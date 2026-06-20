@@ -1,8 +1,8 @@
 name: Obuna tugash eslatmasi
 on:
+  workflow_dispatch:
   schedule:
     - cron: "0 6 * * *"
-  workflow_dispatch:
 jobs:
   notify:
     runs-on: ubuntu-latest
@@ -12,8 +12,7 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install gspread google-auth requests
-      - name: Run notify
-        run: python notify.py
+      - run: python notify.py
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           SHEET_ID: ${{ secrets.SHEET_ID }}
