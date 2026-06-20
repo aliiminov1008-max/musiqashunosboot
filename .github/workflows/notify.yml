@@ -12,7 +12,8 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install gspread google-auth requests
-      - run: python notify.py
+      - name: Run notify
+        run: python notify.py
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           SHEET_ID: ${{ secrets.SHEET_ID }}
