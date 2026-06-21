@@ -1,0 +1,19 @@
+name: Obuna tugash eslatmasi
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * *"
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    env:
+      BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+      SHEET_ID: ${{ secrets.SHEET_ID }}
+      GOOGLE_CREDS_JSON: ${{ secrets.GOOGLE_CREDS_JSON }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install gspread google-auth requests
+      - run: python notify.py
