@@ -114,7 +114,7 @@ def main():
                 f"<b>{plan_label}</b> obunangiz "
                 f"<b>{expiry.strftime('%d.%m.%Y')}</b> sanada tugaydi "
                 f"(<b>{DAYS_BEFORE} kun</b> qoldi).\n\n"
-                f"♻️ Obunani uzaytirish uchun @musiqashunosbot ga murojaat qiling."
+                f"♻️ Obunani uzaytirish uchun @atestatsiya_admin ga murojaat qiling."
             )
 
             ok = send_message(chat_id, message)
