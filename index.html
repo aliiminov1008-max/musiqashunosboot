@@ -12042,6 +12042,12 @@ function parseDate(s){
   s=String(s||'').trim();var m;
   if((m=s.match(/(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{4})/)))return new Date(+m[3],+m[2]-1,+m[1]);
   if((m=s.match(/(\d{4})[.\/-](\d{1,2})[.\/-](\d{1,2})/)))return new Date(+m[1],+m[2]-1,+m[3]);
+  if((m=s.match(/^(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{2})$/)))return new Date(2000+ +m[3],+m[2]-1,+m[1]);
+  var MN={yan:0,jan:0,fev:1,feb:1,mar:2,apr:3,may:4,iyun:5,jun:5,iyul:6,jul:6,avg:7,aug:7,sen:8,sep:8,okt:9,oct:9,noy:10,nov:10,dek:11,dec:11};
+  var l=s.toLowerCase().replace(/[^a-z0-9 ]/g,' ');
+  if((m=l.match(/(\d{1,2})\s*([a-z]{3,})\s*(\d{4})/))&&MN[m[2].slice(0,m[2].indexOf('iyu')===0?4:3)]!==undefined)return new Date(+m[3],MN[m[2].slice(0,m[2].indexOf('iyu')===0?4:3)],+m[1]);
+  if((m=l.match(/([a-z]{3,})\s*(\d{1,2})\s*(\d{4})/))&&MN[m[1].slice(0,m[1].indexOf('iyu')===0?4:3)]!==undefined)return new Date(+m[3],MN[m[1].slice(0,m[1].indexOf('iyu')===0?4:3)],+m[2]);
+  if(/^\d{5}$/.test(s)&&+s>40000&&+s<70000)return new Date(1899,11,30+ +s);   // Sheets seriya raqami
   return null;
 }
 function isPhone(c){var d=String(c).replace(/[^0-9]/g,'');return /^[+\d][\d\s\-()+]{8,}$/.test(String(c).trim())&&(d.length===12&&d.indexOf('998')===0||String(c).trim().charAt(0)==='+'&&d.length>=11);}
