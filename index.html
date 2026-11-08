@@ -12062,6 +12062,7 @@ function analyse(rows){
     else{single=true;var st=ds[0],b=end&&end>st?end:st;end=new Date(b.getTime()+PERIOD*DAY);}  // bitta sana — boshlanish, har to'lovga 31 kun
   });
   var res={types:Object.keys(types),phone:phone,assumed:single};
+  if(!res.types.length){res.state='none';return res;}   // D ustun to'ldirilmagan (yoki tanilmagan) — obuna faol emas
   if(!any||!end){res.state='nodate';return res;}
   var now=new Date(),days=Math.ceil((end.getTime()-now.getTime())/DAY);
   res.end=new Date(end.getTime()-DAY);res.days=days;res.state=days>0?'active':'expired';
