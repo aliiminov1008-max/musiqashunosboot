@@ -1530,7 +1530,7 @@
     <div class="test-header" style="margin-top:8px">
       <div class="big">🎮</div>
       <h2>Metodik o'yinlar</h2>
-      <p>6 ta o'yin, yana biri tez orada</p>
+      <p>7 ta o'yin. Guruh a'zolari uchun</p>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px">
         <div id="gm-card-nota" onclick="showScreen('oyin-nota')" style="background:linear-gradient(135deg,#1a3a47,#2c9cc9);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;min-height:72px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.25">1-o'yin</div><div style="font-size:14px;font-weight:700;color:#fff;margin-top:3px">Nota o'qishni o'rganamiz</div><div id="gm-card-nota-sub" style="font-size:10.5px;color:rgba(255,255,255,0.8);margin-top:3px">Nota, pauza va cho'zimi</div></div>
         <div id="gm-card-takt" onclick="showScreen('oyin-takt')" style="background:linear-gradient(135deg,#1a472a,#2ecc71);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;min-height:72px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.25">2-o'yin</div><div style="font-size:14px;font-weight:700;color:#fff;margin-top:3px">Solfedjio</div><div id="gm-card-takt-sub" style="font-size:10.5px;color:rgba(255,255,255,0.8);margin-top:3px">Nota va eshitish</div></div>
@@ -1538,7 +1538,7 @@
         <div id="gm-card-akkord" onclick="showScreen('oyin-akkord')" style="background:linear-gradient(135deg,#47321a,#d19a3a);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;min-height:72px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.25">4-o'yin</div><div style="font-size:14px;font-weight:700;color:#fff;margin-top:3px">Akkordlar tuzish</div><div style="font-size:11px;color:rgba(255,255,255,.8);margin-top:2px">Tonallikda funksiyalar va aylanmalar</div></div>
         <div id="gm-card-toldir" onclick="showScreen('oyin-toldir')" style="background:linear-gradient(135deg,#1a3a4a,#3ac9c0);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;min-height:72px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.25">5-o'yin</div><div style="font-size:14px;font-weight:700;color:#fff;margin-top:3px">Taktni to'ldiring</div><div id="gm-card-toldir-sub" style="font-size:10.5px;color:rgba(255,255,255,0.8);margin-top:3px">Ritm va o'lchov</div></div>
         <div id="gm-card-yechilish" onclick="showScreen('oyin-yechilish')" style="background:linear-gradient(135deg,#1a4a3a,#5ad1a0);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;min-height:72px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.25">6-o'yin</div><div style="font-size:14px;font-weight:700;color:#fff;margin-top:3px">Akkordlar yechilishi</div><div style="font-size:11px;color:rgba(255,255,255,.8);margin-top:2px">Uchtovushlik va septakkordlar</div></div>
-        <div id="gm-card-interval" onclick="showToast('Tez orada')" style="background:linear-gradient(135deg,#3a1a4a,#8a68d1);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;min-height:72px;display:flex;flex-direction:column;justify-content:center;opacity:.5"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.25">7-o'yin</div><div style="font-size:14px;font-weight:700;color:#fff;margin-top:3px">Intervallar tuzish</div><div style="font-size:11px;color:rgba(255,255,255,.8);margin-top:2px">Tez orada</div></div>
+        <div id="gm-card-interval" onclick="showScreen('oyin-interval')" style="background:linear-gradient(135deg,#3a1a4a,#8a68d1);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;min-height:72px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.25">7-o'yin</div><div style="font-size:14px;font-weight:700;color:#fff;margin-top:3px">Intervallar tuzish</div><div style="font-size:11px;color:rgba(255,255,255,.8);margin-top:2px">Diatonik, xromatik va tarkibli</div></div>
       </div>
     </div>
   </div>
@@ -11273,9 +11273,9 @@ function gmLockUI(){
   const c3=document.getElementById('gm-card-toldir'),sub3=document.getElementById('gm-card-toldir-sub');
   if(c3){c3.style.opacity=GAMES_OK?'':'0.5';if(sub3)sub3.textContent=GAMES_OK?"Ritm va o'lchov":'🔒 Tez orada';}
   const p=c.parentElement.parentElement.querySelector('p');
-  if(p)p.textContent="6 ta o'yin, yana biri tez orada. Guruh a'zolari uchun bepul";
+  if(p)p.textContent="7 ta o'yin. Guruh a'zolari uchun bepul";
 }
-const GAME_IDS=['oyinlar','oyin-nota','oyin-takt','oyin-takt2','oyin-toldir','oyin-cholgu','oyin-yechilish'];
+const GAME_IDS=['oyinlar','oyin-nota','oyin-takt','oyin-takt2','oyin-akkord','oyin-toldir','oyin-yechilish','oyin-interval','oyin-cholgu'];
 let _grpAt=0;
 showScreen=function(id,push){
   GM.stop();
