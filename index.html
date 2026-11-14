@@ -12139,6 +12139,11 @@ window.showScreen=showScreen=function(id,push){prev(id,push);if(id==='oyin-yechi
   #ai .ai-staff{padding:8px 6px;margin-bottom:6px}
   #screen-oyin-interval .ai-staff svg{width:100%;max-width:400px;height:auto;display:block;margin:0 auto;touch-action:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
   #ai #ai-staff svg{cursor:pointer}
+  #ai .ai-exp{text-align:left;font-size:13px;line-height:1.55;color:var(--text);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 12px;margin-top:6px}
+  #ai .ai-exp p{margin:6px 0}
+  #ai .ai-exp .hd{font-weight:700;font-size:14px}
+  #ai .ai-exp .hd.ok{color:var(--green)}
+  #ai .ai-exp .hd.bad{color:var(--red)}
   #ai .ai-cap{text-align:center;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:2px}
   #ai .ai-cnt{text-align:center;font-size:12px;color:var(--muted);margin:2px 0 8px}
   #ai .ai-pal{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
@@ -12317,6 +12322,75 @@ function render(){
   const bk=$('ai-bk');if(bk)bk.style.opacity=idx>0?'1':'.4';
   ['d','x','c'].forEach(g=>{const b=$('ai-g'+g);if(b)b.classList.toggle('on',G.g===g);});
 }
+
+/* ===== To'liq izohlar (Intervallar tuzish) ===== */
+const ROM=['I','II','III','IV','V','VI','VII'];
+const NATM=[0,2,4,5,7,9,11],NATm=[0,2,3,5,7,8,10];
+const yt=s=>s+' yarim ton';
+const tonYt=s=>ton(s)+' ('+yt(s)+')';
+const sn=n=>nmS(n)+' ('+ger(n)+')';
+const dirW=d=>d>0?'yuqoriga':'pastga';
+const stN=k=>STEPN[k]||((k+1)+'-pog\'ona');
+function accWord(a){
+  return a===1?'yarim tonga ko\'tarib <b>♯</b> (diyez) bilan':a===2?'ikki yarim tonga ko\'tarib <b>𝄪</b> (dubl-diyez) bilan':a===-1?'yarim tonga pasaytirib <b>♭</b> (bemol) bilan':a===-2?'ikki yarim tonga pasaytirib <b>𝄫</b> (dubl-bemol) bilan':'belgisiz';
+}
+function seqW(l0,steps,dir){
+  if(steps===0)return SOL[l0];
+  if(steps>7)return null;
+  const a=[];for(let i=0;i<=steps;i++)a.push(SOL[(((l0+dir*i)%7)+7)%7]);return a.join(' – ');
+}
+function derive(gn,m0,steps,dir,semis,an,pA,name){
+  const nat=dir*(midiOf(pA,0)-m0),diff=semis-nat,sq=seqW(gn.l,steps,dir);
+  let h='<p><b>1-qadam — pog\'ona soni.</b> '+name+' — '+(steps+1)+' pog\'onali interval ('+stN(steps)+'). ';
+  if(steps===0)h+='Prima — ikkala tovush bir pog\'onada turadi: '+SOL[gn.l]+'.';
+  else if(sq)h+=sn(gn)+' dan '+dirW(dir)+' '+(steps+1)+' pog\'ona sanaymiz (boshlang\'ich nota ham sanaladi): '+sq+'.';
+  else h+=(steps+1)+' pog\'ona = oktava (7 pog\'ona) + '+stN(steps-7)+': '+sn(gn)+' dan '+dirW(dir)+' oktava, so\'ng yana '+(steps-7)+' pog\'ona sanaladi.';
+  h+=' Demak, nota <b>'+SOL[an.l]+'</b> bo\'ladi. Belgilar (♯, ♭) pog\'ona sanashga ta\'sir qilmaydi.</p>';
+  h+='<p><b>2-qadam — masofa (ton).</b> '+name+' = <b>'+tonYt(semis)+'</b>. Belgisiz '+SOL[an.l]+' '+nmS(gn)+' dan '+yt(nat)+' uzoqlikda';
+  if(diff===0)h+=' — bu aynan kerakli masofa, shuning uchun '+SOL[an.l]+' belgisiz yoziladi.';
+  else h+=': kerakli masofadan '+Math.abs(diff)+' yarim ton '+(diff>0?'kam':'ortiq')+'. Shuning uchun '+SOL[an.l]+' ni '+accWord(an.a)+' yozamiz → <b>'+nmS(an)+'</b>.';
+  h+='</p><p><b>Natija.</b> '+sn(gn)+' → <b>'+sn(an)+'</b>: '+(steps+1)+' pog\'ona, '+yt(semis)+' = <b>'+name+'</b>.</p>';
+  return h;
+}
+function mistakeDia(q,my){
+  const gn=givenNote(q),m0=midiOf(q.p0,q.a0),mm=midiOf(my.p,my.a),dp=my.p-q.p0,stU=Math.abs(dp),smU=Math.abs(mm-m0);
+  const myn={l:letOf(my.p),a:my.a},an=ansNote(q),target=m0+q.dir*q.semis,wrote=ident(dp,mm-m0);
+  let h='<p><b>Nima uchun xato?</b> Siz <b>'+sn(myn)+'</b> yozdingiz. ';
+  if(q.steps>0&&dp===0)h+='Bu '+nmS(gn)+' bilan bir xil pog\'onada (prima), holbuki '+q.name+' '+(q.steps+1)+' pog\'onali interval.';
+  else if(q.steps>0&&Math.sign(dp)!==q.dir)h+='Nota '+dirW(-q.dir)+' yozilgan, savolda esa <b>'+dirW(q.dir)+'</b> deyilgan — yo\'nalish teskari. Siz yozgan notaga '+nmS(gn)+' dan '+dirW(-q.dir)+' '+(stU+1)+' pog\'ona ('+stN(stU)+') to\'g\'ri keladi'+(wrote?' ('+wrote+')':'')+'.';
+  else if(my.p===q.pA){
+    const delta=mm-target;
+    h+='Pog\'ona to\'g\'ri ('+SOL[an.l]+'), lekin belgi noto\'g\'ri. '+nmS(gn)+' dan '+sn(myn)+' gacha '+yt(smU)+' bor'+(wrote?' — bu '+wrote:'')+'. '+q.name+' uchun esa '+yt(q.semis)+' kerak, siz yozgan tovush '+Math.abs(delta)+' yarim ton '+(delta>0?'baland':'past')+'. To\'g\'ri yozilishi: <b>'+nmS(an)+'</b>.';
+  }
+  else if(mm===target)h+='Tovushning o\'zi to\'g\'ri (klaviaturada bir xil), lekin nota boshqacha yozilgan (enarmonik). Interval nomi pog\'ona soniga qarab aniqlanadi: '+q.name+' '+(q.steps+1)+' pog\'ona bo\'lishi kerak, siz '+(stU+1)+' pog\'ona yozdingiz'+(wrote?' — bu '+wrote:'')+'.';
+  else h+=nmS(gn)+' dan '+sn(myn)+' gacha '+(stU+1)+' pog\'ona ('+stN(stU)+') va '+yt(smU)+' bor'+(wrote?' — bu <b>'+wrote+'</b>':'')+'. '+q.name+' esa '+(q.steps+1)+' pog\'ona va '+yt(q.semis)+' bo\'lishi kerak.';
+  return h+'</p>';
+}
+function explTonal(q){
+  const t=TX.find(x=>x.abbr===q.abbr),nat=q.mode==='M'?NATM:NATm,tn=tonName([q.tonic.l,q.tonic.a],q.mode),rows=[];
+  [['low',q.lo,'Pastki'],['high',q.hi,'Yuqori']].forEach(([k,n,lab])=>{
+    const d=t[k][0],base=note(q.tonic,d,nat[d]),ch=t[k][1]-nat[d];
+    rows.push(lab+' tovush — <b>'+ROM[d]+' pog\'ona</b>: '+tn+' da '+sn(base)+(ch>0?', yarim tonga <b>ko\'tariladi</b> → ':ch<0?', yarim tonga <b>pasaytiriladi</b> → ':' (o\'zgartirilmaydi) → ')+'<b>'+sn(n)+'</b>');
+  });
+  let h='<p><b>Tonallik.</b> '+tn+' (tonika — '+sn(q.tonic)+'). '+q.abbr+' — '+q.name+': '+q.rule+'.</p><p>'+rows.join('<br>')+'</p>';
+  h+=derive(q.lo,midiOf(q.pl,q.lo.a),q.steps,1,q.semis,q.hi,q.pu,q.name);
+  h+=q.abbr==='ort.6'
+    ?'<p><small>Orttirilgan seksta — katta seksta (9 yarim ton)ning yarim tonga kengaytirilgani: 10 yarim ton. Ovozi kichik septimaga teng, lekin 6 pog\'onadan iborat bo\'lgani uchun seksta deb yoziladi.</small></p>'
+    :'<p><small>Kamaygan tersiya — kichik tersiya (3 yarim ton)ning yarim tonga qisqartirilgani: 2 yarim ton. Ovozi katta sekundaga teng, lekin 3 pog\'onadan iborat bo\'lgani uchun tersiya deb yoziladi.</small></p>';
+  return h;
+}
+function mistakeTonal(q,s){
+  const a=s[0],b=s[1],st=b.p-a.p,sm=b.m-a.m,wrote=ident(st,sm),tn=tonName([q.tonic.l,q.tonic.a],q.mode);
+  let h='<p><b>Nima uchun xato?</b> Siz <b>'+nmS({l:a.l,a:a.a})+'</b> va <b>'+nmS({l:b.l,a:b.a})+'</b> yozdingiz: '+(st+1)+' pog\'ona ('+stN(st)+'), '+yt(sm)+(wrote?' — bu '+wrote:'')+'. ';
+  if(wrote===q.name)h+='Interval nomi to\'g\'ri, lekin bu tovushlar '+tn+' tonallikdagi tovushlar emas: '+q.rule+'.';
+  else if(sm===q.semis)h+='Tovushlar balandligi to\'g\'ri (klaviaturada bir xil), lekin nota yozuvi boshqa: '+q.name+' '+(q.steps+1)+' pog\'ona bo\'lishi kerak, siz '+(st+1)+' pog\'ona yozdingiz. Interval nomi pog\'ona soniga qarab aniqlanadi.';
+  else if(st===q.steps)h+='Pog\'ona soni to\'g\'ri, lekin masofa '+(sm>q.semis?'katta':'kichik')+': '+yt(q.semis)+' kerak edi, siz '+yt(sm)+' yozdingiz — belgilarni (♯/♭) qayta tekshiring.';
+  else h+=q.name+' '+(q.steps+1)+' pog\'ona va '+yt(q.semis)+' bo\'lishi kerak.';
+  return h+'</p>';
+}
+const EXPW=(hd,cls,body)=>'<div class="ai-exp"><div class="hd '+cls+'">'+hd+'</div>'+body+'</div>';
+function showMsg(html){const m=$('ai-msg');m.innerHTML=html;setTimeout(()=>{try{m.scrollIntoView({behavior:'smooth',block:'nearest'});}catch(_){}} ,60);}
+
 window.AI={
   fillInt(){
     const x=G.g==='x',names=x?TX.map(t=>t.abbr+' — '+t.name):INTS[G.g].map(it=>it[0]);
@@ -12380,18 +12454,12 @@ window.AI={
     const q=G.q,msg=$('ai-msg');
     if(q.tonal)return this.checkTonal();
     if(!G.my){msg.textContent='Avval ikkinchi tovushni nota yo\'liga yozing';return;}
-    const my=G.my,m0=midiOf(q.p0,q.a0),target=m0+q.dir*q.semis,mm=midiOf(my.p,my.a);
-    const ok=my.p===q.pA&&my.a===q.aA,an=ansNote(q);
-    const ans=nmS(an)+' ('+ger(an)+')';
-    const info='<br><small>'+q.name+' = '+ton(q.semis)+', '+(q.steps+1)+' pog\'ona ('+STEPN[q.steps]+')'+(isTri(q)?' — triton':'')+'</small>';
+    const my=G.my,m0=midiOf(q.p0,q.a0),target=m0+q.dir*q.semis;
+    const ok=my.p===q.pA&&my.a===q.aA,an=ansNote(q),gn=givenNote(q);
     G.done=true;G.ok=ok;$('ai-ok').textContent='Keyingi ›';
-    if(ok){G.st++;G.sc+=G.hinted?5:10;msg.innerHTML='✅ To\'g\'ri! '+nmS(givenNote(q))+' → '+ans+info;playList([m0,target]);}
-    else{
-      G.st=0;const dp=my.p-q.p0,wrote=ident(dp,mm-m0);let h;
-      if(mm===target)h='⚠️ Tovush to\'g\'ri, lekin interval nomi boshqa'+(wrote?': siz '+wrote+' yozdingiz':'')+'. '+q.name+' '+(q.steps+1)+' pog\'onadan iborat ('+STEPN[q.steps]+') bo\'lishi kerak.';
-      else{h='❌ Noto\'g\'ri'+(wrote?': siz yozgan interval — '+wrote:'')+'.';if(q.steps>0&&dp!==0&&Math.sign(dp)!==q.dir)h+=' Yo\'nalish teskari.';}
-      msg.innerHTML=h+'<br>To\'g\'ri javob: <b>'+ans+'</b>'+info;
-    }
+    const exp=derive(gn,m0,q.steps,q.dir,q.semis,an,q.pA,q.name)+(isTri(q)?'<p><small>Eslatma: '+q.name+' — triton (3 ton = 6 yarim ton).</small></p>':'');
+    if(ok){G.st++;G.sc+=G.hinted?5:10;showMsg(EXPW('✅ To\'g\'ri! '+sn(gn)+' → '+sn(an),'ok',exp));playList([m0,target]);}
+    else{G.st=0;showMsg(EXPW('❌ Noto\'g\'ri','bad',mistakeDia(q,my)+'<div class="hd ok" style="margin-top:8px">To\'g\'ri javob: '+sn(an)+'</div>'+exp));}
     $('ai-sc').textContent=G.sc;$('ai-st').textContent=G.st;render();
   },
   checkTonal(){
@@ -12400,15 +12468,10 @@ window.AI={
     const s=my.map(x=>({p:x.p,a:x.a,l:letOf(x.p),m:midiOf(x.p,x.a)})).sort((u,v)=>u.p-v.p||u.m-v.m);
     const ok=s[0].l===q.lo.l&&s[0].a===q.lo.a&&s[1].l===q.hi.l&&s[1].a===q.hi.a&&s[1].p-s[0].p===q.steps;
     const ans=nmS(q.lo)+' – '+nmS(q.hi);
-    const info='<br><small>'+q.abbr+' — '+q.name+' = '+ton(q.semis)+', '+(q.steps+1)+' pog\'ona. '+q.rule+'</small>';
     G.done=true;G.ok=ok;$('ai-ok').textContent='Keyingi ›';
-    if(ok){G.st++;G.sc+=G.hinted?5:10;msg.innerHTML='✅ To\'g\'ri! '+ans+info;playList([midiOf(q.pl,q.lo.a),midiOf(q.pu,q.hi.a)]);}
-    else{
-      G.st=0;const wrote=ident(s[1].p-s[0].p,s[1].m-s[0].m);let h;
-      if(s[1].m-s[0].m===q.semis&&s[1].p-s[0].p!==q.steps)h='⚠️ Tovushlar balandligi to\'g\'ri, lekin interval nomi boshqa'+(wrote?': siz '+wrote+' yozdingiz':'')+'. '+q.name+' '+(q.steps+1)+' pog\'onadan iborat bo\'lishi kerak.';
-      else h='❌ Noto\'g\'ri'+(wrote?': siz yozgan interval — '+wrote:'')+'.';
-      msg.innerHTML=h+'<br>To\'g\'ri javob: <b>'+ans+'</b>'+info;
-    }
+    const exp=explTonal(q);
+    if(ok){G.st++;G.sc+=G.hinted?5:10;showMsg(EXPW('✅ To\'g\'ri! '+ans,'ok',exp));playList([midiOf(q.pl,q.lo.a),midiOf(q.pu,q.hi.a)]);}
+    else{G.st=0;showMsg(EXPW('❌ Noto\'g\'ri','bad',mistakeTonal(q,s)+'<div class="hd ok" style="margin-top:8px">To\'g\'ri javob: '+ans+'</div>'+exp));}
     $('ai-sc').textContent=G.sc;$('ai-st').textContent=G.st;render();
   }
 };
