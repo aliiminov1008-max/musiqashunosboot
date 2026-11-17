@@ -747,6 +747,7 @@
 
 <!-- INTERVALLAR -->
 <div id="screen-intervals" class="screen">
+  <button class="back-btn" onclick="showScreen('theory-topics');renderTheoryTopics()">‹ Orqaga</button>
   <div class="header">
     <span class="note-icon">🎼</span>
     <h1>Intervallar</h1>
@@ -816,12 +817,12 @@
         <span style="margin-left:auto;color:var(--accent)">👁</span>
       </div>
     </div>
-    <div class="card" onclick="showScreen('intervals')" style="margin-top:8px">
+    <div class="card" onclick="showScreen('theory-topics');renderTheoryTopics()" style="margin-top:8px">
       <div style="display:flex;align-items:center;gap:12px">
-        <span style="font-size:28px">🎼</span>
+        <span style="font-size:28px">🗂</span>
         <div>
-          <div style="font-size:15px;font-weight:600">Intervallar</div>
-          <div style="font-size:12px;color:var(--muted)">Oddiy va diatonik intervallar</div>
+          <div style="font-size:15px;font-weight:600">Mavzu bo'yicha testlar</div>
+          <div style="font-size:12px;color:var(--muted)">Intervallar, ifoda vositalari, lad, septakkord va boshqa mavzular</div>
         </div>
         <span style="margin-left:auto;color:var(--accent)">›</span>
       </div>
@@ -1153,6 +1154,27 @@
 </div>
 
 <!-- MUSIQA NAZARIYASI: VIDEO DARSLIKLAR -->
+<!-- MUSIQA NAZARIYASI: MAVZU BO'YICHA TESTLAR (sinov) -->
+<div id="screen-theory-topics" class="screen">
+  <button class="back-btn" onclick="showScreen('theory')">‹ Orqaga</button>
+  <div class="page-content" style="padding-top:4px">
+    <div style="background:linear-gradient(135deg,#1a1a3a,#0f0f25);border:1px solid rgba(124,92,191,0.4);border-radius:16px;padding:16px;margin-bottom:12px;text-align:center">
+      <div style="font-size:36px;margin-bottom:8px">🗂</div>
+      <div style="font-size:15px;font-weight:600;color:#b0a0e8">Mavzu bo'yicha testlar</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:6px">Barcha variantlardagi savollar mavzu bo'yicha yig'ilgan · <span id="theory-topics-count"></span></div>
+    </div>
+    <div class="card" onclick="showScreen('intervals')" style="margin-bottom:10px;cursor:pointer">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="background:linear-gradient(135deg,#3a2060,#7c5cbf);border-radius:10px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px">🎼</div>
+        <div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:600;color:var(--text)">Intervallar</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">Oddiy va diatonik intervallar · PDF va testlar</div></div>
+        <span style="color:var(--accent);flex-shrink:0">›</span>
+      </div>
+    </div>
+    <div id="theory-topics-list"></div>
+  </div>
+</div>
+
 <div id="screen-theory-videos" class="screen">
   <button class="back-btn" onclick="showScreen('theory')">‹ Orqaga</button>
   <div class="page-content" style="padding-top:4px">
@@ -1577,6 +1599,7 @@
     <div class="gm-levels"><select id="ay-root" onchange="AY.next()" class="gm-lv" style="min-width:0;font-size:13px;padding:10px 6px"></select><select id="ay-fn" onchange="AY.next()" class="gm-lv" style="min-width:0;font-size:13px;padding:10px 6px"></select><select id="ay-inv" onchange="AY.next()" class="gm-lv" style="min-width:0;font-size:13px;padding:10px 6px"><option value="r">Har xil aylanma</option><option value="0">Asosiy shakl</option><option value="1">1-aylanma</option><option value="2">2-aylanma</option><option value="3">3-aylanma</option></select></div>
     <div class="gm-stats"><span>Ball: <b id="ay-sc">0</b></span><span>Seriya: <b id="ay-st">0</b></span><span id="ay-n"></span></div>
     <div class="ay-q" id="ay-q"></div>
+    <div class="gm-card ay-staff ay-draft" id="ay-draft-card" style="display:none"><div class="ay-cap">Chernovik — bitta yo'lda 4 tagacha akkord yozish mumkin (nota qaysi ustunga yaqin bosilsa, o'sha yerga tushadi)</div><div id="ay-draft"></div></div>
     <div class="gm-card ay-staff" id="ay-staff"></div>
     <div class="ay-cnt" id="ay-cnt"></div>
     <div id="ay-pal"></div>
@@ -1586,8 +1609,9 @@
       <button class="btn-primary" id="ay-ok" onclick="AY.check()" style="grid-column:1/-1">Tekshirish</button>
       <button class="nav-quiz-btn" id="ay-bk" onclick="AY.back()" style="grid-column:span 3">‹ Oldingi</button>
       <button class="nav-quiz-btn" onclick="AY.fwd()" style="grid-column:span 3">Keyingi ›</button>
-      <button class="nav-quiz-btn" onclick="AY.play()" style="grid-column:span 3">🔊 Tinglash</button>
-      <button class="nav-quiz-btn" onclick="AY.hint()" style="grid-column:span 3">💡 Yordam</button>
+      <button class="nav-quiz-btn" onclick="AY.play()" style="grid-column:span 2">🔊 Tinglash</button>
+      <button class="nav-quiz-btn" onclick="AY.hint()" style="grid-column:span 2">💡 Yordam</button>
+      <button class="nav-quiz-btn" id="ay-dr" onclick="AY.draft()" style="grid-column:span 2">✏️ Chernovik</button>
     </div>
   </div>
 </div>
@@ -6283,6 +6307,7 @@ function startQuiz(type, key) {
 
 function _doStartQuiz(type, key) {
   currentQuizType = type;
+  if (type === 'theoryTopic') { _startTopicQuizCore(key); return; }
   // Quiz nomini saqlash
   if (type === 'sinf' && key) {
     const vMatch = key.match(/_v(\d+)$/);
@@ -6542,7 +6567,7 @@ function _doStartQuiz(type, key) {
   currentQ=0; score=0; answered=false;
   userAnswers = new Array(quizQuestions.length).fill(null);
   shuffledOrders = quizQuestions.map(q => q.fixed ? [...Array(q.a.length).keys()] : shuffle([...Array(q.a.length).keys()]));
-  currentQuizSource = (type==='imtixonMilliy'||type==='imtixonBahorgi'||type==='imtixonKuzgi'||type==='imtixonKuzgi2'||type==='imtixonKuzgi3') ? 'imtixon' : (type==='general' ? 'tests' : (type==='intervals' || type==='intervals2' || type==='intervals3' || type==='intervals4' || type==='intervals5' || type==='intervals6' ? 'theory' : (type==='theory' || type==='theory1' || type==='theory2' || type==='theory3' || type==='theory4' || type==='theory5' || type==='theory6' || type==='theory7' || type==='theory8' || type==='theory9' ? 'theory' : (type==='kasb1' || type==='kasb2' || type==='kasb3' || type==='kasb4' || type==='kasb5' ? 'kasb' : (type==='imtixon1' || type==='imtixon2' || type==='imtixon3' || type==='imtixon4' || type==='imtixon5' || type==='imtixon6' || type==='imtixon7' || type==='imtixon8' ? 'imtixon' : (type==='sertifikat1' ? 'tests' : (type==='mttmusiqa1' || type==='mttmusiqa2' || type==='mttmusiqa3' || type==='mttmusiqa4' || type==='mttmusiqa5' || type==='mttmusiqa6' || type==='mttmusiqa7' || type==='mttmusiqa8' || type==='mttmusiqa9' ? 'ilkqadam-musiqa' : (type==='metodika_v1' || type==='metodika_v2' || type==='metodika_v3' || type==='metodika_v4' || type==='metodika_v5' ? 'adabiyot-metodika' : (type==='jahon_v1' || type==='jahon_v2' || type==='jahon_v3' || type==='jahon_v4' || type==='jahon_v5' || type==='jahon_v6' || type==='jahon_v7' || type==='jahon_v8' || type==='jahon_v9' || type==='jahon_v10' || type==='jahon_v11' || type==='jahon_v12' || type==='jahon_v13' || type==='jahon_v14' || type==='jahon_v15' || type==='jahon_v17' || type==='jahon_v18' || type==='jahon_v19' || type==='jahon_v20' || type==='jahon_v21' || type==='jahon_v22' || type==='jahon_v23' || type==='jahon_v24' || type==='jahon_v25' || type==='jahon_v_tt' ? 'adabiyot-jahon' : (type==='adabiyot' || type==='adabiyot_uzbek2' || type==='adabiyot_uzbek3' || type==='adabiyot_uzbek4' || type==='adabiyot_uzbek5' || type==='adabiyot_uzbek6' || type==='adabiyot_uzbek7' || type==='adabiyot_uzbek8' || type==='adabiyot_uzbek9' || type==='adabiyot_uzbek10' || type==='adabiyot_uzbek11' || type==='adabiyot_uzbek12' || type==='adabiyot_uzbek13' || type==='adabiyot_uzbek14' || type==='adabiyot_uzbek15' || type==='adabiyot_uzbek16' || type==='adabiyot_uzbek17' || type==='adabiyot_uzbek18' || type==='adabiyot_uzbek19' || type==='adabiyot_uzbek20' || type==='adabiyot_uzbek_tt' ? 'adabiyot-uzbek' : (type==='kompozitorlar1' || type==='kompozitorlar2' || type==='kompozitorlar3' ? 'adabiyot-kompozitorlar' : (type==='shakl1' || type==='shakl2' || type==='shakl3' || type==='shakl4' || type==='shakl5' ? 'asarlar-tahlili' : (type==='ilkqadam1' || type==='ilkqadam2' || type==='ilkqadam3' || type==='ilkqadam4' || type==='ilkqadam5' || type==='ilkqadam6' || type==='nashr3v-1' || type==='nashr3v-2' || type==='nashr3v-3' || type==='nashr3v-4' || type==='nashr3v-5' || type==='nashr3v-6' || type==='nashr3v-7' || type==='nashr3v-8' || type==='nashr3v-9' || type==='nashr3v-10' || type==='nashr3v-11' ? 'ilkqadam' : 'sinf-test')))))))))))));
+  currentQuizSource = (type==='imtixonMilliy'||type==='imtixonBahorgi'||type==='imtixonKuzgi'||type==='imtixonKuzgi2'||type==='imtixonKuzgi3') ? 'imtixon' : (type==='general' ? 'tests' : (type==='intervals' || type==='intervals2' || type==='intervals3' || type==='intervals4' || type==='intervals5' || type==='intervals6' ? 'intervals' : (type==='theory' || type==='theory1' || type==='theory2' || type==='theory3' || type==='theory4' || type==='theory5' || type==='theory6' || type==='theory7' || type==='theory8' || type==='theory9' ? 'theory' : (type==='kasb1' || type==='kasb2' || type==='kasb3' || type==='kasb4' || type==='kasb5' ? 'kasb' : (type==='imtixon1' || type==='imtixon2' || type==='imtixon3' || type==='imtixon4' || type==='imtixon5' || type==='imtixon6' || type==='imtixon7' || type==='imtixon8' ? 'imtixon' : (type==='sertifikat1' ? 'tests' : (type==='mttmusiqa1' || type==='mttmusiqa2' || type==='mttmusiqa3' || type==='mttmusiqa4' || type==='mttmusiqa5' || type==='mttmusiqa6' || type==='mttmusiqa7' || type==='mttmusiqa8' || type==='mttmusiqa9' ? 'ilkqadam-musiqa' : (type==='metodika_v1' || type==='metodika_v2' || type==='metodika_v3' || type==='metodika_v4' || type==='metodika_v5' ? 'adabiyot-metodika' : (type==='jahon_v1' || type==='jahon_v2' || type==='jahon_v3' || type==='jahon_v4' || type==='jahon_v5' || type==='jahon_v6' || type==='jahon_v7' || type==='jahon_v8' || type==='jahon_v9' || type==='jahon_v10' || type==='jahon_v11' || type==='jahon_v12' || type==='jahon_v13' || type==='jahon_v14' || type==='jahon_v15' || type==='jahon_v17' || type==='jahon_v18' || type==='jahon_v19' || type==='jahon_v20' || type==='jahon_v21' || type==='jahon_v22' || type==='jahon_v23' || type==='jahon_v24' || type==='jahon_v25' || type==='jahon_v_tt' ? 'adabiyot-jahon' : (type==='adabiyot' || type==='adabiyot_uzbek2' || type==='adabiyot_uzbek3' || type==='adabiyot_uzbek4' || type==='adabiyot_uzbek5' || type==='adabiyot_uzbek6' || type==='adabiyot_uzbek7' || type==='adabiyot_uzbek8' || type==='adabiyot_uzbek9' || type==='adabiyot_uzbek10' || type==='adabiyot_uzbek11' || type==='adabiyot_uzbek12' || type==='adabiyot_uzbek13' || type==='adabiyot_uzbek14' || type==='adabiyot_uzbek15' || type==='adabiyot_uzbek16' || type==='adabiyot_uzbek17' || type==='adabiyot_uzbek18' || type==='adabiyot_uzbek19' || type==='adabiyot_uzbek20' || type==='adabiyot_uzbek_tt' ? 'adabiyot-uzbek' : (type==='kompozitorlar1' || type==='kompozitorlar2' || type==='kompozitorlar3' ? 'adabiyot-kompozitorlar' : (type==='shakl1' || type==='shakl2' || type==='shakl3' || type==='shakl4' || type==='shakl5' ? 'asarlar-tahlili' : (type==='ilkqadam1' || type==='ilkqadam2' || type==='ilkqadam3' || type==='ilkqadam4' || type==='ilkqadam5' || type==='ilkqadam6' || type==='nashr3v-1' || type==='nashr3v-2' || type==='nashr3v-3' || type==='nashr3v-4' || type==='nashr3v-5' || type==='nashr3v-6' || type==='nashr3v-7' || type==='nashr3v-8' || type==='nashr3v-9' || type==='nashr3v-10' || type==='nashr3v-11' ? 'ilkqadam' : 'sinf-test')))))))))))));
 
   // Umumiy testlar uchun 90 daqiqalik vaqt chegarasi
   clearQuizTimer();
@@ -11757,7 +11782,8 @@ window.showScreen=showScreen=function(id,push){prev(id,push);if(id==='oyin-akkor
   #ay .ay-q{text-align:center;line-height:1.35;margin:4px 0 8px;font-size:15px;font-weight:700;color:var(--text)}
   #ay .ay-staff{padding:8px 6px;margin-bottom:6px}
   #screen-oyin-yechilish .ay-staff svg{width:100%;max-width:400px;height:auto;display:block;margin:0 auto;touch-action:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
-  #ay #ay-staff svg{cursor:pointer}
+  #ay #ay-staff svg,#ay #ay-draft svg{cursor:pointer}
+  #ay .ay-draft{margin-bottom:8px}
   #ay .ay-cap{text-align:center;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:2px}
   #ay .ay-cnt{text-align:center;font-size:12px;color:var(--muted);margin:2px 0 8px}
   #ay .ay-pal{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
@@ -11767,6 +11793,53 @@ window.showScreen=showScreen=function(id,push){prev(id,push);if(id==='oyin-akkor
   #ay .ay-pal.v6 .gm-lv{font-size:18px;padding:8px 0}
   #ay .ay-pal.v6 .gm-lv:first-child{font-size:12px}
 </style>
+<script id="theory-topics-js">
+/* Musiqa nazariyasi: mavzu bo'yicha testlar (sinov).
+   Savollar variantlardan ko'chirilmaydi: har bir savolning belgisi (hash) -> mavzu jadvali orqali yig'iladi.
+   Bir xil savollar (masalan "Lad tarkibida umumiy nechta...") bir marta hisoblanadi. */
+const TT_TOPICS = [{"id": "cho", "title": "Nota cho'zimlari, pauza va ligalar", "icon": "🎵"}, {"id": "ifoda", "title": "Musiqa ifoda vositalari", "icon": "🎚"}, {"id": "ritm", "title": "Ritm, o'lchov va takt", "icon": "🥁"}, {"id": "belgi", "title": "Takrorlash va qisqartirish belgilari", "icon": "🔁"}, {"id": "harf", "title": "Harfiy sistema", "icon": "🔤"}, {"id": "alt", "title": "Alteratsiya va enarmonizm", "icon": "♯"}, {"id": "nota", "title": "Nota yozuvi, kalit va oktavalar", "icon": "🎼"}, {"id": "lad", "title": "Lad va gammalar", "icon": "🎹"}, {"id": "ton", "title": "Tonalliklar va kalit belgilari", "icon": "🔑"}, {"id": "ucht", "title": "Uchtovushliklar va funksiyalar", "icon": "🔺"}, {"id": "sept", "title": "Septakkordlar", "icon": "🔷"}, {"id": "shakl", "title": "Kuy, janr, shakl va turkumlar", "icon": "🏛"}, {"id": "xor", "title": "Xor, ovoz va cholg'ular", "icon": "🎤"}, {"id": "xalq", "title": "Xalq musiqasi, maqom va raqs", "icon": "🪕"}, {"id": "atama", "title": "Atamalar va umumiy tushunchalar", "icon": "📖"}];
+const TT_MAP = {"1vty8n8": "cho", "o9y7y0": "cho", "1sms7af": "cho", "1mm9qo7": "cho", "1pxef85": "cho", "169olhc": "ifoda", "1qj0rd0": "ifoda", "1fi0rpe": "ifoda", "mufryu": "ifoda", "8e5u9t": "ifoda", "1p3np4m": "ifoda", "1wisaxl": "ifoda", "1cbuy7": "alt", "1n9yjf": "alt", "bebi6": "alt", "1ypa7lx": "alt", "vh15j6": "alt", "auqd1q": "alt", "sh5v6x": "belgi", "1q2fzau": "cho", "l4bzp5": "cho", "1y0v6u": "ifoda", "5gj3ve": "belgi", "bt9k0e": "ifoda", "utfnwb": "ifoda", "1sf5gpl": "ifoda", "zag2q6": "belgi", "155l7t4": "belgi", "ujrve2": "belgi", "f33fgv": "cho", "db7gkl": "ton", "1qixw94": "cho", "1xvn87d": "cho", "s5x9mo": "harf", "1uzmi85": "harf", "1jhliby": "harf", "13u47yc": "harf", "1judco3": "harf", "1jaibhf": "harf", "1l0xdmr": "harf", "g288i1": "harf", "1a9ehi0": "harf", "z9366l": "harf", "1ujf2t4": "harf", "1b66rj9": "harf", "1jb3x6e": "harf", "zw2lcp": "harf", "1ycos79": "xalq", "1alsybb": "xalq", "1o4xx78": "atama", "hzswr2": "xalq", "1rlkcnq": "ritm", "1sj4btb": "lad", "ms4yoy": "ritm", "1q738us": "cho", "1y8ncf8": "cho", "p3yi68": "atama", "rstfp8": "xalq", "14rs4if": "nota", "x248cf": "ucht", "1kl9l8x": "xor", "1aghj1z": "xalq", "frb1ba": "nota", "dt30cl": "shakl", "1oy0wvi": "harf", "1ws6jh0": "xalq", "lhqrm7": "xor", "1fvd95n": "ifoda", "bb6ty1": "ucht", "p5tr2s": "sept", "hp4lmy": "ifoda", "13mujvm": "xalq", "1obbebe": "ton", "1sy7aow": "xor", "vn8o96": "xalq", "1r7zb31": "ifoda", "wexxdb": "belgi", "h58hzt": "nota", "14bv0kf": "ton", "y776lh": "xor", "1bcjbon": "alt", "8pvvsc": "xalq", "4eiqnl": "xalq", "1tjftsf": "xalq", "1k65ydf": "xalq", "j3wnp2": "xor", "1ta1nfx": "xor", "1ygtp68": "xor", "jmpnru": "ucht", "1dxg50m": "ifoda", "1kgyncv": "ucht", "fs03pl": "lad", "11j8m07": "lad", "1t5xc4g": "shakl", "qr29f2": "shakl", "7yqd4": "lad", "1dg5ev7": "nota", "hwqygr": "shakl", "1ebdyav": "atama", "xmyas2": "atama", "1lwxbni": "atama", "1dun48i": "lad", "10uzm81": "ifoda", "8rskjr": "ucht", "qidwxj": "ton", "1i1bafd": "cho", "5xg0yg": "ritm", "cbtc0z": "atama", "1d7g3zq": "shakl", "1kuk407": "xor", "1my6cqn": "lad", "bty02s": "xor", "ef82z5": "xor", "owh29q": "atama", "l1mgih": "xor", "h23vuc": "lad", "1mqj2ms": "lad", "llmd3m": "lad", "m01ubu": "ifoda", "9jlykh": "atama", "295vzy": "ton", "18hx63e": "lad", "h58im1": "lad", "1tjwlh5": "lad", "1b9zil5": "lad", "13k2uxw": "lad", "om91m2": "cho", "pqo00x": "xor", "ksgba3": "xalq", "1tt4bc": "ifoda", "8698cp": "xor", "1aqgvvw": "xalq", "1699ina": "xor", "syl9in": "xor", "10bup23": "xor", "15w8kg6": "xalq", "gb4xwe": "ton", "1bnsdjh": "ton", "xpbs47": "xor", "1aui4yu": "ton", "1cqlsou": "ton", "1nje0ha": "ton", "1ykiqv8": "ton", "1ll18a3": "ton", "1qh6fj1": "ton", "1so9y63": "ton", "385pbo": "ton", "19r878": "ton", "lxqabo": "ton", "275du5": "ton", "89e0q2": "ton", "1bcskw8": "atama", "tlkaju": "ifoda", "3gj4g4": "lad", "1hdchoq": "nota", "y55gi4": "cho", "851wgf": "lad", "ycirnl": "ucht", "80r25e": "lad", "rl0otb": "lad", "1f6cmo2": "lad", "lqg7kv": "ifoda", "i7pyc5": "belgi", "vusogf": "belgi", "6jmxt6": "belgi", "y5iha9": "belgi", "qlyg8l": "belgi", "e21qtq": "nota", "1pz6g8k": "alt", "13ln1kp": "alt", "1iabdpn": "ritm", "1drmjvd": "ritm", "18r2f0n": "ritm", "16in7z3": "ritm", "o4dsao": "ritm", "13dq6ki": "lad", "wy6kjg": "lad", "1j74xlk": "lad", "17vsuh3": "lad", "88xe0w": "lad", "1uvy6c1": "lad", "sevzbx": "lad", "1xf61gi": "lad", "r6adsi": "lad", "9q8nko": "lad", "jtuagx": "ton", "ud5xiw": "ton", "1sjjp60": "ton", "1u6kcgv": "ucht", "1t7l5ya": "ucht", "odx78r": "ucht", "kj5i00": "lad", "1hl3z9e": "lad", "c21tjf": "lad", "8dwe34": "lad", "1pobqvy": "lad", "yszzns": "cho", "1cqr3wf": "xor", "1rez2pf": "xalq", "7zqp48": "shakl", "9tvacd": "ucht", "v58jyu": "ucht", "ii2zox": "lad", "1j7tb1b": "lad", "1tcf8g1": "lad", "1vgbkqe": "lad", "dwluu6": "lad", "yrh5gg": "lad", "m9hmfb": "ton", "g0xymk": "shakl", "1tc1yc8": "shakl", "1kv7ldv": "shakl", "19g3jag": "shakl", "ypmn7n": "shakl", "d5hslc": "shakl", "19xsts5": "ucht", "n9xrgz": "ucht", "1poqxim": "ucht", "1c4rvzc": "shakl", "1innx9l": "shakl", "n8sypw": "shakl", "lcp63q": "shakl", "1jvso14": "shakl", "1l2jo9r": "shakl", "xmy5h5": "shakl", "1oh88q9": "shakl", "1hqvtlf": "lad", "k8t18u": "ucht", "1gsuw7u": "ucht", "ykybvj": "ucht", "1bupyf5": "ucht", "11sx2dv": "shakl", "1qt9jqi": "shakl", "adqw5z": "shakl", "1tr9x53": "shakl", "1ht73j2": "shakl", "1umwcut": "shakl", "1e27hqc": "shakl", "1qzpqy8": "shakl", "1gb5ckj": "shakl", "ikcyi8": "shakl", "1amtug7": "shakl", "1cpmqv3": "shakl", "10pewf4": "shakl", "1n5v5ro": "shakl", "qmud8s": "shakl", "x5tihp": "shakl", "18leoaj": "shakl", "17kujqz": "shakl", "1n7uv1y": "shakl", "606o8w": "shakl", "7i55we": "shakl", "1kksx99": "shakl", "1y43c24": "shakl", "o8lw15": "shakl", "okp19f": "shakl", "12ym0mn": "shakl", "37jx53": "shakl", "1dry01p": "shakl", "xoltr0": "shakl", "lcvwvz": "shakl", "xcu1h8": "shakl", "15mrnhl": "shakl", "1shxts8": "ucht", "ojd11y": "ucht", "1ach5uf": "ucht", "1czv03w": "lad", "17723b4": "lad", "84pk4j": "sept", "jmh8ii": "sept", "11lf06f": "sept", "15yqh35": "sept", "11fw0mx": "sept", "x5pfhs": "sept", "jw11ps": "sept", "1wtcyix": "sept", "fyrft1": "sept", "1ehwak0": "sept", "jyytu8": "sept", "nr55q4": "sept", "1uiyhrp": "sept", "1kuayjw": "sept", "q2hdp": "sept", "irdcd3": "sept", "10zbwah": "sept", "17osic2": "sept", "3e55db": "sept", "1ezud1l": "sept", "jh9h79": "sept", "1sa83cs": "sept", "18i9mcd": "sept", "v2infv": "sept", "6ji30v": "sept", "9suq1f": "sept", "1o1m2r2": "sept", "12k3lbr": "sept", "ye1cdc": "sept", "5puvjl": "sept", "19uqnkk": "sept", "e7ayaj": "nota", "cmpqhl": "nota", "12fxo3d": "nota", "w4z2sm": "nota", "16nbdey": "nota", "k7te0a": "nota", "ibhvv9": "nota", "stu6hl": "nota", "141pdjs": "nota", "lwfubt": "nota"};
+function _ttKey(q){var s=q.q+'\u00a6'+(q.img||'')+'\u00a6'+(q.a||[]).join('\u00a6'),h=5381;for(var i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return (h>>>0).toString(36);}
+function ttBuckets(){
+  var arrs=[nazariya2Questions,nazariya3Questions,nazariya4Questions,nazariya5Questions,nazariya6Questions,nazariya7Questions,nazariya8Questions,nazariya9Questions,nazariya10Questions,nazariya11Questions];
+  var B={},seen={},unk=[];
+  arrs.forEach(function(arr){arr.forEach(function(q){var h=_ttKey(q);if(seen[h])return;seen[h]=1;var t=TT_MAP[h];if(t){(B[t]=B[t]||[]).push(q);}else unk.push(q);});});
+  if(unk.length)B.boshqa=unk;
+  return B;
+}
+function renderTheoryTopics(){
+  var box=document.getElementById('theory-topics-list');if(!box)return;
+  var B=ttBuckets(),total=0,html='';
+  var list=TT_TOPICS.slice();if(B.boshqa)list.push({id:'boshqa',title:'Boshqa savollar',icon:'📌'});
+  list.forEach(function(t){
+    var n=(B[t.id]||[]).length;if(!n)return;total+=n;
+    html+='<div class="card" onclick="openTheoryTopic(\''+t.id+'\')" style="margin-bottom:10px;cursor:pointer">'
+      +'<div style="display:flex;align-items:center;gap:12px">'
+      +'<div style="background:linear-gradient(135deg,#3a2060,#7c5cbf);border-radius:10px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px">'+t.icon+'</div>'
+      +'<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:600;color:var(--text)">'+t.title+'</div>'
+      +'<div style="font-size:12px;color:var(--muted);margin-top:2px">'+n+' ta savol</div></div>'
+      +'<span style="color:var(--accent);flex-shrink:0">›</span></div></div>';
+  });
+  box.innerHTML=html;
+  var c=document.getElementById('theory-topics-count');if(c)c.textContent=total+' ta savol, '+list.filter(function(t){return (B[t.id]||[]).length;}).length+' ta mavzu';
+}
+function openTheoryTopic(id){ startQuiz('theoryTopic', id); }
+function _startTopicQuizCore(id){
+  var B=ttBuckets(),pool=B[id]||[];
+  if(!pool.length){if(typeof showToast==='function')showToast("Bu mavzuda savol topilmadi");return;}
+  var t=TT_TOPICS.filter(function(x){return x.id===id;})[0];
+  currentQuizTitle="Musiqa nazariyasi — "+(t?t.title:'Boshqa savollar');
+  quizQuestions=shuffle([...pool]);
+  currentQ=0;score=0;answered=false;
+  userAnswers=new Array(quizQuestions.length).fill(null);
+  shuffledOrders=quizQuestions.map(function(q){return q.fixed?[...Array(q.a.length).keys()]:shuffle([...Array(q.a.length).keys()]);});
+  currentQuizSource='theory-topics';
+  clearQuizTimer();quizHasTimer=false;
+  document.getElementById('quiz-back-btn').onclick=function(){clearQuizTimer();showScreen('theory-topics');};
+  showScreen('quiz');
+  renderQuestion();
+}
+</script>
 <script id="yechilish-js">
 (function(){
 'use strict';
@@ -11812,7 +11885,7 @@ const letOf=(p,c)=>(((base(c)+p)%7)+7)%7;
 const midiOf=(p,a,c)=>{const d=(c==='t'?30:18)+p;return 12*(Math.floor(d/7)+1)+N[((d%7)+7)%7]+a;};
 const tonName=(t,mode)=>{const s=ger({l:t[0],a:t[1]});return mode==='M'?s+' dur':s.toLowerCase()+' moll';};
 const tonLbl=q=>tonName([q.tonic.l,q.tonic.a],q.mode);
-const symOf=(q,k)=>DEG[q.deg][0]+SUF[q.n===3?'t':'s'][k];
+const symOf=(q,k)=>(q.n===4&&q.deg===1?'S':'')+DEG[q.deg][0]+SUF[q.n===3?'t':'s'][k];
 const SUBD='Subdominanta septakkordi (II pog\'ona)';
 const fnName=q=>q.n===3?DEG[q.deg][1]+' uchtovushligi':(q.deg===1&&q.alt?SUBD:SEPT_NAME[q.deg]);
 function keySig(q){
@@ -11881,7 +11954,7 @@ function pAt(ev,svg){
   const m=svg.getScreenCTM();if(!m)return null;
   const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const q=pt.matrixTransform(m.inverse());
   let c=0,best=1e9;cxsOf(svg).forEach((x,i)=>{const d=Math.abs(q.x-x);if(d<best){best=d;c=i;}});
-  return{p:Math.max(PMIN,Math.min(PMAX,Math.round((70-q.y)/4))),c:1};
+  return{p:Math.max(PMIN,Math.min(PMAX,Math.round((70-q.y)/4))),c:cxsOf(svg).length>2?c:1};
 }
 function guide(svg,r){
   const g=svg.querySelector('.ay-guide');if(!g)return;
@@ -11923,7 +11996,7 @@ function playList(list,single){
 //  • {v:{pog'ona:pog'ona}} — OVOZMA-OVOZ yechilish: akkorddagi har bir tovush o'z pog'onasidan
 //    tonikaning qaysi pog'onasiga o'tishi ko'rsatiladi; javobda berilgan akkorddagi tovushlar soni
 //    (4 ta) yoziladi, bir xil tovushga o'tganlar ikkilanadi/uchlanadi (darslikdagi qoida).
-const T0=[0,0,3],T6=[0,1,3],T64=[0,2,3],D53=[4,0,3],D7_=[4,0,4],D6=[4,1,3],D65=[4,1,4];
+const T0=[0,0,3],T6=[0,1,3],T64=[0,2,3],D53=[4,0,3],D7_=[4,0,4],D6=[4,1,3],D65=[4,1,4],D43=[4,2,4],D2=[4,3,4];
 const VD7a={v:{7:1,2:1,4:3,5:1}};   // D7 (asosiy shakl): 5–1, 7–1, 2–1, 4–3  -> to'liqsiz T (prima uchlanadi)
 const VD7b={v:{7:1,2:1,4:3,5:5}};   // D6/5, D4/3, D2: 7–1, 2–1, 4–3, 5–5  -> to'liq T (prima juftlanadi)
 const VV7={v:{7:1,2:1,4:3,6:5}};    // VII7 va aylanmalari: 7–1, 2–1, 4–3, 6–5 -> to'liq T
@@ -11935,7 +12008,12 @@ const RULE={
     6:[[T0],[T0,T6],[T6]]
   },
   4:{ // septakkordlar
-    1:[[D53,D7_],[D53,D7_],[D53,D7_],[D6,D65]],
+    // SII7 (subdominanta septakkordi) — darslik jadvali: D, T (T6 / T6/4 / T), D7 orqali (aylanmalari)
+    //   SII7   (bas II) → D | T6   | D4/3
+    //   SII6/5 (bas IV) → D | T6   | D2
+    //   SII4/3 (bas VI) → D | T6/4 | D7
+    //   SII2   (bas I)  → D6| T    | D6/5
+    1:[[D53,T6,D43],[D53,T6,D2],[D53,T64,D7_],[D6,T0,D65]],
     4:[[VD7a],[VD7b],[VD7b],[VD7b]],
     6:[[VV7],[VV7],[VV7],[VV7]]
   }
@@ -11984,7 +12062,7 @@ function altName(a){
     const c1=a.vox.filter(v=>v.dt===1).length;
     return a.inc?"Tonika to'liqsiz: prima uch marta, tersiya bir marta, kvinta yo'q":"Tonika uchtovushligi · "+INVN.t[a.i2]+", to'liq"+(c1===2?', prima juftlangan':'')+(a.spread?', yoyiq joylashuv':'');
   }
-  return DEG[a.d2][1]+' uchtovushligi · '+INVN.t[a.i2];
+  return a.n2===4?DEG[a.d2][1]+' septakkordi · '+INVN.s[a.i2]:DEG[a.d2][1]+' uchtovushligi · '+INVN.t[a.i2];
 }
 const bassTxt=(q,a)=>(((q.deg+2*q.inv)%7)+1)+"-pog'ona → "+(((a.d2+2*a.i2)%7)+1)+"-pog'ona";
 const voiceTxt=(q,a)=>a.vox.map(v=>v.df+'–'+v.dt+' ('+nmS(v.from)+' → '+nmS(v.to)+')').join(', ');
@@ -12003,7 +12081,16 @@ function ruleTxt(q){
     if(q.inv===1)return `Subdominanta sekstakkordi dominantaga yechiladi: bas ${s(sc[5])} → ${s(sc[4])} (pastga)`;
     return `Subdominanta kvartsekstakkordi tonikaga yechiladi: bas ${s(sc[0])} o'z joyida qoladi (umumiy tovush)`;
   }
-  return q.n===3?`II pog'ona akkordi dominantaga yechiladi: umumiy tovush ${s(sc[1])} saqlanadi`:`II pog'ona septakkordi (subdominanta funksiyasi) dominantaga yechiladi: septima ${s(sc[0])} → ${s(sc[6])} (pastga)`;
+  if(q.n===4){ // SII7 va aylanmalari — darslik jadvali (D, T, D7 orqali)
+    const b=[1,3,5,0][q.inv],to=(d,t)=>`${t} ga (bas ${s(sc[b])} ${d===b?"o'z joyida qoladi":'→ '+s(sc[d])})`;
+    return [
+      `SII7 (bas — ${s(sc[1])}, II pog'ona) uch xil yechiladi: `+[to(4,'D'),to(2,'T6'),to(1,"D7 ning terskvartakkordi D4/3")].join(', '),
+      `SII6/5 (bas — ${s(sc[3])}, IV pog'ona) uch xil yechiladi: `+[to(4,'D'),to(2,'T6'),to(3,"D7 ning sekundakkordi D2")].join(', '),
+      `SII4/3 (bas — ${s(sc[5])}, VI pog'ona) uch xil yechiladi: `+[to(4,'D'),to(4,"T6/4 (K6/4)"),to(4,'D7')].join(', '),
+      `SII2 (bas — ${s(sc[0])}, I pog'ona) uch xil yechiladi: `+[to(6,'D6'),to(0,'T'),to(6,"D7 ning kvintsekstakkordi D6/5")].join(', ')
+    ][q.inv];
+  }
+  return `II pog'ona akkordi dominantaga yechiladi: umumiy tovush ${s(sc[1])} saqlanadi`;
 }
 // yechilish akkordining nota yo'lidagi joylashuvi
 function ansPos(q,a){
@@ -12031,14 +12118,18 @@ const midis=(arr,c)=>arr.slice().sort((u,v)=>u.p-v.p).map(x=>midiOf(x.p,x.a,c));
 function chordSeq(chs){
   try{const c=ctx(),t0=c.currentTime;chs.forEach((ch,k)=>{ch.forEach(m=>tone(c,m,t0+k*1.5,1.3,.16));});}catch(e){}
 }
-function save(){H[idx]={q:G.q,notes:G.notes,done:G.done,hinted:G.hinted,ok:G.ok,msg:$('ay-msg').innerHTML};}
-function load(){const e=H[idx];G.q=e.q;G.notes=e.notes;G.done=e.done;G.hinted=e.hinted;G.ok=e.ok;G.mode='n';$('ay-msg').innerHTML=e.msg;$('ay-ok').textContent=e.done?'Keyingi ›':'Tekshirish';render();}
+function save(){H[idx]={q:G.q,notes:G.notes,draft:G.draft,done:G.done,hinted:G.hinted,ok:G.ok,msg:$('ay-msg').innerHTML};}
+function load(){const e=H[idx];G.q=e.q;G.notes=e.notes;G.draft=e.draft||[[],[],[],[]];G.done=e.done;G.hinted=e.hinted;G.ok=e.ok;G.mode='n';$('ay-msg').innerHTML=e.msg;$('ay-ok').textContent=e.done?'Keyingi ›':'Tekshirish';render();}
 function render(){
   const q=G.q,vk=q.vk;
   $('ay-q').innerHTML=`<div style="font-size:26px;font-weight:800;color:var(--accent2);line-height:1.2">${tonLbl(q)}</div><div style="font-size:21px;font-weight:800;margin-top:1px">${symOf(q,q.inv)} → ?</div><div style="font-size:13px;font-weight:500;color:var(--muted)">${fnName(q)} · ${INVN[G.m][q.inv]}${q.mode==='m'?' · garmonik minor':''}</div><div style="font-size:13px;font-weight:600;margin-top:4px">${vk?"Har bir ovozning yechilishini yoniga yozing ("+q.n+" ta nota)":"Akkordning yechilishini yoniga yozing"}</div><div style="font-size:11.5px;color:var(--muted)">Notalar yonidagi raqam — tovushning tonallikdagi pog'onasi</div>`;
   const gp=givenLab(q);
   $('ay-staff').innerHTML=arrow(stave([gp,G.notes],q.clef,G.done?(G.ok?'var(--green)':'var(--red)'):'inherit',!G.done,CFG));
+  $('ay-draft-card').style.display=G.dopen?'':'none';
+  const dr=$('ay-dr');if(dr)dr.textContent=G.dopen?'✏️ Yopish':'✏️ Chernovik';
+  $('ay-draft').innerHTML=G.dopen?stave(G.draft,q.clef,'var(--muted)',!G.done,DRAFT):'';
   const sv=$('ay-staff').firstElementChild;if(sv&&!G.done)bind(sv,'m');
+  const dv=$('ay-draft').firstElementChild;if(dv&&!G.done)bind(dv,'d');
   $('ay-cnt').innerHTML=G.done?'':'Notalar: <b>'+G.notes.length+' / '+(q.minN===q.maxN?q.maxN:q.minN+'–'+q.maxN)+'</b> · '+(G.mode==='n'?(vk?"barmoqni bosib turing, qo'yib yuborsangiz nota qo'yiladi; bir xil joyga yana bossangiz nota ikkilanadi":"barmoqni bosib turing, qo'yib yuborsangiz nota qo'yiladi"):G.mode==='x'?"olib tashlash: nota turgan chiziqqa bosing":"belgini nota turgan chiziqqa bosing");
   const modes=vk?['n','x',-2,-1,1,2]:['n',-2,-1,1,2];
   $('ay-pal').innerHTML=G.done?'':'<div class="ay-pal'+(vk?' v6':'')+'">'+modes.map(m=>`<button class="gm-lv${G.mode===m?' on':''}" onclick="AY.setMode('${m}')">${m==='n'?'Nota':m==='x'?'⌫':AC[m]}</button>`).join('')+'</div>';
@@ -12051,16 +12142,29 @@ function render(){
   const bk=$('ay-bk');if(bk)bk.style.opacity=idx>0?'1':'.4';
 }
 window.AY={
-  fillFn(){const lab=G.m==='t'?{1:'II',3:'S (IV)',4:'D (V)',6:'VII'}:{1:'S (II7)',4:'D (D7)',6:'Yetakchi (VII7)'};$('ay-fn').innerHTML='<option value="r">Har xil funksiya</option>'+Object.keys(lab).map(d=>`<option value="${d}">${lab[d]}</option>`).join('');$('ay-fn').value='r';},
-  open(){G.m=G.m||'t';if(!$('ay-root').options.length){$('ay-root').innerHTML='<option value="r">Har xil tonallik</option>'+TONS.map((t,i)=>`<option value="${i}">${tonName(t,t[2])}</option>`).join('');}this.fillFn();G.n=0;this.next();},
+  fillFn(){const lab=G.m==='t'?{1:'II',3:'S (IV)',4:'D (V)',6:'VII'}:{1:'SII7',4:'D (D7)',6:'Yetakchi (VII7)'};$('ay-fn').innerHTML='<option value="r">Har xil funksiya</option>'+Object.keys(lab).map(d=>`<option value="${d}">${lab[d]}</option>`).join('');$('ay-fn').value='r';},
+  open(){G.m=G.m||'t';if(!$('ay-root').options.length){$('ay-root').innerHTML='<option value="r">Har xil tonallik</option>'+TONS.map((t,i)=>`<option value="${i}">${tonName(t,t[2])}</option>`).join('');}this.fillFn();G.n=0;G.dopen=false;this.next();},
   mode(m){G.m=m;$('ay-mt').classList.toggle('on',m==='t');$('ay-ms').classList.toggle('on',m==='s');G.n=0;this.fillFn();this.next();},
   next(){H=[];idx=-1;this.fresh();},
-  fresh(){if(idx>=0)save();G.q=gen();G.notes=[];G.mode='n';G.done=false;G.hinted=false;G.ok=false;$('ay-msg').textContent='';$('ay-ok').textContent='Tekshirish';H.push(null);idx=H.length-1;save();render();},
+  fresh(){if(idx>=0)save();G.q=gen();G.notes=[];G.draft=[[],[],[],[]];G.mode='n';G.done=false;G.hinted=false;G.ok=false;$('ay-msg').textContent='';$('ay-ok').textContent='Tekshirish';H.push(null);idx=H.length-1;save();render();},
   fwd(){if(idx<0)return;save();if(idx<H.length-1){idx++;load();}else this.fresh();},
   back(){if(idx<=0)return;save();idx--;load();},
   setMode(m){if(G.done)return;G.mode=(m==='n'||m==='x')?m:+m;render();},
-  put(p){
-    if(G.done||!G.q)return;const q=G.q,c=q.clef,arr=G.notes,msg=$('ay-msg'),vk=q.vk,cap=q.maxN;
+  put(p,which){
+    if(G.done||!G.q)return;
+    if(/^d\d?$/.test(which||'')){ // chernovik: har bir ustunda 4 tagacha nota
+      const c0=G.q.clef,dm=$('ay-msg'),da=G.draft[+(which.slice(1)||0)],di=da.findIndex(x=>x.p===p);
+      if(G.mode==='n'||G.mode==='x'){
+        if(di>=0){da.splice(di,1);dm.textContent='';}
+        else if(G.mode==='x'){dm.textContent="Bu chiziqda nota yo'q.";return;}
+        else{if(da.length>=4){dm.textContent="Chernovikda bitta akkord ko'pi bilan 4 ta tovushdan iborat. Ortiqcha notani olib tashlash uchun ustiga bosing.";return;}da.push({p,a:0});dm.textContent='';playList([midiOf(p,0,c0)],true);}
+      }else{
+        if(di<0){dm.textContent="Bu chiziqda nota yo'q. Belgi nota turgan chiziqqa qo'yiladi.";return;}
+        const nt=da[di];nt.a=nt.a===G.mode?0:G.mode;dm.textContent='';playList([midiOf(p,nt.a,c0)],true);
+      }
+      render();return;
+    }
+    const q=G.q,c=q.clef,arr=G.notes,msg=$('ay-msg'),vk=q.vk,cap=q.maxN;
     const at=[];arr.forEach((x,i)=>{if(x.p===p)at.push(i);});
     if(G.mode==='x'){
       if(!at.length){msg.textContent="Bu chiziqda nota yo'q.";return;}
@@ -12077,10 +12181,11 @@ window.AY={
     }
     render();
   },
+  draft(){G.dopen=!G.dopen;render();},
   hint(){
     if(G.done)return;const q=G.q;G.hinted=true;
     const a0=q.alts[0];
-    $('ay-msg').innerHTML=`<b>${tonLbl(q)}</b>: belgilar — ${keySig(q)}.${q.mode==='m'?" Garmonik minorda VII pog'ona yarim ton ko'tariladi.":''}<br>${ruleTxt(q)}.<br>Yechilish: <b>${q.alts.map(altSym).join(' yoki ')}</b>.`+(q.vk?'':`<br>Bas tovushi: ${bassTxt(q,a0)}.`);
+    $('ay-msg').innerHTML=`<b>${tonLbl(q)}</b>: belgilar — ${keySig(q)}.${q.mode==='m'?" Garmonik minorda VII pog'ona yarim ton ko'tariladi.":''}<br>${ruleTxt(q)}.<br>Yechilish: <b>${q.alts.map(altSym).join(' yoki ')}</b>.`+(q.vk?'':(q.alts.length>1?'<br>Bas tovushi: '+q.alts.map(a=>altSym(a)+' — '+bassTxt(q,a)).join('; ')+'.':`<br>Bas tovushi: ${bassTxt(q,a0)}.`));
   },
   play(){
     const q=G.q;if(!q)return;const g=midis(ansNotes(q),q.clef);
@@ -12091,7 +12196,7 @@ window.AY={
   check(){
     if(G.done){this.fwd();return;}
     const q=G.q;
-    if(G.notes.length<q.minN){$('ay-msg').textContent='Yechilish '+q.minN+' ta tovushdan iborat: yana '+(q.minN-G.notes.length)+' ta nota yozing';return;}
+    if(G.notes.length<q.minN){$('ay-msg').textContent='Yechilish '+(q.minN===q.maxN?q.minN:q.minN+' yoki '+q.maxN)+' ta tovushdan iborat: yana kamida '+(q.minN-G.notes.length)+' ta nota yozing';return;}
     const s=G.notes.map(x=>({p:x.p,a:x.a,l:letOf(x.p,q.clef)})).sort((u,v)=>u.p-v.p||u.a-v.a);
     const key=x=>x.l*10+x.a,pc=x=>(N[x.l]+x.a+120)%12,pcm=a=>a.map(pc).sort((u,v)=>u-v).join(),pcset=a=>[...new Set(a.map(pc))].sort((u,v)=>u-v).join();
     const k2=arr=>arr.map(x=>x.p+':'+x.a).sort().join('|');
