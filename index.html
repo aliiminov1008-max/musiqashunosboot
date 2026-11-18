@@ -1552,7 +1552,7 @@
     <div class="test-header" style="margin-top:8px">
       <div class="big">🎮</div>
       <h2>Metodik o'yinlar</h2>
-      <p>7 ta o'yin. Guruh a'zolari uchun</p>
+      <p>8 ta o'yin. Guruh a'zolari uchun</p>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px">
         <div id="gm-card-nota" onclick="showScreen('oyin-nota')" style="background:linear-gradient(135deg,#1a3a47,#2c9cc9);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;min-height:72px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.25">1-o'yin</div><div style="font-size:14px;font-weight:700;color:#fff;margin-top:3px">Nota o'qishni o'rganamiz</div><div id="gm-card-nota-sub" style="font-size:10.5px;color:rgba(255,255,255,0.8);margin-top:3px">Nota, pauza va cho'zimi</div></div>
         <div id="gm-card-takt" onclick="showScreen('oyin-takt')" style="background:linear-gradient(135deg,#1a472a,#2ecc71);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;min-height:72px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.25">2-o'yin</div><div style="font-size:14px;font-weight:700;color:#fff;margin-top:3px">Solfedjio</div><div id="gm-card-takt-sub" style="font-size:10.5px;color:rgba(255,255,255,0.8);margin-top:3px">Nota va eshitish</div></div>
@@ -1561,6 +1561,7 @@
         <div id="gm-card-toldir" onclick="showScreen('oyin-toldir')" style="background:linear-gradient(135deg,#1a3a4a,#3ac9c0);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;min-height:72px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.25">5-o'yin</div><div style="font-size:14px;font-weight:700;color:#fff;margin-top:3px">Taktni to'ldiring</div><div id="gm-card-toldir-sub" style="font-size:10.5px;color:rgba(255,255,255,0.8);margin-top:3px">Ritm va o'lchov</div></div>
         <div id="gm-card-yechilish" onclick="showScreen('oyin-yechilish')" style="background:linear-gradient(135deg,#1a4a3a,#5ad1a0);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;min-height:72px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.25">6-o'yin</div><div style="font-size:14px;font-weight:700;color:#fff;margin-top:3px">Akkordlar yechilishi</div><div style="font-size:11px;color:rgba(255,255,255,.8);margin-top:2px">Uchtovushlik va septakkordlar</div></div>
         <div id="gm-card-interval" onclick="showScreen('oyin-interval')" style="background:linear-gradient(135deg,#3a1a4a,#8a68d1);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;min-height:72px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.25">7-o'yin</div><div style="font-size:14px;font-weight:700;color:#fff;margin-top:3px">Intervallar tuzish</div><div style="font-size:11px;color:rgba(255,255,255,.8);margin-top:2px">Diatonik, xromatik va tarkibli</div></div>
+        <div id="gm-card-notaovi" onclick="showScreen('oyin-nota-ovi')" style="background:linear-gradient(135deg,#4a1a2e,#e0739a);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;min-height:72px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.25">8-o'yin</div><div style="font-size:14px;font-weight:700;color:#fff;margin-top:3px">Nota ovi</div><div style="font-size:11px;color:rgba(255,255,255,.8);margin-top:2px">Nota yo'lini nomiga olib bor</div></div>
       </div>
     </div>
   </div>
@@ -1592,6 +1593,50 @@
 </div>
 
 <!-- 6-O'YIN: AKKORDLAR YECHILISHI -->
+<!-- 8-O'YIN: NOTA OVI (nota yo'lini nomiga olib borish) -->
+<div id="screen-oyin-nota-ovi" class="screen">
+  <button class="back-btn" onclick="showScreen('oyinlar')">‹ Orqaga</button>
+  <div class="gm-wrap" id="nv">
+    <div id="nv-setup">
+      <div class="gm-card" style="padding:16px 14px">
+        <div style="font-size:34px">🎣</div>
+        <div style="font-size:17px;font-weight:700;color:var(--accent2);margin:4px 0">Nota ovi</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.45">Ekranda nota yo'llari suzib yuradi. Notani ushlab, pastdagi to'g'ri nota nomiga olib boring. Vaqt tugamasdan oldin imkon qadar ko'p notani toping!</div>
+      </div>
+      <div class="nv-lbl">Kalit</div>
+      <div class="nv-row" id="nv-r-clef"><button class="gm-lv on" data-v="t" onclick="NV.set('clef','t',this)">Sol kaliti</button><button class="gm-lv" data-v="b" onclick="NV.set('clef','b',this)">Fa kaliti</button></div>
+      <div class="nv-lbl">Har bir nota nomi uchun nechta nota</div>
+      <div class="nv-row" id="nv-r-n"><button class="gm-lv" data-v="2" onclick="NV.set('n',2,this)">2</button><button class="gm-lv on" data-v="3" onclick="NV.set('n',3,this)">3</button><button class="gm-lv" data-v="5" onclick="NV.set('n',5,this)">5</button></div>
+      <div class="nv-lbl">O'yin vaqti (teskari sanoq)</div>
+      <div class="gm-tempo" style="margin-bottom:14px"><label>Vaqt: <b id="nv-tv">3:00</b></label><div class="gm-sl" id="nv-tp" data-min="2" data-max="20" data-v="12"><div class="gm-sl-fill"></div><div class="gm-sl-th"></div></div></div>
+      <button class="btn-primary" onclick="NV.start()" style="margin-top:6px">O'yinni boshlash</button>
+      <button class="nav-quiz-btn gm-bd" onclick="GM.fs()" style="width:100%;margin-top:10px">🖥 Doska rejimi</button>
+    </div>
+    <div id="nv-play" style="display:none">
+      <div class="gm-stats"><span>Vaqt: <b id="nv-time">0:00</b></span><span>Xato: <b id="nv-err">0</b></span><span id="nv-left"></span><button class="gm-bd2" title="Doska rejimi" onclick="GM.fs()">🖥</button></div>
+      <div id="nv-arena"><div id="nv-zone"><div id="nv-boxes"></div></div></div>
+      <div class="gm-msg" id="nv-msg" style="margin-top:10px"></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+        <button class="nav-quiz-btn" onclick="NV.start()">↻ Qayta</button>
+        <button class="nav-quiz-btn" id="nv-snd" onclick="NV.snd()">🔊 Tovush</button>
+        <button class="nav-quiz-btn" onclick="NV.open()">⚙ Sozlama</button>
+      </div>
+    </div>
+    <div id="nv-result" style="display:none">
+      <div class="gm-card" style="padding:20px 14px">
+        <div style="font-size:34px" id="nv-re">🎉</div>
+        <div style="font-size:18px;font-weight:700;color:var(--accent2)" id="nv-rt">Barakalla!</div>
+        <div class="nv-stars" id="nv-stars"></div>
+        <div style="font-size:14px;color:var(--text);line-height:1.7" id="nv-sum"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px">
+        <button class="btn-primary" onclick="NV.start()">Qayta o'ynash</button>
+        <button class="nav-quiz-btn" onclick="NV.open()">⚙ Sozlama</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="screen-oyin-yechilish" class="screen">
   <button class="back-btn" onclick="showScreen('oyinlar')">‹ Orqaga</button>
   <div class="gm-wrap" id="ay">
@@ -10770,6 +10815,7 @@ function fs(){
 if(mq&&mq.addEventListener)mq.addEventListener('change',applyBoard);
 document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&board){board=false;applyBoard();}});
 applyBoard();
+window.gmSlider=gmSlider;
 function gmSlider(el){
   const mn=+el.dataset.min,mx=+el.dataset.max;let v=+el.dataset.v,drag=false;
   const fill=el.querySelector('.gm-sl-fill'),th=el.querySelector('.gm-sl-th');
@@ -11297,9 +11343,9 @@ function gmLockUI(){
   const c3=document.getElementById('gm-card-toldir'),sub3=document.getElementById('gm-card-toldir-sub');
   if(c3){c3.style.opacity=GAMES_OK?'':'0.5';if(sub3)sub3.textContent=GAMES_OK?"Ritm va o'lchov":'🔒 Tez orada';}
   const p=c.parentElement.parentElement.querySelector('p');
-  if(p)p.textContent="7 ta o'yin. Guruh a'zolari uchun bepul";
+  if(p)p.textContent="8 ta o'yin. Guruh a'zolari uchun bepul";
 }
-const GAME_IDS=['oyinlar','oyin-nota','oyin-takt','oyin-takt2','oyin-akkord','oyin-toldir','oyin-yechilish','oyin-interval','oyin-cholgu'];
+const GAME_IDS=['oyinlar','oyin-nota','oyin-takt','oyin-takt2','oyin-akkord','oyin-toldir','oyin-yechilish','oyin-interval','oyin-cholgu','oyin-nota-ovi'];
 let _grpAt=0;
 showScreen=function(id,push){
   GM.stop();
@@ -12817,6 +12863,276 @@ window.__profReload=function(){subCache=null;render();};
 window.openProfile=function(){showScreen('profile');};
 var prev=window.showScreen;
 window.showScreen=showScreen=function(id,push){prev(id,push);if(id==='profile'){demo=false;render();window.scrollTo(0,0);}};
+})();
+</script>
+
+<style id="nota-ovi-css">
+#nv .nv-row{display:flex;gap:8px;margin-bottom:10px}
+#nv .nv-lbl{font-size:12px;color:var(--muted);margin:2px 2px 6px;text-align:left}
+#nv-arena{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--glass-border);background:linear-gradient(180deg,#1b2a52 0%,#244a68 100%);-webkit-user-select:none;user-select:none;box-shadow:var(--shadow)}
+#nv-zone{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(180deg,rgba(70,30,90,.55),rgba(40,16,60,.85));border-top:1px solid rgba(255,255,255,.18)}
+#nv-boxes{position:absolute;left:8px;right:8px;bottom:8px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.nv-box{height:54px;border-radius:12px;border:1.5px dashed rgba(242,217,153,.55);background:rgba(255,255,255,.08);color:var(--text);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:transform .12s,background .15s,border-color .15s}
+.nv-box .nv-bn{font-size:19px;font-weight:800;line-height:1.05}
+.nv-box .nv-bn sup{font-size:11px;font-weight:700;margin-left:1px}
+.nv-box .nv-bc{font-size:11px;color:var(--muted);margin-top:2px;font-weight:600}
+.nv-box.hot{transform:scale(1.07);background:rgba(212,175,106,.30);border:1.5px solid var(--accent)}
+.nv-box.ok{background:rgba(76,175,125,.28);border:1.5px solid var(--green)}
+.nv-box.ok .nv-bc{color:#8be0b0}
+.nv-box.bad{animation:nvShake .4s;border-color:var(--red);background:rgba(224,92,92,.25)}
+@keyframes nvShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.nv-item{position:absolute;left:0;top:0;z-index:5;cursor:grab;touch-action:none;will-change:transform}
+.nv-item .nv-in{background:#fffdf6;color:#2a2340;border-radius:calc(12px*var(--nvk,1));padding:calc(6px*var(--nvk,1));box-shadow:0 6px 14px rgba(0,0,0,.35);animation:nvPop .35s ease-out;transition:transform .12s,box-shadow .12s}
+.nv-item.drag{z-index:30;cursor:grabbing}
+.nv-item.drag .nv-in,.nv-item.sel .nv-in{transform:scale(1.12);box-shadow:0 12px 24px rgba(0,0,0,.5)}
+.nv-item.sel .nv-in{outline:3px solid var(--accent)}
+.nv-item.gone .nv-in{animation:nvGone .3s forwards}
+@keyframes nvPop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes nvGone{to{transform:scale(1.5);opacity:0}}
+#nv-time.low{color:var(--red)}
+#nv-result .nv-stars{font-size:38px;letter-spacing:6px;margin:6px 0}
+
+body.gm-board #screen-oyin-nota-ovi .gm-wrap{max-width:1500px;margin:0 auto;padding:8px 32px 100px}
+body.gm-board #nv-setup,body.gm-board #nv-result{max-width:760px;margin:0 auto}
+body.gm-board #nv .nv-lbl{font-size:18px;margin:6px 2px 8px}
+body.gm-board #nv .nv-row{gap:14px;margin-bottom:16px}
+@media (min-width:700px){
+body.gm-board #nv-boxes{grid-template-columns:repeat(8,1fr);gap:12px;left:14px;right:14px;bottom:14px}
+body.gm-board .nv-box{height:90px;border-radius:16px}
+body.gm-board .nv-box .nv-bn{font-size:38px}
+body.gm-board .nv-box .nv-bn sup{font-size:20px}
+body.gm-board .nv-box .nv-bc{font-size:19px;margin-top:4px}
+}
+body.gm-board #nv-result .nv-stars{font-size:64px}
+body.gm-board #nv-result [id=nv-sum]{font-size:22px!important}
+body.gm-board #nv-arena{border-radius:22px}
+</style>
+<script id="nota-ovi-js">
+/* 8-o'yin: Nota ovi. Nota yo'llari (nota + kalit) ekranda suzib yuradi; o'yinchi ularni pastdagi 8 ta nota nomidan biriga olib boradi. */
+(function(){
+const $=id=>document.getElementById(id);
+const NAMES=['do','re','mi','fa','sol','lya','si','do'];
+const POS={t:[-2,-1,0,1,2,3,4,5],b:[3,4,5,6,7,8,9,10]};   // nota yo'lidagi o'rni (0 = pastki chiziq)
+const SUP={t:{0:'1',7:'2'},b:{7:'1'}};                    // oktava belgisi (ikkita "do" ni ajratish uchun)
+const BASE={t:60,b:48},OFF=[0,2,4,5,7,9,11,12];            // MIDI: Sol kaliti do1 = 60, Fa kaliti do = 48
+const BASS='<path d="M15 46 C15 37 33 37 33 49 C33 60 23 68 11 74" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="15" cy="46" r="3.6" fill="currentColor"/><circle cx="38" cy="42" r="1.9" fill="currentColor"/><circle cx="38" cy="50" r="1.9" fill="currentColor"/>';
+const TREBLE='<path d="M20 88 C22 70 26 50 24 36 C23 26 19 24 18 30 C17 38 26 48 28 58 C30 68 14 72 14 62 C14 52 26 52 26 62 C26 68 20 68 20 63 M20 88 C20 94 12 94 14 88" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>';
+let IW=92,IH=78,LIFT=36;const SPD=[16,28,44];
+const OKMSG=["To'g'ri! 👏","Zo'r! ✨","Barakalla! 🎵","Ofarin! 🌟"];
+const S={cfg:{clef:'t',n:3,sp:1,t:180},run:false,raf:0,last:0,el:0,err:0,okc:0,items:[],queue:[],box:[],need:0,sel:null,snd:true,w:0,fh:0,ah:0,shown:-1,ac:null,K:1,b:false,ZH:132,max:5};
+
+function sgn(x){return x<0?-1:1}
+function rnd(a,b){return a+Math.random()*(b-a)}
+function shuf(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a}
+function fmt(s){s=Math.floor(s);return Math.floor(s/60)+':'+('0'+(s%60)).slice(-2)}
+
+function staffSvg(clef,p){
+  const y=q=>70-4*q,cx=62,cy=y(p);
+  let o='<svg viewBox="0 20 96 80" width="'+Math.round(80*S.K)+'" height="'+Math.round(66.7*S.K)+'" xmlns="http://www.w3.org/2000/svg" style="display:block;pointer-events:none">';
+  for(let i=0;i<5;i++)o+='<line x1="2" x2="94" y1="'+(38+8*i)+'" y2="'+(38+8*i)+'" stroke="currentColor" stroke-width="1.2"/>';
+  o+=clef==='b'?BASS:TREBLE;
+  if(p<=-2)for(let q=-2;q>=p;q-=2)o+='<line x1="'+(cx-11)+'" x2="'+(cx+11)+'" y1="'+y(q)+'" y2="'+y(q)+'" stroke="currentColor" stroke-width="1.3"/>';
+  if(p>=10)for(let q=10;q<=p;q+=2)o+='<line x1="'+(cx-11)+'" x2="'+(cx+11)+'" y1="'+y(q)+'" y2="'+y(q)+'" stroke="currentColor" stroke-width="1.3"/>';
+  o+='<ellipse cx="'+cx+'" cy="'+cy+'" rx="6.4" ry="4.7" transform="rotate(-18 '+cx+' '+cy+')" fill="currentColor"/>';
+  if(p<4)o+='<line x1="'+(cx+5.8)+'" x2="'+(cx+5.8)+'" y1="'+(cy-1)+'" y2="'+(cy-27)+'" stroke="currentColor" stroke-width="1.6"/>';
+  else o+='<line x1="'+(cx-5.8)+'" x2="'+(cx-5.8)+'" y1="'+(cy+1)+'" y2="'+(cy+27)+'" stroke="currentColor" stroke-width="1.6"/>';
+  return o+'</svg>';
+}
+
+function tone(midi,bad){
+  if(!S.snd)return;
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+    if(!S.ac)S.ac=new AC();const c=S.ac;if(c.state==='suspended')c.resume();
+    const o=c.createOscillator(),g=c.createGain(),t=c.currentTime;
+    o.type=bad?'square':'triangle';o.frequency.value=bad?140:440*Math.pow(2,(midi-69)/12);
+    g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(bad?0.08:0.28,t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+(bad?0.18:0.8));
+    o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+(bad?0.2:0.85));
+  }catch(e){}
+}
+
+function unlockAudio(){try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;if(!S.ac)S.ac=new AC();if(S.ac.state==='suspended')S.ac.resume();}catch(e){}}
+function isBoard(){return document.body.classList.contains('gm-board');}
+function measure(){
+  const ar=$('nv-arena'),w=ar.clientWidth||340,b=isBoard()&&w>=700; /* tor ekranda (telefon) doska rejimi kattalashtirmaydi */
+  S.b=b;S.K=b?Math.max(1.5,Math.min(2.2,w/820)):1;
+  IW=Math.round(92*S.K);IH=Math.round(78*S.K);LIFT=Math.round(36*S.K);
+  S.ZH=b?118:132;S.max=b?7:5;S.w=w;
+  if(b){S.ah=Math.max(420,Math.min(900,window.innerHeight-370));S.fh=S.ah-S.ZH;}
+  else{S.fh=Math.max(250,Math.min(380,Math.round(w*0.95)));S.ah=S.fh+S.ZH;}
+  ar.style.height=S.ah+'px';ar.style.setProperty('--nvk',S.K);$('nv-zone').style.height=S.ZH+'px';
+}
+function place(it){it.el.style.transform='translate('+Math.round(it.x)+'px,'+Math.round(it.y)+'px)';}
+function clampField(it){it.x=Math.max(0,Math.min(S.w-IW,it.x));it.y=Math.max(0,Math.min(S.fh-IH,it.y));}
+function newVel(it){const a=rnd(0,6.283),v=SPD[S.cfg.sp]*S.K*rnd(.7,1.3);it.vx=Math.cos(a)*v;it.vy=Math.sin(a)*v;const mn=6*S.K;if(Math.abs(it.vx)<mn)it.vx=mn*sgn(it.vx);if(Math.abs(it.vy)<mn)it.vy=mn*sgn(it.vy);}
+
+function spawn(){
+  if(!S.queue.length)return;
+  const idx=S.queue.pop(),clef=S.cfg.clef,el=document.createElement('div');
+  el.className='nv-item';el.innerHTML='<div class="nv-in">'+staffSvg(clef,POS[clef][idx])+'</div>';
+  const it={idx:idx,el:el,x:rnd(0,Math.max(1,S.w-IW)),y:rnd(0,Math.max(1,S.fh-IH)),vx:0,vy:0,drag:false,frozen:false};
+  newVel(it);place(it);bindItem(it);$('nv-arena').appendChild(el);S.items.push(it);
+}
+
+function bindItem(it){
+  const el=it.el;let g=null,wasSel=false;
+  el.addEventListener('pointerdown',function(e){
+    if(!S.run||it.drag)return;e.preventDefault();
+    wasSel=(S.sel===it);if(S.sel&&S.sel!==it)unsel();
+    try{el.setPointerCapture(e.pointerId);}catch(_){}
+    const ar=$('nv-arena').getBoundingClientRect();
+    g={id:e.pointerId,sx:e.clientX,sy:e.clientY,t:Date.now(),moved:false,ar:ar};
+    it.drag=true;el.classList.add('drag');
+    if(S.sel===it){S.sel=null;el.classList.remove('sel');}
+    it.frozen=false;
+    unlockAudio();
+  });
+  el.addEventListener('pointermove',function(e){
+    if(!g||e.pointerId!==g.id)return;
+    if(!g.moved&&Math.hypot(e.clientX-g.sx,e.clientY-g.sy)>8)g.moved=true;
+    if(!g.moved)return;
+    it.x=Math.max(0,Math.min(S.w-IW,e.clientX-g.ar.left-IW/2));
+    it.y=Math.max(0,Math.min(S.ah-IH,e.clientY-g.ar.top-IH/2-LIFT));
+    place(it);hot(hitBox(it));
+  });
+  const end=function(e){
+    if(!g||e.pointerId!==g.id)return;
+    const wasTap=!g.moved&&Date.now()-g.t<400;g=null;
+    it.drag=false;el.classList.remove('drag');hot(-1);
+    if(wasTap){if(wasSel){newVel(it);$('nv-msg').textContent='';return;}it.frozen=true;S.sel=it;el.classList.add('sel');$('nv-msg').textContent="Endi pastdagi nota nomini bosing";return;}
+    const b=hitBox(it);
+    if(b>=0)drop(it,b);else{clampField(it);newVel(it);place(it);}
+  };
+  el.addEventListener('pointerup',end);el.addEventListener('pointercancel',end);
+}
+function unsel(){if(S.sel){S.sel.frozen=false;S.sel.el.classList.remove('sel');S.sel=null;}}
+
+function hitBox(it){
+  const ar=$('nv-arena').getBoundingClientRect(),cx=ar.left+it.x+IW/2,cy=ar.top+it.y+IH/2;
+  for(let i=0;i<S.box.length;i++){const r=S.box[i].el.getBoundingClientRect();if(cx>=r.left-4&&cx<=r.right+4&&cy>=r.top-4&&cy<=r.bottom+4)return i;}
+  return -1;
+}
+function hot(i){S.box.forEach(function(b,k){b.el.classList.toggle('hot',k===i);});}
+
+function drop(it,bi){
+  const b=S.box[bi],clef=S.cfg.clef;
+  if(it===S.sel)S.sel=null;
+  if(bi===it.idx){
+    S.okc++;b.done++;it.frozen=true;it.el.classList.add('gone');
+    S.items.splice(S.items.indexOf(it),1);setTimeout(function(){if(it.el.parentNode)it.el.parentNode.removeChild(it.el);},320);
+    tone(BASE[clef]+OFF[it.idx],false);
+    updBox(b);$('nv-msg').textContent=OKMSG[S.okc%OKMSG.length];
+    if(S.okc>=S.need){finish();return;}
+    spawn();updLeft();
+  }else{
+    S.err++;$('nv-err').textContent=S.err;tone(0,true);
+    b.el.classList.add('bad');setTimeout(function(){b.el.classList.remove('bad');},420);
+    $('nv-msg').textContent="Bu nota «"+b.name+(b.sup?b.sup:'')+"» emas. Yana urinib ko'ring";
+    it.frozen=false;it.el.classList.remove('sel');clampField(it);newVel(it);place(it);
+  }
+}
+function updBox(b){
+  b.el.querySelector('.nv-bc').textContent=b.done>=S.cfg.n?'✓':b.done+'/'+S.cfg.n;
+  b.el.classList.toggle('ok',b.done>=S.cfg.n);
+}
+function updLeft(){$('nv-left').textContent="Qoldi: "+(S.need-S.okc);}
+
+function buildBoxes(){
+  const clef=S.cfg.clef,box=$('nv-boxes');box.innerHTML='';S.box=[];
+  for(let i=0;i<8;i++){
+    const el=document.createElement('div');el.className='nv-box';
+    const sup=SUP[clef][i]||'';
+    el.innerHTML='<div class="nv-bn">'+NAMES[i]+(sup?'<sup>'+sup+'</sup>':'')+'</div><div class="nv-bc">0/'+S.cfg.n+'</div>';
+    (function(k){el.addEventListener('click',function(){if(S.run&&S.sel)drop(S.sel,k);});})(i);
+    box.appendChild(el);S.box.push({el:el,name:NAMES[i],sup:sup,done:0});
+  }
+}
+
+function show(id){['nv-setup','nv-play','nv-result'].forEach(function(k){$(k).style.display=k===id?'':'none';});}
+function clearItems(){S.items.forEach(function(it){if(it.el.parentNode)it.el.parentNode.removeChild(it.el);});S.items=[];S.sel=null;}
+
+function tick(t){
+  S.raf=0;if(!S.run)return;
+  const dt=Math.min(0.05,Math.max(0,(t-S.last)/1000));S.last=t;S.el+=dt;
+  for(let i=0;i<S.items.length;i++){
+    const it=S.items[i];if(it.drag||it.frozen)continue;
+    it.x+=it.vx*dt;it.y+=it.vy*dt;
+    if(it.x<0){it.x=0;it.vx=Math.abs(it.vx);}else if(it.x>S.w-IW){it.x=S.w-IW;it.vx=-Math.abs(it.vx);}
+    if(it.y<0){it.y=0;it.vy=Math.abs(it.vy);}else if(it.y>S.fh-IH){it.y=S.fh-IH;it.vy=-Math.abs(it.vy);}
+    place(it);
+  }
+  for(let i=0;i<S.items.length;i++)for(let j=i+1;j<S.items.length;j++){
+    const a=S.items[i],b=S.items[j];if(a.drag||b.drag||a.frozen||b.frozen)continue;
+    const dx=a.x-b.x,dy=a.y-b.y,ox=(IW-10)-Math.abs(dx),oy=(IH-10)-Math.abs(dy);
+    if(ox>0&&oy>0){
+      if(ox<oy){const s=sgn(dx||1);a.x+=s*ox/2;b.x-=s*ox/2;a.vx=s*Math.abs(a.vx);b.vx=-s*Math.abs(b.vx);}
+      else{const s=sgn(dy||1);a.y+=s*oy/2;b.y-=s*oy/2;a.vy=s*Math.abs(a.vy);b.vy=-s*Math.abs(b.vy);}
+      clampField(a);clampField(b);place(a);place(b);
+    }
+  }
+  if(S.el>=S.cfg.t){$('nv-time').textContent='0:00';finish(true);return;}
+  const sec=Math.ceil(S.cfg.t-S.el);if(sec!==S.shown){S.shown=sec;$('nv-time').textContent=fmt(sec);$('nv-time').classList.toggle('low',sec<=10);}
+  S.raf=requestAnimationFrame(tick);
+}
+function stop(){S.run=false;if(S.raf){cancelAnimationFrame(S.raf);S.raf=0;}}
+
+function start(){
+  stop();clearItems();show('nv-play');measure();buildBoxes();
+  const n=S.cfg.n;S.need=n*8;S.okc=0;S.err=0;S.el=0;S.shown=-1;
+  const q=[];for(let i=0;i<8;i++)for(let k=0;k<n;k++)q.push(i);S.queue=shuf(q);
+  $('nv-err').textContent='0';$('nv-time').textContent=fmt(S.cfg.t);$('nv-time').classList.remove('low');updLeft();
+  $('nv-msg').textContent="Nota yo'lini ushlab, to'g'ri nomga olib boring (yoki bosib, so'ng nomni bosing)";
+  for(let i=0;i<Math.min(S.max,S.need);i++)spawn();
+  S.run=true;S.last=performance.now();S.raf=requestAnimationFrame(tick);
+}
+function finish(timeUp){
+  stop();clearItems();
+  const total=S.okc+S.err,acc=total?Math.round(S.okc*100/total):100;
+  let stars,best='',html;
+  if(timeUp){
+    const r=S.need?S.okc/S.need:0;
+    stars=r>=0.8?2:(r>=0.5?1:0);
+    $('nv-re').textContent='⏰';$('nv-rt').textContent='Vaqt tugadi!';
+    html="To'g'ri: <b>"+S.okc+"/"+S.need+"</b> · Xato: <b>"+S.err+"</b> · Aniqlik: <b>"+acc+"%</b>";
+  }else{
+    stars=S.err===0?3:(S.err<=3?2:1);
+    $('nv-re').textContent='🎉';$('nv-rt').textContent='Barakalla!';
+    const key='nv_best_'+S.cfg.clef+S.cfg.n+'_'+S.cfg.t;
+    try{const old=parseFloat(localStorage.getItem(key)||'0');if(!old||S.el<old){localStorage.setItem(key,String(S.el));best=old?"<br>🏆 Yangi rekord!":'';}else best="<br>Rekord: "+fmt(old);}catch(e){}
+    html="Sarflangan vaqt: <b>"+fmt(S.el)+"</b> (qoldi: "+fmt(Math.max(0,S.cfg.t-S.el))+") · Xato: <b>"+S.err+"</b> · Aniqlik: <b>"+acc+"%</b>"+best;
+  }
+  $('nv-stars').textContent='★'.repeat(stars)+'☆'.repeat(3-stars);
+  $('nv-sum').innerHTML=html;
+  show('nv-result');
+}
+
+window.NV={
+  open:function(){stop();clearItems();show('nv-setup');},
+  stop:stop,start:start,
+  set:function(k,v,btn){S.cfg[k]=v;const row=btn.parentNode;Array.prototype.forEach.call(row.children,function(b){b.classList.toggle('on',b===btn);});},
+  snd:function(){S.snd=!S.snd;$('nv-snd').textContent=S.snd?'🔊 Tovush':'🔇 Tovush';}
+};
+(function(){const sl=$('nv-tp');if(!sl||!window.gmSlider)return;gmSlider(sl);
+  const upd=function(){S.cfg.t=sl.value*15;$('nv-tv').textContent=fmt(S.cfg.t);};
+  sl.oninput=upd;upd();})();
+$('nv-arena').addEventListener('click',function(e){if(S.sel&&(e.target.id==='nv-arena'||e.target.id==='nv-zone'||e.target.id==='nv-boxes'))unsel();});
+function relayout(){
+  if(!S.run)return;
+  const ow=S.w,ofh=S.fh,oK=S.K;measure();
+  const clef=S.cfg.clef,r=S.K/oK;
+  S.items.forEach(function(it){
+    if(S.K!==oK){it.el.firstChild.innerHTML=staffSvg(clef,POS[clef][it.idx]);it.x*=S.w/ow;it.y*=S.fh/ofh;it.vx*=r;it.vy*=r;}
+    clampField(it);place(it);
+  });
+}
+window.addEventListener('resize',relayout);
+if(window.MutationObserver)new MutationObserver(relayout).observe(document.body,{attributes:true,attributeFilter:['class']});
+const prev=window.showScreen;
+window.showScreen=showScreen=function(id,push){
+  if(id!=='oyin-nota-ovi')NV.stop();
+  prev(id,push);
+  if(id==='oyin-nota-ovi'){NV.open();window.scrollTo(0,0);}
+};
 })();
 </script>
 
