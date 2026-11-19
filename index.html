@@ -670,7 +670,7 @@
   .mm-v:active{opacity:.8}
 </style>
     <details class="mm-box" id="mm-box">
-      <summary><span class="mm-ic">🌱</span><span class="mm-tx"><b>MTTda musiqa o'qitish metodikasi</b><small>Attestatsiya uchun · 106 ta savol, 4 ta variant</small></span></summary>
+      <summary><span class="mm-ic">🌱</span><span class="mm-tx"><b>MTTda musiqa o'qitish metodikasi</b><small>Attestatsiya uchun · 106 ta savol · Guruh a'zolari uchun bepul</small></span></summary>
       <div class="mm-grid">
         <button type="button" class="mm-v" onclick="startQuiz('mttmet1',null)"><b>1-variant</b><span>27 ta savol</span></button>
         <button type="button" class="mm-v" onclick="startQuiz('mttmet2',null)"><b>2-variant</b><span>27 ta savol</span></button>
@@ -6334,8 +6334,8 @@ function answerDaily(qIdx, chosenOrigIdx) {
 }
 
 function startQuiz(type, key) {
-  // 2026 kuzgi/bahorgi attestatsiya savollari bepul: faqat guruh a'zoligi kerak
-  if (type === 'imtixonKuzgi' || type === 'imtixonKuzgi2' || type === 'imtixonKuzgi3' || type === 'imtixonBahorgi' || type === 'imtixonMilliy') {
+  // 2026 kuzgi/bahorgi attestatsiya savollari va asosiy ekrandagi MTT metodikasi bepul: faqat guruh a'zoligi kerak
+  if (/^mttmet[1-4]$/.test(type) || type === 'imtixonKuzgi' || type === 'imtixonKuzgi2' || type === 'imtixonKuzgi3' || type === 'imtixonBahorgi' || type === 'imtixonMilliy') {
     if (typeof window.requireGroup === 'function') window.requireGroup(function () { _doStartQuiz(type, key); });
     else _doStartQuiz(type, key);
     return;
