@@ -592,7 +592,10 @@
     </a>
   <div class="header" style="padding-top:46px">
     <span class="hero-eyebrow">🎼 Musiqashunos</span>
-    <h1 class="hero-title" style="margin-top:2px">Musiqa — Attestatsiya</h1>
+    <div id="srch-home" onclick="srchShow()" role="search" aria-label="Savollarni qidirish">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+      <span>Kerakli savolni izlang</span>
+    </div>
     <p>Maktab va MTT Musiqa o'qituvchilari uchun</p>
     <div class="staff-rule">
       <span class="staff-note" style="font-size:15px;animation-delay:0s">♪</span>
@@ -13228,6 +13231,404 @@ window.showScreen=showScreen=function(id,push){
   prev(id,push);
   if(id==='oyin-nota-ovi'){NV.open();window.scrollTo(0,0);}
 };
+})();
+</script>
+
+<style id="search-css">
+  #srch-home{display:flex;align-items:center;gap:10px;height:42px;max-width:420px;margin:6px auto 2px;padding:0 16px;border-radius:21px;cursor:text;background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.10);color:rgba(245,239,224,0.45);font-size:15px;-webkit-user-select:none;user-select:none;}
+  #srch-home:active{background:rgba(255,255,255,0.13);}
+  #srch-home svg{flex:none;opacity:0.8;}
+  #srch-home span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  #srch-overlay{display:none;position:fixed;inset:0;z-index:9500;background:var(--bg);flex-direction:column;}
+  #srch-overlay.on{display:flex;}
+  .srch-bar{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--border);background:var(--bg2);}
+  .srch-back{background:none;border:0;color:var(--accent2);font-size:28px;line-height:1;padding:0 6px;cursor:pointer;}
+  .srch-field{flex:1;display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0 10px;}
+  #srch-input{flex:1;min-width:0;background:none;border:0;outline:0;color:var(--text);font-size:16px;padding:11px 0;font-family:inherit;}
+  #srch-input::placeholder{color:var(--muted);}
+  #srch-clear{display:none;background:none;border:0;color:var(--muted);font-size:16px;cursor:pointer;padding:4px;}
+  #srch-info{padding:10px 14px 4px;font-size:12.5px;color:var(--muted);line-height:1.5;}
+  #srch-info b{color:var(--accent2);}
+  #srch-chips{display:flex;gap:6px;overflow-x:auto;padding:4px 12px 8px;-webkit-overflow-scrolling:touch;}
+  #srch-chips:empty{display:none;}
+  .srch-chip{flex:none;font-size:11px;padding:5px 10px;border-radius:14px;border:1px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;white-space:nowrap;max-width:260px;overflow:hidden;text-overflow:ellipsis;}
+  .srch-chip.on{background:rgba(212,175,106,0.18);border-color:var(--accent);color:var(--accent2);}
+  #srch-list{flex:1;overflow-y:auto;padding:4px 12px 40px;-webkit-overflow-scrolling:touch;}
+  .srch-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;margin-bottom:10px;}
+  .srch-tag{display:inline-block;font-size:10.5px;font-weight:600;color:var(--accent2);background:rgba(212,175,106,0.12);border-radius:8px;padding:3px 8px;margin-bottom:8px;line-height:1.35;}
+  .srch-q{font-size:14px;line-height:1.5;color:var(--text);white-space:pre-wrap;word-break:break-word;}
+  .srch-img{max-width:100%;max-height:150px;border-radius:8px;margin-top:8px;display:block;}
+  .srch-opts{margin-top:8px;display:flex;flex-direction:column;gap:4px;}
+  .srch-opt{font-size:12.5px;line-height:1.45;color:var(--muted);padding:6px 9px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid transparent;word-break:break-word;}
+  .srch-opt.ok{color:#c9f2dc;background:rgba(76,175,125,0.16);border-color:rgba(76,175,125,0.5);}
+  .srch-ex{margin-top:8px;font-size:12px;line-height:1.55;color:var(--muted);padding:8px 10px;background:rgba(255,255,255,0.05);border-radius:8px;white-space:pre-wrap;word-break:break-word;}
+  .srch-lock{margin-top:8px;font-size:12px;color:var(--muted);padding:8px 10px;border:1px dashed var(--border);border-radius:8px;}
+  .srch-lock a{color:var(--accent2);text-decoration:underline;cursor:pointer;}
+  .srch-go{margin-top:10px;font-size:12px;font-weight:600;color:var(--accent2);background:none;border:1px solid var(--border);border-radius:10px;padding:7px 12px;cursor:pointer;}
+  .srch-more{display:block;width:100%;margin:6px 0 0;padding:11px;font-size:13px;font-weight:600;color:var(--accent2);background:var(--card);border:1px solid var(--border);border-radius:12px;cursor:pointer;}
+  .srch-empty{text-align:center;color:var(--muted);font-size:14px;padding:46px 20px;line-height:1.6;}
+  .srch-empty .big{font-size:34px;display:block;margin-bottom:8px;}
+  #srch-list mark{background:rgba(242,217,153,0.38);color:#fff;border-radius:3px;padding:0 1px;}
+</style>
+<div id="srch-overlay" role="dialog" aria-label="Savollarni qidirish">
+  <div class="srch-bar">
+    <button class="srch-back" onclick="srchClose()" aria-label="Yopish">‹</button>
+    <div class="srch-field">
+      <span>🔍</span>
+      <input id="srch-input" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="Savol yoki so'z izlang…">
+      <button id="srch-clear" onclick="srchClear()" aria-label="Tozalash">✕</button>
+    </div>
+  </div>
+  <div id="srch-info"></div>
+  <div id="srch-chips"></div>
+  <div id="srch-list"></div>
+</div>
+<script id="search-js">
+(function () {
+  // true bo'lsa to'lov qilmagan foydalanuvchiga ham to'g'ri javob va izoh ko'rinadi
+  var ANSWERS_FOR_ALL = false;
+  var PAGE = 25;
+
+  // [massiv, ochish usuli, bo'lim/variant nomi]; ochish: ['q',type] | ['t',type] | ['s',key] | null
+  function sources() {
+    return [
+    [intervalsQuestions,["q", "intervals"],"Intervallar testi — 1-variant"],
+    [intervalsQuestions2,["q", "intervals2"],"Intervallar testi — 2-variant"],
+    [intervalsQuestions3,["q", "intervals3"],"Intervallar testi — 3-variant"],
+    [intervalsQuestions4,["q", "intervals4"],"Intervallar testi — 5-variant"],
+    [intervalsQuestions5,["q", "intervals5"],"Intervallar testi — 6-variant"],
+    [intervalsQuestions6,["q", "intervals6"],"Intervallar testi — 7-variant"],
+    [jahonV1Questions,["q", "jahon_v1"],"Jahon musiqa adabiyoti — 1-variant"],
+    [jahonV2Questions,["q", "jahon_v2"],"Jahon musiqa adabiyoti — 2-variant"],
+    [jahonV3Questions,["q", "jahon_v3"],"Jahon musiqa adabiyoti — 3-variant"],
+    [jahonV4Questions,["q", "jahon_v4"],"Jahon musiqa adabiyoti — 4-variant"],
+    [jahonV5Questions,["q", "jahon_v5"],"Jahon musiqa adabiyoti — 5-variant"],
+    [jahonV6Questions,["q", "jahon_v6"],"Jahon musiqa adabiyoti — 6-variant"],
+    [jahonV7Questions,["q", "jahon_v7"],"Jahon musiqa adabiyoti — 7-variant (Bax ijodi)"],
+    [jahonV8Questions,["q", "jahon_v8"],"Jahon musiqa adabiyoti — 8-variant (Bax ijodi)"],
+    [jahonV9Questions,["q", "jahon_v9"],"Jahon musiqa adabiyoti — 9-variant (Bax ijodi)"],
+    [jahonV10Questions,["q", "jahon_v10"],"Jahon musiqa adabiyoti — 10-variant"],
+    [jahonV11Questions,["q", "jahon_v11"],"Jahon musiqa adabiyoti — 11-variant (Vena klassik maktabi)"],
+    [jahonV12Questions,["q", "jahon_v12"],"Jahon musiqa adabiyoti — 12-variant (Gaydn ijodi)"],
+    [jahonV13Questions,["q", "jahon_v13"],"Jahon musiqa adabiyoti — 13-variant (Gaydn ijodi)"],
+    [jahonV14Questions,["q", "jahon_v14"],"Jahon musiqa adabiyoti — 14-variant (V.A. Motsart)"],
+    [jahonV15Questions,["q", "jahon_v15"],"Jahon musiqa adabiyoti — 15-variant (V.A. Motsart)"],
+    [jahonV17Questions,["q", "jahon_v17"],"Jahon musiqa adabiyoti — 16-variant (L. van Betxoven)"],
+    [jahonV18Questions,["q", "jahon_v18"],"Jahon musiqa adabiyoti — 17-variant (L. van Betxoven)"],
+    [jahonV19Questions,["q", "jahon_v19"],"Jahon musiqa adabiyoti — 18-variant (Romantizm davri ijodkorlari)"],
+    [jahonV20Questions,["q", "jahon_v20"],"Jahon musiqa adabiyoti — 19-variant (Frans Shubert)"],
+    [jahonV21Questions,["q", "jahon_v21"],"Jahon musiqa adabiyoti — 20-variant (Frederik Shopen, 1-qism)"],
+    [jahonV22Questions,["q", "jahon_v22"],"Jahon musiqa adabiyoti — 21-variant (Frederik Shopen, 2-qism)"],
+    [jahonV23Questions,["q", "jahon_v23"],"Jahon musiqa adabiyoti — 22-variant (Ferens List)"],
+    [jahonV24Questions,["q", "jahon_v24"],"Jahon musiqa adabiyoti — 24-variant"],
+    [jahonV25Questions,["q", "jahon_v25"],"Jahon musiqa adabiyoti — 25-variant"],
+    [adabiyotQuestions,["q", "adabiyot"],"O'zbek musiqa adabiyoti — 1-variant"],
+    [uzbekAdabiyot2Questions,["q", "adabiyot_uzbek2"],"O'zbek musiqa adabiyoti — 2-variant"],
+    [uzbekAdabiyot3Questions,["q", "adabiyot_uzbek3"],"O'zbek musiqa adabiyoti — 3-variant"],
+    [uzbekAdabiyot4Questions,["q", "adabiyot_uzbek4"],"O'zbek musiqa adabiyoti — 4-variant"],
+    [uzbekAdabiyot5Questions,["q", "adabiyot_uzbek5"],"O'zbek musiqa adabiyoti — 5-variant"],
+    [uzbekAdabiyot6Questions,["q", "adabiyot_uzbek6"],"O'zbek musiqa adabiyoti — 6-variant"],
+    [uzbekAdabiyot7Questions,["q", "adabiyot_uzbek7"],"O'zbek musiqa adabiyoti — 7-variant"],
+    [uzbekAdabiyot8Questions,["q", "adabiyot_uzbek8"],"O'zbek musiqa adabiyoti — 8-variant"],
+    [uzbekAdabiyot9Questions,["q", "adabiyot_uzbek9"],"O'zbek musiqa adabiyoti — 9-variant"],
+    [uzbekAdabiyot10Questions,["q", "adabiyot_uzbek10"],"O'zbek musiqa adabiyoti — 10-variant"],
+    [uzbekAdabiyot11Questions,["q", "adabiyot_uzbek11"],"O'zbek musiqa adabiyoti — 11-variant"],
+    [uzbekAdabiyot12Questions,["q", "adabiyot_uzbek12"],"O'zbek musiqa adabiyoti — 12-variant"],
+    [uzbekAdabiyot13Questions,["q", "adabiyot_uzbek13"],"O'zbek musiqa adabiyoti — 13-variant (Opera san'ati)"],
+    [uzbekAdabiyot14Questions,["q", "adabiyot_uzbek14"],"O'zbek musiqa adabiyoti — 14-variant (Opera san'ati, 2)"],
+    [uzbekAdabiyot15Questions,["q", "adabiyot_uzbek15"],"O'zbek musiqa adabiyoti — 15-variant (Balet san'ati)"],
+    [uzbekAdabiyot16Questions,["q", "adabiyot_uzbek16"],"O'zbek musiqa adabiyoti — 16-variant (Balet san'ati, 2)"],
+    [uzbekAdabiyot17Questions,["q", "adabiyot_uzbek17"],"O'zbek musiqa adabiyoti — 17-variant (Vokal-simfonik musiqasi)"],
+    [uzbekAdabiyot18Questions,["q", "adabiyot_uzbek18"],"O'zbek musiqa adabiyoti — 18-variant (Vokal-simfonik musiqasi, 2)"],
+    [uzbekAdabiyot19Questions,["q", "adabiyot_uzbek19"],"O'zbek musiqa adabiyoti — 19-variant (O'zbek simfonik musiqasi)"],
+    [uzbekAdabiyot20Questions,["q", "adabiyot_uzbek20"],"O'zbek musiqa adabiyoti — 20-variant (O'zbek simfonik musiqasi, 2)"],
+    [tayanchTushunchalarQuestions,["q", "adabiyot_uzbek_tt"],"Tayanch tushunchalar"],
+    [kompozitorlar1Questions,["q", "kompozitorlar1"],"O'zbek kompozitorlari — 1-variant (M. Burxonov va M. Ashrafiy)"],
+    [kompozitorlar2Questions,["q", "kompozitorlar2"],"O'zbek kompozitorlari — 2-variant (Y. Rajabiy va V. Uspenskiy)"],
+    [kompozitorlar3Questions,["q", "kompozitorlar3"],"O'zbek kompozitorlari — 3-variant (T. Jalilov va S. Yudakov)"],
+    [kompozitorlar4Questions,["q", "kompozitorlar4"],"O'zbek kompozitorlari — 4-variant"],
+    [nazariyaQuestions,["t", "theory"],"Nazariya testi — umumiy to'plam"],
+    [nazariya2Questions,["t", "theory1"],"Nazariya testi — 1-variant"],
+    [nazariya3Questions,["t", "theory2"],"Nazariya testi — 2-variant"],
+    [nazariya4Questions,["t", "theory3"],"Nazariya testi — 3-variant"],
+    [nazariya5Questions,["t", "theory4"],"Nazariya testi — 4-variant"],
+    [nazariya6Questions,["t", "theory5"],"Nazariya testi — 5-variant"],
+    [nazariya7Questions,["t", "theory6"],"Nazariya testi — 6-variant"],
+    [nazariya8Questions,["t", "theory7"],"Nazariya testi — 7-variant"],
+    [nazariya9Questions,["t", "theory8"],"Nazariya testi — 8-variant"],
+    [nazariya10Questions,["t", "theory9"],"Nazariya testi — 9-variant: Septakordlar1"],
+    [nazariya11Questions,["t", "theory10"],"Nazariya testi — 10-variant: Notalarni aniqlash"],
+    [musiqiyShaklQuestions,["q", "shakl1"],"Asarlar tahlili — 1-variant"],
+    [musiqiyShakl2Questions,["q", "shakl2"],"Asarlar tahlili — 2-variant"],
+    [musiqiyShakl3Questions,["q", "shakl3"],"Asarlar tahlili — 3-variant"],
+    [musiqiyShakl4Questions,["q", "shakl4"],"Asarlar tahlili — 4-variant"],
+    [musiqiyShakl5Questions,["q", "shakl5"],"Asarlar tahlili — 5-variant"],
+    [kasb1Questions,["q", "kasb1"],"Kasb Standarti — 1-variant"],
+    [kasb2Questions,["q", "kasb2"],"Kasb Standarti — 2-variant"],
+    [kasb3Questions,["q", "kasb3"],"Kasb Standarti — 3-variant"],
+    [kasb4Questions,["q", "kasb4"],"Kasb Standarti — 4-variant"],
+    [kasb5Questions,["q", "kasb5"],"Kasb Standarti — 5-variant"],
+    [kasb6Questions,["q", "kasb6"],"Kasb Standarti — 2026 tushgan savollar 1"],
+    [kasb7Questions,["q", "kasb7"],"Kasb Standarti — 2026 tushgan savollar 2"],
+    [kasb8Questions,["q", "kasb8"],"Kasb Standarti — 2026 tushgan savollar 3"],
+    [ilkQadam1Questions,["q", "ilkqadam1"],"Ilk qadam — 1-variant"],
+    [ilkQadam2Questions,["q", "ilkqadam2"],"Ilk qadam — 2-variant"],
+    [ilkQadam3Questions,["q", "ilkqadam3"],"Ilk qadam — 3-variant"],
+    [ilkQadam4Questions,["q", "ilkqadam4"],"Ilk qadam — 4-variant"],
+    [ilkQadam5Questions,["q", "ilkqadam5"],"Ilk qadam — 5-variant"],
+    [ilkQadam6Questions,["q", "ilkqadam6"],"Ilk qadam — 6-variant"],
+    [nashr3V1Questions,["q", "nashr3v-1"],"Ilk qadam uchinchi nashri — 1-variant"],
+    [nashr3V2Questions,["q", "nashr3v-2"],"Ilk qadam uchinchi nashri — 2-variant"],
+    [nashr3V3Questions,["q", "nashr3v-3"],"Ilk qadam uchinchi nashri — 3-variant"],
+    [nashr3V4Questions,["q", "nashr3v-4"],"Ilk qadam uchinchi nashri — 4-variant"],
+    [nashr3V5Questions,["q", "nashr3v-5"],"Ilk qadam uchinchi nashri — 5-variant: KODLASH"],
+    [nashr3V6Questions,["q", "nashr3v-6"],"Ilk qadam uchinchi nashri — 6-variant"],
+    [nashr3V7Questions,["q", "nashr3v-7"],"Ilk qadam uchinchi nashri — 7-variant"],
+    [nashr3V8Questions,["q", "nashr3v-8"],"Ilk qadam uchinchi nashri — 8-variant"],
+    [nashr3V9Questions,["q", "nashr3v-9"],"Ilk qadam uchinchi nashri — 9-variant"],
+    [nashr3V10Questions,["q", "nashr3v-10"],"Ilk qadam uchinchi nashri — 10-variant"],
+    [nashr3V11Questions,["q", "nashr3v-11"],"Ilk qadam uchinchi nashri — 10-variant"],
+    [imtixon1Questions,["q", "imtixon1"],"Imtixon — 1-variant"],
+    [imtixonKuzgi1Questions,["q", "imtixonKuzgi"],"Imtixon — 2026 kuzgi, 1-variant"],
+    [imtixonBahorgi1Questions,["q", "imtixonBahorgi"],"Imtixon — 2026 bahorgi, 1-variant"],
+    [imtixonMilliy2026Questions,["q", "imtixonMilliy"],"Imtixon — 2026 Milliy sertifikat"],
+    [imtixonKuzgi2Questions,["q", "imtixonKuzgi2"],"Imtixon — 2026 kuzgi, 2-variant"],
+    [imtixonKuzgi3Questions,["q", "imtixonKuzgi3"],"Imtixon — 2026 kuzgi, 3-variant"],
+    [imtixon2Questions,["q", "imtixon2"],"Imtixon — 2-variant"],
+    [mttMusiqa1Questions,["q", "mttmusiqa1"],"MTT - Musiqa — 1-variant"],
+    [imtixon3Questions,["q", "imtixon3"],"Imtixon — 3-variant"],
+    [imtixon4Questions,["q", "imtixon4"],"Imtixon — Attestatsiya uchun"],
+    [imtixon5Questions,["q", "imtixon5"],"Imtixon — Atestatsiya uchun (2)"],
+    [imtixon6Questions,["q", "imtixon6"],"Imtixon — Atestatsiya uchun (3)"],
+    [imtixon7Questions,["q", "imtixon7"],"Imtixon — Atestatsiya uchun (4)"],
+    [imtixon8Questions,["q", "imtixon8"],"Imtixon — Atestatsiya uchun (5)"],
+    [mttMusiqa2Questions,["q", "mttmusiqa2"],"MTT - Musiqa — 2-variant"],
+    [mttMusiqa3Questions,["q", "mttmusiqa3"],"MTT - Musiqa — 3-variant"],
+    [mttMusiqa4Questions,["q", "mttmusiqa4"],"MTT - Musiqa — 4-variant"],
+    [mttMusiqa5Questions,["q", "mttmusiqa5"],"MTT - Musiqa — 5-variant"],
+    [mttMusiqa6Questions,["q", "mttmusiqa6"],"MTT - Musiqa — 6-variant"],
+    [mttMusiqa7Questions,["q", "mttmusiqa7"],"MTT - Musiqa — 7-variant"],
+    [mttMusiqa8Questions,["q", "mttmusiqa8"],"MTT - Musiqa — 8-variant"],
+    [mttMusiqa9Questions,["q", "mttmusiqa9"],"MTT - Musiqa — 9-variant"],
+    [milliySertifikat1Questions,["q", "sertifikat1"],"Milliy sertifikat — 1-variant"],
+    [metodikaV1Questions,["q", "metodika_v1"],"Metodika — 1-variant"],
+    [metodikaV2Questions,["q", "metodika_v2"],"Metodika — 2-variant"],
+    [metodikaV3Questions,["q", "metodika_v3"],"Metodika — 3-variant"],
+    [metodikaV4Questions,["q", "metodika_v4"],"Metodika — 4-variant"],
+    [metodikaV5Questions,["q", "metodika_v5"],"Metodika — 5-variant"],
+    [generalQuestions,null,"Umumiy test"],
+    [sinf5Questions,null,"Maktab darsliklari — 5-sinf (umumiy)"],
+    [MTT_MET_EXTRA,["q", "mttmet4"],"MTTda musiqa o'qitish metodikasi (asosiy ekran) — 4-variant, qo'shimcha savollar"],
+    [MTT_MET_FOLK,["q", "mttmet1"],"MTTda musiqa o'qitish metodikasi (asosiy ekran) — folklor savollari (1–3-variant)"],
+    [MTT_MET_RAQS,["q", "mttmet1"],"MTTda musiqa o'qitish metodikasi (asosiy ekran) — milliy raqs savollari (1–3-variant)"],
+    [sinf1Questions,null,"Maktab darsliklari — 1-sinf"],
+    [sinf2Questions,null,"Maktab darsliklari — 2-sinf"],
+    [sinf2Questions2,null,"Maktab darsliklari — 2-sinf (Yangi darslik)"],
+    [sinf2Questions3,null,"Maktab darsliklari — 2-sinf (Yangi darslik, 3-variant)"],
+    [sinf2Questions4,null,"Maktab darsliklari — 2-sinf (Yangi darslik, 4-variant)"],
+    [sinf3Questions,null,"Maktab darsliklari — 3-sinf"],
+    [sinf4Questions,null,"Maktab darsliklari — 4-sinf"]
+    ];
+  }
+
+  var IDX = null, RES = [], SHOWN = 0, FILTER = '', WORDS = [], RE = null, QRAW = '', timer = null;
+
+  function norm(s) {
+    return String(s == null ? '' : s)
+      .replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]+>/g, ' ')
+      .replace(/[\u2018\u2019\u02bb\u02bc\u02b9`\u00b4\u2032]/g, "'")
+      .replace(/\s+/g, ' ').toLowerCase().trim();
+  }
+  function plain(s) { return String(s == null ? '' : s).replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' '); }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  function build() {
+    if (IDX) return;
+    IDX = [];
+    var seenArr = new Set();
+    function add(arr, open, label) {
+      if (!Array.isArray(arr) || !arr.length || seenArr.has(arr)) return;
+      seenArr.add(arr);
+      var seenQ = new Set();
+      arr.forEach(function (q) {
+        if (!q || !q.q) return;
+        var a = Array.isArray(q.a) ? q.a : [];
+        var k = q.q + '\u00a6' + a.join('\u00a6');
+        if (seenQ.has(k)) return;
+        seenQ.add(k);
+        IDX.push({ q: q, label: label, open: open, nq: norm(q.q), na: norm(a.join(' ')), ne: norm(q.explain) });
+      });
+    }
+    // Maktab darsliklari (sinfTests obyekti)
+    try {
+      if (typeof sinfTests === 'object' && sinfTests) {
+        Object.keys(sinfTests).forEach(function (key) {
+          var m = key.match(/^sinf(\d+)(?:_v(\d+))?$/);
+          if (!m) return;
+          var label = "Maktab darsliklari — " + m[1] + "-sinf" + (m[2] ? ", " + m[2] + "-variant" : "");
+          add(sinfTests[key], ['s', key], label);
+        });
+      }
+    } catch (e) {}
+    try {
+      sources().forEach(function (s) { add(s[0], s[1], s[2]); });
+    } catch (e) { if (window.console) console.error('Qidiruv bazasi:', e); }
+  }
+
+  function canSee() {
+    try { return ANSWERS_FOR_ALL || (typeof hasTestAccess !== 'undefined' && !!hasTestAccess); } catch (e) { return false; }
+  }
+
+  function makeRe(words) {
+    var uniq = [];
+    words.forEach(function (w) { if (w.length >= 2 && uniq.indexOf(w) < 0) uniq.push(w); });
+    if (!uniq.length) return null;
+    uniq.sort(function (a, b) { return b.length - a.length; });
+    var parts = uniq.map(function (w) {
+      return w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/'/g, "['\u2018\u2019\u02bb\u02bc`\u00b4\u2032]");
+    });
+    return new RegExp(parts.join('|'), 'gi');
+  }
+  function hl(text) {
+    text = plain(text);
+    if (!RE) return esc(text);
+    var out = '', last = 0, m;
+    RE.lastIndex = 0;
+    while ((m = RE.exec(text))) {
+      if (!m[0]) { RE.lastIndex++; continue; }
+      out += esc(text.slice(last, m.index)) + '<mark>' + esc(m[0]) + '</mark>';
+      last = m.index + m[0].length;
+    }
+    return out + esc(text.slice(last));
+  }
+
+  function search(raw) {
+    build();
+    var q = norm(raw);
+    var words = q.split(' ').filter(Boolean);
+    var res = [];
+    for (var i = 0; i < IDX.length; i++) {
+      var it = IDX[i], hay = it.nq + ' ' + it.na + ' ' + it.ne, ok = true;
+      for (var w = 0; w < words.length; w++) { if (hay.indexOf(words[w]) < 0) { ok = false; break; } }
+      if (!ok) continue;
+      var s = 0;
+      if (words.every(function (x) { return it.nq.indexOf(x) >= 0; })) s += 3;
+      if (it.nq.indexOf(q) >= 0) s += 2;
+      if (words.every(function (x) { return it.na.indexOf(x) >= 0; })) s += 1;
+      res.push([s, i]);
+    }
+    res.sort(function (a, b) { return b[0] - a[0] || a[1] - b[1]; });
+    return { q: q, words: words, items: res.map(function (r) { return IDX[r[1]]; }) };
+  }
+
+  function $(id) { return document.getElementById(id); }
+
+  function card(it, idx, see) {
+    var q = it.q, a = Array.isArray(q.a) ? q.a : [], h = '<div class="srch-card"><div class="srch-tag">' + esc(it.label) + '</div>';
+    h += '<div class="srch-q">' + hl(q.q) + '</div>';
+    if (q.img) h += '<img class="srch-img" loading="lazy" src="' + esc(q.img) + '" alt="">';
+    h += '<div class="srch-opts">';
+    a.forEach(function (o, i) { h += '<div class="srch-opt' + (see && i === q.correct ? ' ok' : '') + '">' + (see && i === q.correct ? '✓ ' : '') + hl(o) + '</div>'; });
+    h += '</div>';
+    if (see) { if (q.explain) h += '<div class="srch-ex">' + hl(q.explain) + '</div>'; }
+    else h += '<div class="srch-lock">🔒 To\'g\'ri javob va izoh — obunachilar uchun. <a onclick="srchLocked()">Batafsil</a></div>';
+    if (it.open) h += '<button class="srch-go" onclick="srchOpen(' + idx + ')">Variantni ochish ›</button>';
+    return h + '</div>';
+  }
+
+  function filtered() { return FILTER ? RES.filter(function (r) { return r.label === FILTER; }) : RES; }
+
+  function render(append) {
+    var list = $('srch-list'), see = canSee(), items = filtered();
+    if (!append) { list.innerHTML = ''; SHOWN = 0; }
+    var old = list.querySelector('.srch-more'); if (old) old.remove();
+    var end = Math.min(SHOWN + PAGE, items.length), h = '';
+    for (var i = SHOWN; i < end; i++) h += card(items[i], RES.indexOf(items[i]), see);
+    list.insertAdjacentHTML('beforeend', h);
+    SHOWN = end;
+    if (SHOWN < items.length) list.insertAdjacentHTML('beforeend', '<button class="srch-more" onclick="srchMore()">Yana ko\'rsatish (' + (items.length - SHOWN) + ')</button>');
+  }
+
+  function chips() {
+    var cnt = {}, order = [];
+    RES.forEach(function (r) { if (!(r.label in cnt)) { cnt[r.label] = 0; order.push(r.label); } cnt[r.label]++; });
+    order.sort(function (a, b) { return cnt[b] - cnt[a]; });
+    var h = '';
+    if (order.length > 1) order.slice(0, 14).forEach(function (l) {
+      h += '<div class="srch-chip' + (l === FILTER ? ' on' : '') + '" data-l="' + esc(l) + '" onclick="srchChip(this)">' + esc(l.replace(/^Imtixonda tushgan savollar/, 'Imtixon')) + ' · ' + cnt[l] + '</div>';
+    });
+    $('srch-chips').innerHTML = h;
+    return order.length;
+  }
+
+  function run() {
+    var raw = $('srch-input').value, info = $('srch-info'), list = $('srch-list');
+    $('srch-clear').style.display = raw ? 'block' : 'none';
+    QRAW = raw;
+    if (norm(raw).length < 2) {
+      RES = []; FILTER = ''; $('srch-chips').innerHTML = '';
+      info.innerHTML = 'Platformadagi barcha savollardan izlaydi. Masalan: <b>dinamik belgi</b>, <b>Betxoven</b>, <b>yalla</b>, <b>kvinta doirasi</b>.';
+      list.innerHTML = '<div class="srch-empty"><span class="big">🔍</span>Kamida 2 ta harf yozing</div>';
+      return;
+    }
+    var r = search(raw);
+    RES = r.items; WORDS = r.words; RE = makeRe(r.words); FILTER = '';
+    if (!RES.length) {
+      $('srch-chips').innerHTML = '';
+      info.innerHTML = '';
+      list.innerHTML = '<div class="srch-empty"><span class="big">😕</span><b>Ma\'lumot topilmadi</b><br>Boshqa so\'z bilan yoki qisqaroq yozib ko\'ring</div>';
+      return;
+    }
+    var nsec = chips();
+    info.innerHTML = '<b>' + RES.length + '</b> ta savol topildi · <b>' + nsec + '</b> ta bo\'lim/variantda';
+    render(false);
+    list.scrollTop = 0;
+  }
+
+  window.srchShow = function () {
+    var ov = $('srch-overlay'); ov.classList.add('on');
+    document.body.style.overflow = 'hidden';
+    if (!IDX) build();
+    if (!$('srch-input').value) run();
+    try { $('srch-input').focus(); } catch (e) {}
+    setTimeout(function () { try { $('srch-input').focus(); } catch (e) {} }, 60);
+    if (!canSee() && typeof checkAccess === 'function' && !window.__srchChk) {
+      window.__srchChk = 1;
+      try { checkAccess().then(function () { if (RES.length) render(false); }, function () {}); } catch (e) {}
+    }
+  };
+  window.srchClose = function () {
+    $('srch-overlay').classList.remove('on');
+    document.body.style.overflow = '';
+    try { $('srch-input').blur(); } catch (e) {}
+  };
+  window.srchClear = function () { $('srch-input').value = ''; run(); $('srch-input').focus(); };
+  window.srchMore = function () { render(true); };
+  window.srchChip = function (el) {
+    var l = el.getAttribute('data-l');
+    FILTER = (FILTER === l) ? '' : l;
+    chips(); render(false);
+    $('srch-list').scrollTop = 0;
+  };
+  window.srchLocked = function () { if (typeof showNoAccessPopup === 'function') showNoAccessPopup(); };
+  window.srchOpen = function (i) {
+    var it = RES[i]; if (!it || !it.open) return;
+    window.srchClose();
+    var t = it.open[0], v = it.open[1];
+    try {
+      if (t === 't' && typeof openTheoryVariant === 'function') openTheoryVariant(v, null);
+      else if (t === 's') startQuiz('sinf', v);
+      else startQuiz(v, null);
+    } catch (e) { if (window.console) console.error(e); }
+  };
+  window.__srch = { norm: norm, build: build, search: search, count: function () { build(); return IDX.length; } };
+
+  (function () {
+    var inp = $('srch-input'); if (!inp) return;
+    inp.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(run, 180); });
+    inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { clearTimeout(timer); run(); inp.blur(); } });
+  })();
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && $('srch-overlay') && $('srch-overlay').classList.contains('on')) window.srchClose(); });
 })();
 </script>
 
