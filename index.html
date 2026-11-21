@@ -10843,7 +10843,7 @@ function cNew(){
   const opts=INS.slice();
   for(let i=opts.length-1;i>0;i--){const j=R(i+1);const t=opts[i];opts[i]=opts[j];opts[j]=t;}
   let t;do{t=pick(INS);}while(INS.length>1&&t===C.last);
-  C.last=t;C.opts=opts;C.target=t;C.heard=false;C.answered=false;
+  C.last=t;C.opts=opts;C.target=t;C.heard=false;C.answered=false;C.tried=false;
   $('ch-hint').textContent='Tinglash tugmasini bosing';$('ch-msg').textContent='';$('ch-info').textContent='';
   $('ch-next').style.display='block';
   const box=$('ch-opts');box.innerHTML='';
@@ -10860,12 +10860,20 @@ const decode=ab=>new Promise((res,rej)=>{const p=ctx.decodeAudioData(ab,res,rej)
 function loadFirst(ins){
   if(!bufCache[ins.n]){
     bufCache[ins.n]=(async()=>{
+      const log=[];let fb=null;
       for(const u of aUrls(ins.n)){
-        let ab;
-        try{const r=await fetch(u);if(!r.ok)continue;ab=await r.arrayBuffer();}catch(e){continue;}
-        try{return {buf:await decode(ab.slice(0))};}catch(e){return {url:u};}
+        const nm=u.replace('audio/','');let ab;
+        try{
+          const r=await fetch(u);
+          if(!r.ok){log.push(nm+':'+r.status);continue;}
+          const ct=(r.headers.get('content-type')||'').toLowerCase();
+          if(ct.indexOf('text/html')>=0){log.push(nm+':html');continue;}
+          ab=await r.arrayBuffer();
+        }catch(e){log.push(nm+':xato');continue;}
+        try{return {buf:await decode(ab.slice(0))};}catch(e){if(!fb)fb=u;log.push(nm+':decode');}
       }
-      throw new Error('fayl topilmadi');
+      if(fb)return {url:fb};
+      const er=new Error('yoq');er.log=log;throw er;
     })();
     bufCache[ins.n].catch(()=>{delete bufCache[ins.n];});
   }
@@ -10886,25 +10894,32 @@ function cPlay(){
       chEl=new Audio(r.url);chEl.onended=()=>card.classList.remove('pulse');
       const p=chEl.play();if(p&&p.catch)p.catch(()=>{card.classList.remove('pulse');$('ch-msg').textContent="⚠️ Ovozni chalib bo'lmadi: "+r.url;});
     }
-  }).catch(()=>{
+  }).catch(er=>{
     if(my!==playTok)return;
     card.classList.remove('pulse');
-    $('ch-msg').textContent="⚠️ Ovoz fayli topilmadi: audio/"+ins.n+".aac";
+    const L=((er&&er.log)||[]).filter(x=>x.indexOf(ins.n+'.')===0).join(', ');
+    $('ch-msg').textContent="⚠️ "+(ins.label||ins.n)+" ovozi topilmadi. "+L;
   });
 }
 function cAnswer(k,btn){
-  if(C.answered)return;
+  if(C.answered||btn.disabled)return;
   if(!C.heard){$('ch-msg').textContent='Avval «Tinglash» tugmasini bosing';return;}
-  C.answered=true;C.total++;
   const ok=C.opts[k]===C.target;
-  if(ok){C.right++;C.streak++}else C.streak=0;
-  $('ch-sc').textContent=C.right+' / '+C.total;$('ch-st').textContent=C.streak;
-  const all=[...$('ch-opts').children];
-  all.forEach((bt,i)=>{bt.disabled=true;if(C.opts[i]===C.target)bt.classList.add('ok');});
-  if(ok)burst(btn);else{btn.classList.add('no');xmark(btn);}
-  $('ch-msg').textContent=ok?"✅ To'g'ri!":"❌ Noto'g'ri. To'g'ri javob: "+(C.target.label||C.target.n);
-  $('ch-info').textContent=C.target.i||'';
-  $('ch-next').style.display='block';
+  if(!C.tried){ /* hisob faqat birinchi urinish bo'yicha */
+    C.tried=true;C.total++;
+    if(ok){C.right++;C.streak++}else C.streak=0;
+    $('ch-sc').textContent=C.right+' / '+C.total;$('ch-st').textContent=C.streak;
+  }
+  if(ok){
+    C.answered=true;
+    [...$('ch-opts').children].forEach((bt,i)=>{bt.disabled=true;if(C.opts[i]===C.target)bt.classList.add('ok');});
+    burst(btn);
+    $('ch-msg').textContent="✅ To'g'ri! Bu — "+(C.target.label||C.target.n);
+    $('ch-info').textContent=C.target.i||'';
+  }else{
+    btn.classList.add('no');btn.disabled=true;xmark(btn);
+    $('ch-msg').textContent="❌ Bu emas. Boshqa variantni tanlang yoki ovozni qayta tinglang 🎧";
+  }
 }
 function openCholgu(){
   if(!C.inited){
