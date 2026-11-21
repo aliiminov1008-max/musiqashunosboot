@@ -521,6 +521,22 @@
   body.gm-board #ch-opts .gm-opt img{height:150px}
   body.gm-board #ch-opts .gm-opt:last-child:nth-child(odd){grid-column:auto}
   body.gm-board .gm-opt{font-size:22px;padding:26px 10px}body.gm-board .gm-opt span{font-size:52px}
+
+  /* 4-o'yin: ijro belgisi va cholg'ular harakati */
+  .ch-eq{display:flex;align-items:flex-end;justify-content:center;gap:6px;height:48px;margin:2px 0 4px}
+  .ch-eq i{display:block;width:8px;height:18%;border-radius:4px;background:linear-gradient(180deg,var(--accent2,#f0d58a),var(--accent,#d4af6a));opacity:.35}
+  .ch-note{opacity:.45;transition:opacity .2s}
+  .gm-card.pulse .ch-note{opacity:1}
+  .gm-card.pulse .ch-eq i{opacity:1;animation:chEq .55s ease-in-out infinite alternate}
+  .ch-eq i:nth-child(2){animation-delay:-.15s!important}.ch-eq i:nth-child(3){animation-delay:-.3s!important}
+  .ch-eq i:nth-child(4){animation-delay:-.45s!important}.ch-eq i:nth-child(5){animation-delay:-.2s!important}
+  .ch-eq i:nth-child(6){animation-delay:-.35s!important}.ch-eq i:nth-child(7){animation-delay:-.1s!important}
+  @keyframes chEq{from{height:18%}to{height:100%}}
+  @keyframes chDance{0%{transform:translateY(0) rotate(-2.5deg) scale(1)}50%{transform:translateY(-7px) rotate(2.5deg) scale(1.03)}100%{transform:translateY(0) rotate(-2.5deg) scale(1)}}
+  #ch-opts.playing .gm-opt{animation:chDance .7s ease-in-out infinite}
+  #ch-opts.playing .gm-opt:nth-child(2n){animation-delay:-.25s}
+  #ch-opts.playing .gm-opt:nth-child(3n){animation-delay:-.5s;animation-direction:reverse}
+  body.gm-board .ch-eq{height:90px;gap:10px}body.gm-board .ch-eq i{width:14px}
   body.gm-board .gm-card{padding:32px}body.gm-board .gm-card .big{font-size:80px}body.gm-board .gm-card h3{font-size:28px}body.gm-board .gm-card p{font-size:17px}
   body.gm-board .gm-info{font-size:18px}
   @media (min-width:1500px){body.gm-board .gm-bar .n{font-size:32px}body.gm-board .gm-opt{font-size:26px}body.gm-board .gm-msg{font-size:24px}}
@@ -1866,15 +1882,10 @@
 <!-- 3-O'YIN: BU QAYSI CHOLG'U OVOZI -->
 <div id="screen-oyin-cholgu" class="screen">
   <button class="back-btn" onclick="showScreen('oyinlar')">‹ Orqaga</button>
-  <div class="header" style="padding-top:8px">
-    <span class="note-icon">🎧</span>
-    <h1>Bu qaysi cholg'u ovozi?</h1>
-    <p>Tinglang va cholg'uni toping</p>
-  </div>
-  <div class="gm-wrap">
+  <div class="gm-wrap" style="padding-top:8px">
     <div class="gm-top"><button class="nav-quiz-btn gm-bd" onclick="GM.fs()">🖥 Doska rejimi</button></div>
     <div class="gm-stats"><span>To'g'ri: <b id="ch-sc">0 / 0</b></span><span>Seriya: <b id="ch-st">0</b></span></div>
-    <div class="gm-card" id="ch-card"><span class="big">🎧</span><h3>Qaysi cholg'u chalmoqda?</h3><p id="ch-hint">Tinglash tugmasini bosing</p></div>
+    <div class="gm-card" id="ch-card"><span class="big ch-note">🎵</span><div class="ch-eq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><p id="ch-hint" style="display:none"></p></div>
     <div class="gm-row">
       <button class="btn-primary" id="ch-play">▶ Tinglash</button>
       <button class="btn-primary" id="ch-stop">⏹ To'xtatish</button>
@@ -10924,6 +10935,10 @@ function cAnswer(k,btn){
 function openCholgu(){
   if(!C.inited){
     C.inited=true;
+    const _cc=$('ch-card'),_co=$('ch-opts');
+    if(_cc&&_co&&window.MutationObserver){
+      new MutationObserver(()=>_co.classList.toggle('playing',_cc.classList.contains('pulse'))).observe(_cc,{attributes:true,attributeFilter:['class']});
+    }
     $('ch-play').onclick=()=>{if(!C.target)cNew();cPlay();};
     $('ch-stop').onclick=stopAll;
     $('ch-next').onclick=cNew;
