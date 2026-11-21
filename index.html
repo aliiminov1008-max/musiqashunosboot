@@ -13503,7 +13503,7 @@ function buildFrog(){
    '<ellipse class="qk-ripple" cx="'+f.x+'" cy="'+(f.y+44*f.s)+'" rx="40" ry="10" fill="none" stroke="#fff" stroke-width="2" style="animation-iteration-count:infinite;animation-duration:2.6s"/>'
   +'<g class="qk-fr" id="qk-frs" transform="translate('+f.x+','+f.y+') scale('+f.s+')">'+charG('frog','qk-cf')
   +'<g class="qk-ring"><ellipse cx="0" cy="48" rx="40" ry="15" fill="#ff5a4d"/><ellipse cx="0" cy="48" rx="40" ry="15" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="13 22"/><ellipse cx="0" cy="49" rx="23" ry="7" fill="#2b94d8"/></g></g>'
-  +'<g class="qk-bub" id="qk-bub"><path d="M'+(f.x+66)+' '+(f.y-10)+' L'+(f.x+58)+' '+(f.y-14)+' L'+(f.x+66)+' '+(f.y-18)+' Z" fill="#fff"/><rect x="'+(f.x+65)+'" y="'+(f.y-31)+'" width="104" height="30" rx="15" fill="#fff" stroke="#ffd66b" stroke-width="2.5"/><text x="'+(f.x+117)+'" y="'+(f.y-11)+'" text-anchor="middle" font-size="12" font-weight="800" fill="#0b5d8c" font-family="sans-serif">🔊 Mening notam</text></g>';
+  +'<g class="qk-bub" id="qk-bub"><path d="M'+(f.x+66)+' '+(f.y-10)+' L'+(f.x+58)+' '+(f.y-14)+' L'+(f.x+66)+' '+(f.y-18)+' Z" fill="#fff"/><rect x="'+(f.x+65)+'" y="'+(f.y-31)+'" width="104" height="30" rx="15" fill="#fff" stroke="#ffd66b" stroke-width="2.5"/><text x="'+(f.x+117)+'" y="'+(f.y-11)+'" text-anchor="middle" font-size="'+(S.R?17:12)+'" font-weight="800" fill="#0b5d8c" font-family="sans-serif">🔊 '+(S.R?nm(S.R.T):'Mening notam')+'</text></g>';
   const tap=()=>QK.hearFrog();
   $('qk-frs').onclick=tap;$('qk-bub').onclick=tap;
 }
@@ -13615,6 +13615,26 @@ function lose(i){
   },180+1300);
 }
 
+function playChoice(i,done){
+  const c=ac(),dst=bus(),R=S.R;
+  if(!c||!dst){later(done,300);return;}
+  const notes=R.slots[i];let t=c.currentTime+0.15,ms=150;
+  later(()=>{setPlay(i,true);say(CH[ORDER[i]].em+' <b>'+(i+1)+'-karnaychi</b> kuyi — oxirgi notada 🐸 Baqacha jo\'r bo\'ladi. Tinglang! 👂');},ms);
+  notes.forEach((n,k)=>{
+    const d=n.b*B,last=k===notes.length-1;
+    brass(n.m,t,d*0.94,dst,c);
+    for(let q=0;q*0.5<d-0.05;q++)later(()=>pop(i),ms+q*500);
+    if(last){
+      brass(R.T,t,d*0.94,dst,c);                       /* Baqacha oxirgi notaga jo'r bo'ladi */
+      later(()=>setPlay('f',true),ms);
+      for(let q=0;q*0.5<d-0.05;q++)later(()=>pop('f'),ms+q*500);
+      later(()=>setPlay('f',false),ms+d*1000+40);
+    }
+    t+=d;ms+=d*1000;
+  });
+  later(()=>setPlay(i,false),ms+40);
+  later(done,ms+350);
+}
 const QK={
   _gen:genRound,
   open(){
@@ -13625,7 +13645,7 @@ const QK={
     $('qk-names').innerHTML='';stats();mainBtn('▶ Boshlash');
     say('Boshlash tugmasini bosing 🎺');
   },
-  stop(){stopSound();if(S.state==='listen'||S.state==='anim')S.state='choose';},
+  stop(){stopSound();if(S.state==='listen'||S.state==='anim'||S.state==='check'){S.state='choose';if(S.R)setPicks(true);}},
   level(n,btn){if(!S.built)buildScene();S.lvl=n;document.querySelectorAll('#qk .gm-lv').forEach(b=>b.classList.toggle('on',b===btn));stopSound();S.state='ready';S.R=null;buildSlots();buildFrog();setPicks(false);$('qk-names').innerHTML='';mainBtn('▶ Boshlash');say('Boshlash tugmasini bosing 🎺');},
   main(){
     ac();
@@ -13634,17 +13654,18 @@ const QK={
   },
   pick(i){
     if(S.state!=='choose'||!S.alive[i])return;
-    S.tries++;stopSound();
-    if(i===S.R.correct)win(i);else lose(i);
+    S.tries++;stopSound();S.state='check';setPicks(false);
+    playChoice(i,()=>{if(i===S.R.correct)win(i);else lose(i);});
   },
   tap(i){
     if(S.state==='choose'){QK.pick(i);return;}
     if(S.state==='listen'){say('Avval hamma kuyni diqqat bilan tinglang 🎧 So\'ng karnaychini bosing!');return;}
+    if(S.state==='check')return;
     if(!S.R||S.state==='ready')say('Boshlash tugmasini bosing 🎺');
   },
   hearFrog(){
     if(!S.R){say('Avval ▶ Boshlash tugmasini bosing 🎺');return;}
-    if(S.state==='anim')return;ac();
+    if(S.state==='anim'||S.state==='check')return;ac();
     const wasListen=S.state==='listen';stopSound();
     if(wasListen){S.state='choose';setPicks(true);}
     seq([{who:'f',notes:S.R.tm,gap:0,msg:'🐸 <b>Baqacha</b> notasi…'}],()=>{if(S.state==='choose')say('Qaysi kuyning <b>oxirgi notasi</b> shu nota bilan bir xil? 🤔');});
