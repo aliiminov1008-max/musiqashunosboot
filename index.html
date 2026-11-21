@@ -1882,7 +1882,7 @@
     <div class="gm-msg" id="ch-msg"></div>
     <div class="gm-grid" id="ch-opts"></div>
     <div class="gm-info" id="ch-info"></div>
-    <button class="nav-quiz-btn" id="ch-next" style="display:none;width:100%">Keyingi savol ›</button>
+    <button class="nav-quiz-btn" id="ch-next" style="display:block;width:100%">Keyingi cholg'u ›</button>
   </div>
 </div>
 
@@ -10845,7 +10845,7 @@ function cNew(){
   let t;do{t=pick(INS);}while(INS.length>1&&t===C.last);
   C.last=t;C.opts=opts;C.target=t;C.heard=false;C.answered=false;
   $('ch-hint').textContent='Tinglash tugmasini bosing';$('ch-msg').textContent='';$('ch-info').textContent='';
-  $('ch-next').style.display='none';
+  $('ch-next').style.display='block';
   const box=$('ch-opts');box.innerHTML='';
   opts.forEach((o,k)=>{
     const bt=document.createElement('button');bt.className='gm-opt';
