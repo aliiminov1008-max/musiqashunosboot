@@ -541,6 +541,35 @@
   body.gm-board .gm-info{font-size:18px}
   @media (min-width:1500px){body.gm-board .gm-bar .n{font-size:32px}body.gm-board .gm-opt{font-size:26px}body.gm-board .gm-msg{font-size:24px}}
 
+  /* 3-o'yin (cholg'u ovozi): ixcham telefon ko'rinishi + doska rejimi */
+  #screen-oyin-cholgu .gm-wrap{padding:0 10px 84px}
+  #screen-oyin-cholgu .ch-stats{margin-bottom:4px;font-size:11px}
+  #screen-oyin-cholgu .ch-stats b{font-size:14px}
+  #screen-oyin-cholgu #ch-card{display:flex;align-items:center;justify-content:center;gap:14px;padding:6px 12px;margin-bottom:8px}
+  #screen-oyin-cholgu #ch-card .big{font-size:30px;margin:0}
+  #screen-oyin-cholgu .ch-eq{height:34px;margin:0}
+  #screen-oyin-cholgu .ch-btns{margin-bottom:4px;gap:6px}
+  #screen-oyin-cholgu .ch-btns>button{padding:10px 4px;font-size:13px;white-space:nowrap;border-radius:12px}
+  #screen-oyin-cholgu .gm-msg{min-height:18px;font-size:13px;margin-bottom:6px}
+  #screen-oyin-cholgu #ch-opts{gap:8px;margin-bottom:6px}
+  #screen-oyin-cholgu #ch-opts .gm-opt{padding:6px 6px 4px;font-size:14px;line-height:1.2}
+  #screen-oyin-cholgu #ch-opts .gm-opt img{height:clamp(52px,calc((100vh - 310px)/4 - 28px),120px);margin-bottom:3px}
+  #screen-oyin-cholgu .gm-info{font-size:12px;min-height:0;margin-bottom:4px}
+  body.gm-board #screen-oyin-cholgu .gm-wrap{max-width:1500px;margin:0 auto;padding:8px 32px 100px;display:grid;grid-template-columns:minmax(0,2.4fr) minmax(300px,1fr);gap:0 32px;align-items:start}
+  body.gm-board #screen-oyin-cholgu .ch-stats{grid-column:1/-1;font-size:16px;margin-bottom:10px}
+  body.gm-board #screen-oyin-cholgu .ch-stats b{font-size:24px}
+  body.gm-board #screen-oyin-cholgu #ch-opts{grid-column:1;grid-row:2/4;grid-template-columns:repeat(3,1fr);gap:16px;margin:0}
+  body.gm-board #screen-oyin-cholgu .ch-side{grid-column:2;grid-row:2;position:sticky;top:12px}
+  body.gm-board #screen-oyin-cholgu .gm-info{grid-column:2;grid-row:3;font-size:18px}
+  body.gm-board #screen-oyin-cholgu #ch-card{flex-direction:column;gap:6px;padding:20px;margin-bottom:14px}
+  body.gm-board #screen-oyin-cholgu #ch-card .big{font-size:64px}
+  body.gm-board #screen-oyin-cholgu .ch-eq{height:80px;gap:10px}
+  body.gm-board #screen-oyin-cholgu .ch-btns{flex-direction:column;gap:12px;margin-bottom:12px}
+  body.gm-board #screen-oyin-cholgu .ch-btns>button{padding:18px 10px;font-size:20px}
+  body.gm-board #screen-oyin-cholgu .gm-msg{font-size:20px;min-height:30px}
+  body.gm-board #screen-oyin-cholgu #ch-opts .gm-opt{padding:12px 8px 8px;font-size:22px}
+  body.gm-board #screen-oyin-cholgu #ch-opts .gm-opt img{height:clamp(90px,calc((100vh - 230px)/3 - 70px),190px)}
+
   /* 4-o'yin: Taktni to'ldiring */
   #screen-oyin-toldir .gm-wrap{padding:0 8px 90px}
   #screen-oyin-toldir .gm-levels{gap:6px;margin-bottom:6px}
@@ -1881,19 +1910,24 @@
 
 <!-- 3-O'YIN: BU QAYSI CHOLG'U OVOZI -->
 <div id="screen-oyin-cholgu" class="screen">
-  <button class="back-btn" onclick="showScreen('oyinlar')">‹ Orqaga</button>
-  <div class="gm-wrap" style="padding-top:8px">
-    <div class="gm-top"><button class="nav-quiz-btn gm-bd" onclick="GM.fs()">🖥 Doska rejimi</button></div>
-    <div class="gm-stats"><span>To'g'ri: <b id="ch-sc">0 / 0</b></span><span>Seriya: <b id="ch-st">0</b></span></div>
-    <div class="gm-card" id="ch-card"><span class="big ch-note">🎵</span><div class="ch-eq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><p id="ch-hint" style="display:none"></p></div>
-    <div class="gm-row">
-      <button class="btn-primary" id="ch-play">▶ Tinglash</button>
-      <button class="btn-primary" id="ch-stop">⏹ To'xtatish</button>
+  <div class="gm-topbar">
+    <button class="back-btn" onclick="showScreen('oyinlar')">‹ Orqaga</button>
+    <span></span>
+    <button class="gm-bd2" title="Doska rejimi" onclick="GM.fs()">🖥</button>
+  </div>
+  <div class="gm-wrap ch-wrap">
+    <div class="gm-stats ch-stats"><span>To'g'ri: <b id="ch-sc">0 / 0</b></span><span>Seriya: <b id="ch-st">0</b></span></div>
+    <div class="gm-side ch-side">
+      <div class="gm-card" id="ch-card"><span class="big ch-note">🎵</span><div class="ch-eq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><p id="ch-hint" style="display:none"></p></div>
+      <div class="gm-row ch-btns">
+        <button class="btn-primary" id="ch-play">▶ Tinglash</button>
+        <button class="btn-primary" id="ch-stop">⏹ To'xtatish</button>
+        <button class="nav-quiz-btn" id="ch-next">Keyingi ›</button>
+      </div>
+      <div class="gm-msg" id="ch-msg"></div>
     </div>
-    <div class="gm-msg" id="ch-msg"></div>
     <div class="gm-grid" id="ch-opts"></div>
     <div class="gm-info" id="ch-info"></div>
-    <button class="nav-quiz-btn" id="ch-next" style="display:block;width:100%">Keyingi cholg'u ›</button>
   </div>
 </div>
 
@@ -10853,7 +10887,20 @@ function cNew(){
   stopAll();
   const opts=INS.slice();
   for(let i=opts.length-1;i>0;i--){const j=R(i+1);const t=opts[i];opts[i]=opts[j];opts[j]=t;}
-  let t;do{t=pick(INS);}while(INS.length>1&&t===C.last);
+  if(!C.bag||!C.bag.length){
+    /* yangi davr: hamma cholg'u bir martadan chiqib bo'lgach qayta boshlanadi.
+       Davrlar navbatma-navbat: tartib bilan (birin-ketin) va aralash (chalkash) */
+    C.cycle=(C.cycle||0)+1;
+    let b=INS.slice();
+    if(C.cycle%2===0){ /* aralash davr */
+      for(let i=b.length-1;i>0;i--){const j=R(i+1);const x=b[i];b[i]=b[j];b[j]=x;}
+    }else{ /* birin-ketin davr: ro'yxat tartibi, tasodifiy joydan boshlanadi */
+      const off=R(b.length);b=b.slice(off).concat(b.slice(0,off));
+    }
+    if(b.length>1&&b[0]===C.last){b.push(b.shift());}
+    C.bag=b;
+  }
+  const t=C.bag.shift();
   C.last=t;C.opts=opts;C.target=t;C.heard=false;C.answered=false;C.tried=false;
   $('ch-hint').textContent='Tinglash tugmasini bosing';$('ch-msg').textContent='';$('ch-info').textContent='';
   $('ch-next').style.display='block';
@@ -10881,7 +10928,7 @@ function loadFirst(ins){
           if(ct.indexOf('text/html')>=0){log.push(nm+':html');continue;}
           ab=await r.arrayBuffer();
         }catch(e){log.push(nm+':xato');continue;}
-        try{return {buf:await decode(ab.slice(0))};}catch(e){if(!fb)fb=u;log.push(nm+':decode');}
+        try{const bf=await decode(ab.slice(0));return {buf:bf,gain:chGain(bf)};}catch(e){if(!fb)fb=u;log.push(nm+':decode');}
       }
       if(fb)return {url:fb};
       const er=new Error('yoq');er.log=log;throw er;
@@ -10889,6 +10936,19 @@ function loadFirst(ins){
     bufCache[ins.n].catch(()=>{delete bufCache[ins.n];});
   }
   return bufCache[ins.n];
+}
+function chGain(buf){
+  /* har bir cholg'u ovozi bir xil balandlikka keltiriladi (RMS bo'yicha) */
+  try{
+    let sum=0,cnt=0,pk=0;
+    for(let c=0;c<buf.numberOfChannels;c++){
+      const d=buf.getChannelData(c);
+      for(let i=0;i<d.length;i+=2){const v=Math.abs(d[i]);if(v>pk)pk=v;if(v>0.01){sum+=v*v;cnt++;}}
+    }
+    if(!cnt||pk<0.0005)return 1;
+    const rms=Math.sqrt(sum/cnt);
+    return Math.max(0.5,Math.min(14,0.16/rms));
+  }catch(e){return 1;}
 }
 function cPlay(){
   audio();stopAll();
@@ -10898,7 +10958,9 @@ function cPlay(){
   loadFirst(ins).then(r=>{
     if(my!==playTok)return;
     if(r.buf){
-      const bus=ctx.createGain();bus.gain.value=0.9;bus.connect(ctx.destination);reg(stub,bus);
+      const bus=ctx.createGain();bus.gain.value=Math.min(14,0.9*(r.gain||1));
+      const lim=ctx.createDynamicsCompressor();lim.threshold.value=-8;lim.knee.value=6;lim.ratio.value=14;lim.attack.value=0.002;lim.release.value=0.12;
+      bus.connect(lim);lim.connect(ctx.destination);reg(stub,bus);
       const s=ctx.createBufferSource();s.buffer=r.buf;s.connect(bus);s.start(ctx.currentTime+0.05);reg(s,bus);
       tm.push(setTimeout(()=>card.classList.remove('pulse'),r.buf.duration*1000+100));
     }else{
