@@ -13371,6 +13371,18 @@ window.showScreen=showScreen=function(id,push){
   #qk .qk-nm-row.ok{background:rgba(76,175,125,.22);border:1px solid rgba(76,175,125,.55)}
   #qk .qk-nm-row.fr{background:rgba(95,207,106,.16)}
   #qk .qk-nm-row b{color:#ffd66b;font-size:15px}
+  /* PIANINO (1 oktava) */
+  #qk .qk-pbtn{flex:none;margin:0;padding:0 16px;min-height:44px;border-radius:14px;border:1px solid var(--glass-border);background:rgba(255,255,255,.08);color:var(--text);font-size:15px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  #qk .qk-pbtn.on{background:rgba(255,214,107,.22);border-color:#ffd66b}
+  #qk .qk-piano{display:none;margin-top:10px;padding:10px 10px 8px;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid var(--glass-border)}
+  #qk .qk-piano.open{display:block}
+  #qk .qk-pk-h{font-size:12px;color:var(--muted);text-align:center;margin-bottom:8px;line-height:1.4}
+  #qk .qk-keys{position:relative;height:130px;border-radius:0 0 10px 10px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.35);-webkit-user-select:none;user-select:none;touch-action:manipulation}
+  #qk .qk-wk{position:absolute;top:0;bottom:0;width:12.5%;box-sizing:border-box;background:linear-gradient(#fff,#f1ece0);border:1px solid #b9b2a2;border-top:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;font-size:13px;font-weight:800;color:#0b5d8c;font-family:sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  #qk .qk-wk.on{background:linear-gradient(#ffe69a,#ffd66b)}
+  #qk .qk-bk{position:absolute;top:0;height:62%;width:8%;box-sizing:border-box;background:linear-gradient(#2c2c2c,#000);border:1px solid #000;border-top:0;border-radius:0 0 6px 6px;z-index:2;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  #qk .qk-bk.on{background:linear-gradient(#6a5a2a,#3a2f10)}
+  #qk .qk-ph{min-height:16px;font-size:12px;color:#ffd66b;text-align:center;margin-top:6px}
   /* SVG animatsiyalar */
   #qk-svg .qk-boat{animation:qk-bob 3.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 60%}
   @keyframes qk-bob{0%,100%{transform:translateY(0) rotate(-.9deg)}50%{transform:translateY(4px) rotate(.9deg)}}
@@ -13405,6 +13417,9 @@ window.showScreen=showScreen=function(id,push){
   #qk-svg .qk-bub{cursor:pointer}
   #qk-svg .qk-bub:active{opacity:.8}
   #qk-svg .qk-slot,#qk-svg .qk-fr{cursor:pointer}
+  #qk-svg .qk-num{cursor:pointer;-webkit-tap-highlight-color:transparent}
+  #qk-svg .qk-num:active{opacity:.75}
+  #qk-svg .qk-num.gone{display:none}
   #qk .qk-scene{touch-action:manipulation}
   #qk-svg .qk-tapring{opacity:0;transition:opacity .25s;transform-box:fill-box;transform-origin:center}
   #qk-svg.qk-pickable .qk-tapring{opacity:.95;animation:qk-tapspin 7s linear infinite}
@@ -13412,7 +13427,7 @@ window.showScreen=showScreen=function(id,push){
   #qk-svg.qk-pickable .qk-slot:hover .qk-ch{filter:brightness(1.1)}
   /* DOSKA REJIMI (elektron doska / katta ekran) */
   body.gm-board #screen-oyin-karnay .gm-wrap{max-width:1500px;margin:0 auto;padding:8px 32px 40px}
-  body.gm-board #qk{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(340px,1fr);grid-template-rows:auto auto auto auto auto auto auto 1fr;grid-template-areas:"top top" "scene lvls" "scene stats" "scene task" "scene msg" "scene ctl" "scene names" "scene fill";gap:0 36px;align-items:start}
+  body.gm-board #qk{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(340px,1fr);grid-template-rows:auto auto auto auto auto auto auto auto 1fr;grid-template-areas:"top top" "scene lvls" "scene stats" "scene task" "scene msg" "scene ctl" "scene piano" "scene names" "scene fill";gap:0 36px;align-items:start}
   body.gm-board #qk>.gm-top{grid-area:top}
   body.gm-board #qk>.gm-levels{grid-area:lvls}
   body.gm-board #qk>.gm-stats{grid-area:stats}
@@ -13420,6 +13435,10 @@ window.showScreen=showScreen=function(id,push){
   body.gm-board #qk>.qk-scene{grid-area:scene;justify-self:center;width:min(100%,calc((100vh - 235px)*0.947))}
   body.gm-board #qk>.gm-msg{grid-area:msg}
   body.gm-board #qk>.qk-ctl{grid-area:ctl}
+  body.gm-board #qk>.qk-piano{grid-area:piano}
+  body.gm-board #qk .qk-keys{height:190px}
+  body.gm-board #qk .qk-wk{font-size:20px}
+  body.gm-board #qk .qk-pbtn{font-size:19px;min-height:56px}
   body.gm-board #qk .qk-nm-h{font-size:16px}
   body.gm-board #qk .qk-nm-row{font-size:19px;padding:8px 10px}
   body.gm-board #qk .qk-nm-row b{font-size:22px}
@@ -13431,10 +13450,11 @@ window.showScreen=showScreen=function(id,push){
     <div class="gm-top"><button class="nav-quiz-btn gm-bd" onclick="GM.fs()">🖥 Doska rejimi</button></div>
     <div class="gm-levels"><button class="gm-lv on" onclick="QK.level(1,this)">Oson</button><button class="gm-lv" onclick="QK.level(2,this)">O'rta</button><button class="gm-lv" onclick="QK.level(3,this)">Qiyin</button></div>
     <div class="gm-stats"><span>Ball: <b id="qk-sc">0</b></span><span>Seriya: <b id="qk-st">0</b></span><span id="qk-n"></span></div>
-    <div class="qk-task">Kuyning <b>oxirgi notasi</b> suzuvchi Baqacha chalgan nota bilan bir xil bo'lgan karnaychini toping va <b>o'zini bosing</b> 👆</div>
+    <div class="qk-task">Kuyning <b>oxirgi notasi</b> suzuvchi Baqacha chalgan nota bilan bir xil bo'lgan karnaychini toping va <b>o'zini bosing</b> 👆<br>Kuyni qayta eshitish uchun qayiqdagi <b>raqamini</b> bosing 🔢</div>
     <div class="qk-scene"><svg id="qk-svg" viewBox="0 0 360 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dengizda qayiq va karnaychilar"></svg><div class="qk-conf" id="qk-conf"></div></div>
     <div class="gm-msg" id="qk-msg"></div>
-    <div class="qk-ctl"><button class="btn-primary" id="qk-main" onclick="QK.main()">▶ Boshlash</button></div>
+    <div class="qk-ctl"><button class="btn-primary" id="qk-main" onclick="QK.main()">▶ Boshlash</button><button class="qk-pbtn" id="qk-pbtn" onclick="QK.piano()">🎹 Pianino</button></div>
+    <div class="qk-piano" id="qk-piano"><div class="qk-pk-h">🎹 Baqacha chalgan notani tekshiring — klavishni bosing va eshiting</div><div class="qk-keys" id="qk-keys"></div><div class="qk-ph" id="qk-ph"></div></div>
     <div class="qk-names" id="qk-names"></div>
   </div>
 </div>
@@ -13567,7 +13587,7 @@ function buildScene(){
   +'<g class="qk-boat" id="qk-boat"><path d="M24 262 Q180 248 336 262 L332 282 Q180 298 28 282 Z" fill="#8f2a22"/><g id="qk-slots"></g>'
   +'<path d="M10 268 Q180 292 350 268 L332 328 Q180 348 28 328 Z" fill="url(#qkHull)"/><path d="M13 279 Q180 303 347 279 L344 290 Q180 314 16 290 Z" fill="#fff3d6"/>'
   +'<path d="M10 268 Q180 292 350 268" stroke="#ffb3a8" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8"/>'
-  +[0,1,2].map(i=>'<g transform="translate('+X[i]+','+(i===1?313:309)+')"><circle r="11.5" fill="#fff" stroke="#ffc83a" stroke-width="3"/><text text-anchor="middle" y="5" font-size="14" font-weight="900" fill="#d33a31" font-family="sans-serif">'+(i+1)+'</text></g>').join('')
+  +[0,1,2].map(i=>'<g class="qk-num" id="qk-nb'+i+'" transform="translate('+X[i]+','+(i===1?313:309)+')"><circle r="19" fill="transparent"/><circle r="11.5" fill="#fff" stroke="#ffc83a" stroke-width="3"/><text text-anchor="middle" y="5" font-size="14" font-weight="900" fill="#d33a31" font-family="sans-serif">'+(i+1)+'</text></g>').join('')
   +'<line x1="20" y1="266" x2="20" y2="214" stroke="#7a4a1a" stroke-width="3" stroke-linecap="round"/><path d="M20 216 L2 223 L20 231 Z" fill="#ffd23f"/></g>'
   +'<g id="qk-fall"></g>'
   +'<g class="qk-w3"><path d="'+wavePath(344,5,60,-60,480,380)+'" fill="#1d7fd0" opacity=".95"/></g>'
@@ -13588,7 +13608,7 @@ function buildSlots(){
   let h='';
   for(let i=0;i<3;i++)h+='<g class="qk-slot" id="qk-s'+i+'" transform="translate('+X[i]+','+BY+')"><circle class="qk-tapring" cx="0" cy="12" r="54" fill="none" stroke="#fff" stroke-width="3.5" stroke-dasharray="8 9" stroke-linecap="round"/>'+charG(ORDER[i],'qk-c'+i)+'<rect x="-58" y="-60" width="116" height="136" rx="22" fill="transparent"/></g>';
   $('qk-slots').innerHTML=h;$('qk-fall').innerHTML='';
-  for(let i=0;i<3;i++)$('qk-s'+i).onclick=()=>QK.tap(i);
+  for(let i=0;i<3;i++){$('qk-s'+i).onclick=()=>QK.tap(i);const nb=$('qk-nb'+i);if(nb){nb.classList.remove('gone');nb.onclick=e=>{e.stopPropagation();QK.replay(i);};}}
 }
 function fx(el){$('qk-fx').appendChild(el);return el;}
 function mk(tag,attrs){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);return e;}
@@ -13680,7 +13700,7 @@ function win(i){
 function lose(i){
   S.alive[i]=0;S.streak=0;stats();S.state='anim';setPicks(false);stopSound();
   const slot=$('qk-s'+i),ch=$('qk-c'+i);
-  const rg=slot.querySelector('.qk-tapring');if(rg)rg.remove();slot.style.pointerEvents='none';
+  const rg=slot.querySelector('.qk-tapring');if(rg)rg.remove();slot.style.pointerEvents='none';const nbx=$('qk-nb'+i);if(nbx)nbx.classList.add('gone');
   sndOops();ch.classList.add('oh');
   say('Voy! '+CH[ORDER[i]].em+' <b>'+CH[ORDER[i]].name+'</b> suvga tushmoqda… 💦');
   later(()=>{$('qk-fall').appendChild(slot);ch.classList.add('fall');},180);
@@ -13740,6 +13760,13 @@ const QK={
     if(S.state==='check')return;
     if(!S.R||S.state==='ready')say('Boshlash tugmasini bosing 🎺');
   },
+  replay(i){
+    if(!S.R){say('Avval ▶ Boshlash tugmasini bosing 🎺');return;}
+    if(!S.alive[i]||S.state==='anim'||S.state==='check')return;ac();
+    const wasListen=S.state==='listen';stopSound();
+    if(wasListen){S.state='choose';setPicks(true);}
+    seq([{who:i,notes:S.R.slots[i],gap:0,msg:CH[ORDER[i]].em+' <b>'+(i+1)+'-karnaychi — '+CH[ORDER[i]].name+'</b> kuyi…'}],()=>{if(S.state==='choose')say('Qaysi kuyning <b>oxirgi notasi</b> Baqacha notasi bilan bir xil? 🤔');});
+  },
   hearFrog(){
     if(!S.R){say('Avval ▶ Boshlash tugmasini bosing 🎺');return;}
     if(S.state==='anim'||S.state==='check')return;ac();
@@ -13747,6 +13774,38 @@ const QK={
     if(wasListen){S.state='choose';setPicks(true);}
     seq([{who:'f',notes:S.R.tm,gap:0,msg:'🐸 <b>Baqacha</b> notasi…'}],()=>{if(S.state==='choose')say('Qaysi kuyning <b>oxirgi notasi</b> shu nota bilan bir xil? 🤔');});
   }
+};
+/* ---------- Pianino (1 oktava: Do–Do) ---------- */
+const PK_W=[[0,'Do'],[2,'Re'],[4,'Mi'],[5,'Fa'],[7,'Sol'],[9,'Lya'],[11,'Si'],[12,'Do']];
+function pkBase(){return S.R?(S.R.T-(S.R.T%12)):60;}   // Baqacha notasi qaysi oktavada bo'lsa, pianino ham shu oktavada chaladi
+function pkTone(m){
+  const c=ac();if(!c)return;
+  const f=440*Math.pow(2,(m-69)/12),t=c.currentTime+0.005,g=c.createGain(),fl=c.createBiquadFilter();
+  fl.type='lowpass';fl.frequency.value=Math.min(f*7,7500);
+  g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(0.34,t+0.008);g.gain.exponentialRampToValueAtTime(0.0001,t+1.5);
+  [[1,'triangle',0.75],[2,'sine',0.22],[3,'sine',0.08]].forEach(p=>{const o=c.createOscillator(),og=c.createGain();o.type=p[1];o.frequency.value=f*p[0];og.gain.value=p[2];o.connect(og);og.connect(fl);o.start(t);o.stop(t+1.55);});
+  fl.connect(g);g.connect(c.destination);
+}
+function pkHint(txt){const e=$('qk-ph');if(!e)return;e.textContent=txt;clearTimeout(pkHint._t);pkHint._t=setTimeout(()=>{e.textContent='';},1800);}
+function pkPress(off,el){
+  if(S.state==='listen'||S.state==='check'||S.state==='anim'){pkHint('Kuy tugagach pianinoni bosing 🎧');return;}
+  if(el){el.classList.add('on');setTimeout(()=>el.classList.remove('on'),220);}
+  pkTone(pkBase()+off);
+}
+function pkBuild(){
+  const box=$('qk-keys');if(!box||box.childNodes.length)return;
+  let h='';
+  PK_W.forEach((k,i)=>{h+='<div class="qk-wk" data-o="'+k[0]+'" style="left:'+(i*12.5)+'%">'+k[1]+'</div>';});
+  [[1,1],[3,2],[6,4],[8,5],[10,6]].forEach(k=>{h+='<div class="qk-bk" data-o="'+k[0]+'" style="left:'+(k[1]*12.5-4)+'%"></div>';});
+  box.innerHTML=h;
+  box.querySelectorAll('[data-o]').forEach(el=>{el.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();pkPress(+el.dataset.o,el);});});
+}
+QK.piano=function(){
+  const p=$('qk-piano'),b=$('qk-pbtn');if(!p)return;
+  pkBuild();ac();
+  const open=!p.classList.contains('open');
+  p.classList.toggle('open',open);if(b){b.classList.toggle('on',open);b.textContent=open?'🎹 Yopish':'🎹 Pianino';}
+  if(open){setTimeout(()=>{try{const r=p.getBoundingClientRect();if(r.bottom>window.innerHeight)p.scrollIntoView({behavior:'smooth',block:'end'});}catch(e){}},60);}
 };
 window.QK=QK;
 
