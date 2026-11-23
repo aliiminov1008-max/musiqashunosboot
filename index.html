@@ -48,7 +48,7 @@
   .welcome-banner::before{content:'𝄞';position:absolute;top:-10px;right:10px;font-size:80px;opacity:0.06;color:var(--accent);}
   .welcome-banner h2{font-family:'Playfair Display',serif;font-size:18px;color:var(--accent2);}
   .welcome-banner p{font-size:13px;color:var(--muted);margin-top:6px;line-height:1.5;}
-  .hero-eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:var(--accent);background:rgba(212,175,106,0.1);border:1px solid var(--border);border-radius:20px;padding:4px 12px;margin-bottom:10px;}
+  .hero-eyebrow{cursor:pointer;-webkit-tap-highlight-color:transparent;display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:var(--accent);background:rgba(212,175,106,0.1);border:1px solid var(--border);border-radius:20px;padding:4px 12px;margin-bottom:10px;}
   .hero-title{font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:26px;line-height:1.25;
     background:linear-gradient(100deg,var(--accent2) 20%,#fff 40%,var(--accent2) 60%);background-size:250% 100%;
     -webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 6s ease-in-out infinite;}
@@ -640,7 +640,7 @@
       </div>
     </a>
   <div class="header" style="padding-top:46px">
-    <span class="hero-eyebrow">🎼 Musiqashunos</span>
+    <span class="hero-eyebrow" onclick="FP.open()" role="button" aria-label="Fortepianoni ochish"><svg width="24" height="15" viewBox="0 0 28 18" aria-hidden="true" style="flex:none;display:block"><rect x="0.5" y="0.5" width="27" height="17" rx="2.5" fill="#f5efe0" stroke="#c9a84c"/><g stroke="#c9a84c" stroke-width="0.8"><line x1="4" y1="9" x2="4" y2="17.5"/><line x1="8" y1="9" x2="8" y2="17.5"/><line x1="12" y1="9" x2="12" y2="17.5"/><line x1="16" y1="9" x2="16" y2="17.5"/><line x1="20" y1="9" x2="20" y2="17.5"/><line x1="24" y1="9" x2="24" y2="17.5"/></g><g fill="#1a1533"><rect x="2.8" y="0.5" width="2.8" height="10.5" rx="0.8"/><rect x="6.8" y="0.5" width="2.8" height="10.5" rx="0.8"/><rect x="14.8" y="0.5" width="2.8" height="10.5" rx="0.8"/><rect x="18.8" y="0.5" width="2.8" height="10.5" rx="0.8"/><rect x="22.8" y="0.5" width="2.8" height="10.5" rx="0.8"/></g></svg>Musiqashunos</span>
     <div id="srch-home" onclick="srchShow()" role="search" aria-label="Savollarni qidirish">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
       <span>Kerakli savolni izlang</span>
@@ -13377,7 +13377,7 @@ window.showScreen=showScreen=function(id,push){
   #qk .qk-piano{display:none;margin-top:10px;padding:10px 10px 8px;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid var(--glass-border)}
   #qk .qk-piano.open{display:block}
   #qk .qk-pk-h{font-size:12px;color:var(--muted);text-align:center;margin-bottom:8px;line-height:1.4}
-  #qk .qk-keys{position:relative;height:130px;border-radius:0 0 10px 10px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.35);-webkit-user-select:none;user-select:none;touch-action:manipulation}
+  #qk .qk-keys{touch-action:none;position:relative;height:120px;border-radius:0 0 10px 10px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.35);-webkit-user-select:none;user-select:none;touch-action:manipulation}
   #qk .qk-wk{position:absolute;top:0;bottom:0;width:12.5%;box-sizing:border-box;background:linear-gradient(#fff,#f1ece0);border:1px solid #b9b2a2;border-top:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;font-size:13px;font-weight:800;color:#0b5d8c;font-family:sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}
   #qk .qk-wk.on{background:linear-gradient(#ffe69a,#ffd66b)}
   #qk .qk-bk{position:absolute;top:0;height:62%;width:8%;box-sizing:border-box;background:linear-gradient(#2c2c2c,#000);border:1px solid #000;border-top:0;border-radius:0 0 6px 6px;z-index:2;cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -13436,7 +13436,7 @@ window.showScreen=showScreen=function(id,push){
   body.gm-board #qk>.gm-msg{grid-area:msg}
   body.gm-board #qk>.qk-ctl{grid-area:ctl}
   body.gm-board #qk>.qk-piano{grid-area:piano}
-  body.gm-board #qk .qk-keys{height:190px}
+  body.gm-board #qk .qk-keys{height:170px}
   body.gm-board #qk .qk-wk{font-size:20px}
   body.gm-board #qk .qk-pbtn{font-size:19px;min-height:56px}
   body.gm-board #qk .qk-nm-h{font-size:16px}
@@ -13454,10 +13454,123 @@ window.showScreen=showScreen=function(id,push){
     <div class="qk-scene"><svg id="qk-svg" viewBox="0 0 360 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dengizda qayiq va karnaychilar"></svg><div class="qk-conf" id="qk-conf"></div></div>
     <div class="gm-msg" id="qk-msg"></div>
     <div class="qk-ctl"><button class="btn-primary" id="qk-main" onclick="QK.main()">▶ Boshlash</button><button class="qk-pbtn" id="qk-pbtn" onclick="QK.piano()">🎹 Pianino</button></div>
-    <div class="qk-piano" id="qk-piano"><div class="qk-pk-h">🎹 Baqacha chalgan notani tekshiring — klavishni bosing va eshiting</div><div class="qk-keys" id="qk-keys"></div><div class="qk-ph" id="qk-ph"></div></div>
+    <div class="qk-piano" id="qk-piano"><div class="qk-pk-h">🎹 Baqacha chalgan notani tekshiring — klavishni bosing yoki barmog'ingizni uzmasdan suring</div><div class="qk-keys" id="qk-keys"></div><div class="qk-ph" id="qk-ph"></div></div>
     <div class="qk-names" id="qk-names"></div>
   </div>
 </div>
+<script id="fp-js">
+(function(){
+const $=id=>document.getElementById(id);
+let C=null,M=null;
+function ctx(){try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;if(!C){try{C=new AC({latencyHint:'interactive'});}catch(x){C=new AC();}}if(C.state==='suspended')C.resume();return C;}catch(e){return null;}}
+function out(c){
+  if(!M){
+    M=c.createGain();M.gain.value=0.85;const k=c.createDynamicsCompressor();M.connect(k);k.connect(c.destination);
+    /* ozgina zal (reverb) */
+    const len=Math.floor(c.sampleRate*1.1),b=c.createBuffer(2,len,c.sampleRate);
+    for(let ch=0;ch<2;ch++){const d=b.getChannelData(ch);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6);}
+    const cv=c.createConvolver();cv.buffer=b;const w=c.createGain();w.gain.value=0.3;M.connect(cv);cv.connect(w);w.connect(k);
+    /* ozgina exo (kechikish) */
+    const dl=c.createDelay(0.5),fb=c.createGain(),ew=c.createGain();dl.delayTime.value=0.17;fb.gain.value=0.28;ew.gain.value=0.16;
+    M.connect(dl);dl.connect(fb);fb.connect(dl);dl.connect(ew);ew.connect(k);
+  }
+  return M;
+}
+/* yengil pianino tovushi (ikkala pianino uchun umumiy): 2 ta tebratgich, filtrsiz */
+function tone(m){
+  const c=ctx();if(!c)return;
+  const f=440*Math.pow(2,(m-69)/12),t=c.currentTime,g=c.createGain(),o1=c.createOscillator(),o2=c.createOscillator(),g2=c.createGain();
+  o1.type='triangle';o2.type='sine';o1.frequency.value=f;o2.frequency.value=f*2;g2.gain.value=0.3;
+  g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(0.28,t+0.005);g.gain.exponentialRampToValueAtTime(0.13,t+0.3);g.gain.exponentialRampToValueAtTime(0.0001,t+2.3);   /* pedal kabi cho'ziladi */
+  o1.connect(g);o2.connect(g2);g2.connect(g);g.connect(out(c));
+  o1.start(t);o2.start(t);o1.stop(t+2.35);o2.stop(t+2.35);
+}
+/* barmoqni uzmasdan surib chalish (glissando). Klavish joylari bir marta o'lchanadi (elementFromPoint ishlatilmaydi — katta sahifada sekin),
+   tez surishda oraliq klavishlar ham o'tkazib yuborilmaydi (coalesced events). */
+function glide(box,o){
+  const act={};let keys=[];
+  const measure=()=>{keys=[].slice.call(box.querySelectorAll('[data-o]')).map(el=>{const r=el.getBoundingClientRect();return{el:el,l:r.left,t:r.top,r:r.right,b:r.bottom,k:(el.classList.contains('fb')||el.classList.contains('qk-bk'))?1:0};});keys.sort((a,b)=>b.k-a.k);};
+  const hit=(x,y)=>{for(let i=0;i<keys.length;i++){const k=keys[i];if(x>=k.l&&x<k.r&&y>=k.t&&y<k.b)return k.el;}return null;};
+  const rel=id=>{const k=act[id];if(k)k.classList.remove('on');delete act[id];};
+  const press=(id,k)=>{
+    if(act[id]===k)return;
+    if(act[id])act[id].classList.remove('on');
+    if(!k){act[id]=null;return;}
+    if(o.ok&&!o.ok()){act[id]=null;if(o.blocked)o.blocked();return;}
+    act[id]=k;k.classList.add('on');tone(o.note(k));
+  };
+  box.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();try{box.setPointerCapture(e.pointerId);}catch(x){}measure();press(e.pointerId,hit(e.clientX,e.clientY));});
+  box.addEventListener('pointermove',e=>{
+    if(!(e.pointerId in act))return;e.preventDefault();
+    const ev=e.getCoalescedEvents?e.getCoalescedEvents():null;
+    if(ev&&ev.length){for(let i=0;i<ev.length;i++)press(e.pointerId,hit(ev[i].clientX,ev[i].clientY));}else press(e.pointerId,hit(e.clientX,e.clientY));
+  });
+  ['pointerup','pointercancel','lostpointercapture'].forEach(n=>box.addEventListener(n,e=>rel(e.pointerId)));
+  box.addEventListener('contextmenu',e=>e.preventDefault());
+}
+/* ---------- To'liq ekranli 2 oktavalik fortepiano ---------- */
+const NAMES=['Do','Re','Mi','Fa','Sol','Lya','Si'],WO=[0,2,4,5,7,9,11];
+let ov=null,st=null,box=null,open=false,mode=2,base=60;
+try{mode=(localStorage.getItem('fpMode')==='1')?1:2;}catch(e){}
+function render(){
+  const two=mode===2,n=two?2:1,WOFF=[];if(two)base=60;
+  for(let o=0;o<n;o++)WO.forEach(x=>WOFF.push(o*12+x));WOFF.push(n*12);
+  const BL=two?[[1,1],[3,2],[6,4],[8,5],[10,6],[13,8],[15,9],[18,11],[20,12],[22,13]]:[[1,1],[3,2],[6,4],[8,5],[10,6]];
+  const w=100/WOFF.length;let h='';
+  WOFF.forEach((off,i)=>{h+='<div class="fk'+(off%12===0?' c':'')+'" data-o="'+off+'" style="left:'+(i*w)+'%;width:'+w+'%">'+NAMES[WO.indexOf(off%12)]+'</div>';});
+  BL.forEach(b=>{h+='<div class="fb" data-o="'+b[0]+'" style="left:'+(b[1]*w-w*0.25)+'%;width:'+(w*0.5)+'%"></div>';});
+  box.innerHTML=h;
+  const oc={48:'kichik oktava',60:'1-oktava',72:'2-oktava'};
+  $('fp-title').textContent='🎹 Fortepiano · '+(two?'2 oktava':oc[base]);
+  $('fp-m').textContent=two?'🔍 Katta':'2 oktava';
+  ['fp-lo','fp-hi'].forEach(id=>{$(id).style.display=two?'none':'block';});
+  $('fp-lo').style.opacity=base>48?1:.35;$('fp-hi').style.opacity=base<72?1:.35;
+}
+function layout(){
+  if(!st)return;const W=window.innerWidth,H=window.innerHeight;
+  st.style.width=(H>W?H:W)+'px';st.style.height=(H>W?W:H)+'px';
+  st.style.transform=H>W?'translateX('+W+'px) rotate(90deg)':'none';
+}
+function build(){
+  const css=document.createElement('style');css.id='fp-css';
+  css.textContent='#fp-overlay{display:none;position:fixed;inset:0;contain:layout paint;z-index:1000001;background:#0b0a14;touch-action:none;overflow:hidden;-webkit-user-select:none;user-select:none}'
+  +'#fp-overlay.on{display:block}'
+  +'#fp-stage{position:absolute;left:0;top:0;will-change:transform;transform-origin:0 0;background:linear-gradient(#1b1630,#0b0a14);touch-action:none}'
+  +'#fp-bar{position:absolute;left:0;right:0;top:0;height:54px;display:flex;align-items:center;gap:12px;padding:0 14px;box-sizing:border-box;color:#f5efe0;font-family:sans-serif}'
+  +'#fp-title{font-size:15px;font-weight:800;color:#e8c97a;white-space:nowrap}'
+  +'#fp-tip{flex:1;font-size:12px;color:rgba(245,239,224,.6);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
+  +'.fpb{flex:none;min-width:42px;height:38px;padding:0 12px;border-radius:12px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;font:700 14px sans-serif;line-height:1;cursor:pointer;-webkit-tap-highlight-color:transparent}.fpb:active{background:rgba(255,214,107,.3)}#fp-x{font-size:20px}'
+  +'#fp-keys{position:absolute;left:0;right:0;top:calc(54px + (100% - 54px) / 2);height:min(220px,74%);transform:translateY(-50%);border-radius:10px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.6);touch-action:none}'
+  +'#fp-keys .fk{position:absolute;top:0;bottom:0;box-sizing:border-box;background:linear-gradient(#fff,#efe8d6);border:1px solid #a9a290;border-top:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px;font:800 14px sans-serif;color:#6b5a2a}'
+  +'#fp-keys .fk.c{color:#b5651d}'
+  +'#fp-keys .fb{position:absolute;top:0;height:58%;box-sizing:border-box;background:linear-gradient(#333,#000);border:1px solid #000;border-top:0;border-radius:0 0 7px 7px;z-index:2}'
+  +'#fp-keys .fk.on{background:linear-gradient(#ffe69a,#ffd66b)}'
+  +'#fp-keys .fb.on{background:linear-gradient(#7a6420,#3a2f10)}';
+  document.head.appendChild(css);
+  ov=document.createElement('div');ov.id='fp-overlay';
+  ov.innerHTML='<div id="fp-stage"><div id="fp-bar"><div id="fp-title"></div><div id="fp-tip">Barmoqni uzmasdan suring</div><button class="fpb" id="fp-lo" aria-label="Pastroq oktava">◀</button><button class="fpb" id="fp-hi" aria-label="Balandroq oktava">▶</button><button class="fpb" id="fp-m"></button><button class="fpb" id="fp-x" aria-label="Yopish">✕</button></div><div id="fp-keys"></div></div>';
+  document.body.appendChild(ov);st=$('fp-stage');box=$('fp-keys');
+  glide(box,{note:k=>base+(+k.dataset.o)});
+  $('fp-m').addEventListener('click',e=>{e.stopPropagation();mode=mode===2?1:2;try{localStorage.setItem('fpMode',mode);}catch(x){}render();});
+  $('fp-lo').addEventListener('click',e=>{e.stopPropagation();if(base>48){base-=12;render();}});
+  $('fp-hi').addEventListener('click',e=>{e.stopPropagation();if(base<72){base+=12;render();}});
+  render();
+  $('fp-x').addEventListener('click',e=>{e.stopPropagation();close();});
+}
+function onResize(){if(open)layout();}
+function openFP(){
+  if(!ov)build();open=true;ov.classList.add('on');layout();ctx();
+  window.addEventListener('resize',onResize);window.addEventListener('orientationchange',onResize);
+  try{const tg=window.Telegram&&window.Telegram.WebApp;if(tg&&tg.disableVerticalSwipes)tg.disableVerticalSwipes();}catch(e){}
+}
+function close(){
+  if(!ov)return;open=false;ov.classList.remove('on');
+  window.removeEventListener('resize',onResize);window.removeEventListener('orientationchange',onResize);
+  try{const tg=window.Telegram&&window.Telegram.WebApp;if(tg&&tg.enableVerticalSwipes)tg.enableVerticalSwipes();}catch(e){}
+}
+window.FP={open:openFP,close:close,tone:tone,glide:glide,warm:ctx};
+})();
+</script>
 <script id="qk-js">
 (function(){
 const $=id=>document.getElementById(id);
@@ -13778,31 +13891,18 @@ const QK={
 /* ---------- Pianino (1 oktava: Do–Do) ---------- */
 const PK_W=[[0,'Do'],[2,'Re'],[4,'Mi'],[5,'Fa'],[7,'Sol'],[9,'Lya'],[11,'Si'],[12,'Do']];
 function pkBase(){return S.R?(S.R.T-(S.R.T%12)):60;}   // Baqacha notasi qaysi oktavada bo'lsa, pianino ham shu oktavada chaladi
-function pkTone(m){
-  const c=ac();if(!c)return;
-  const f=440*Math.pow(2,(m-69)/12),t=c.currentTime+0.005,g=c.createGain(),fl=c.createBiquadFilter();
-  fl.type='lowpass';fl.frequency.value=Math.min(f*7,7500);
-  g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(0.34,t+0.008);g.gain.exponentialRampToValueAtTime(0.0001,t+1.5);
-  [[1,'triangle',0.75],[2,'sine',0.22],[3,'sine',0.08]].forEach(p=>{const o=c.createOscillator(),og=c.createGain();o.type=p[1];o.frequency.value=f*p[0];og.gain.value=p[2];o.connect(og);og.connect(fl);o.start(t);o.stop(t+1.55);});
-  fl.connect(g);g.connect(c.destination);
-}
 function pkHint(txt){const e=$('qk-ph');if(!e)return;e.textContent=txt;clearTimeout(pkHint._t);pkHint._t=setTimeout(()=>{e.textContent='';},1800);}
-function pkPress(off,el){
-  if(S.state==='listen'||S.state==='check'||S.state==='anim'){pkHint('Kuy tugagach pianinoni bosing 🎧');return;}
-  if(el){el.classList.add('on');setTimeout(()=>el.classList.remove('on'),220);}
-  pkTone(pkBase()+off);
-}
 function pkBuild(){
   const box=$('qk-keys');if(!box||box.childNodes.length)return;
   let h='';
   PK_W.forEach((k,i)=>{h+='<div class="qk-wk" data-o="'+k[0]+'" style="left:'+(i*12.5)+'%">'+k[1]+'</div>';});
   [[1,1],[3,2],[6,4],[8,5],[10,6]].forEach(k=>{h+='<div class="qk-bk" data-o="'+k[0]+'" style="left:'+(k[1]*12.5-4)+'%"></div>';});
   box.innerHTML=h;
-  box.querySelectorAll('[data-o]').forEach(el=>{el.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();pkPress(+el.dataset.o,el);});});
+  FP.glide(box,{note:el=>pkBase()+(+el.dataset.o),ok:()=>!(S.state==='listen'||S.state==='check'||S.state==='anim'),blocked:()=>pkHint('Kuy tugagach pianinoni bosing 🎧')});
 }
 QK.piano=function(){
   const p=$('qk-piano'),b=$('qk-pbtn');if(!p)return;
-  pkBuild();ac();
+  pkBuild();ac();FP.warm();
   const open=!p.classList.contains('open');
   p.classList.toggle('open',open);if(b){b.classList.toggle('on',open);b.textContent=open?'🎹 Yopish':'🎹 Pianino';}
   if(open){setTimeout(()=>{try{const r=p.getBoundingClientRect();if(r.bottom>window.innerHeight)p.scrollIntoView({behavior:'smooth',block:'end'});}catch(e){}},60);}
