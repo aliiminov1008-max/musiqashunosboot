@@ -13463,6 +13463,7 @@ window.showScreen=showScreen=function(id,push){
 const $=id=>document.getElementById(id);
 let C=null,M=null;
 function ctx(){try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;if(!C){try{C=new AC({latencyHint:'interactive'});}catch(x){C=new AC();}}if(C.state==='suspended')C.resume();return C;}catch(e){return null;}}
+let DLN=null;
 function out(c){
   if(!M){
     M=c.createGain();M.gain.value=0.85;const k=c.createDynamicsCompressor();M.connect(k);k.connect(c.destination);
@@ -13471,35 +13472,111 @@ function out(c){
     for(let ch=0;ch<2;ch++){const d=b.getChannelData(ch);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6);}
     const cv=c.createConvolver();cv.buffer=b;const w=c.createGain();w.gain.value=0.3;M.connect(cv);cv.connect(w);w.connect(k);
     /* ozgina exo (kechikish) */
-    const dl=c.createDelay(0.5),fb=c.createGain(),ew=c.createGain();dl.delayTime.value=0.17;fb.gain.value=0.28;ew.gain.value=0.16;
-    M.connect(dl);dl.connect(fb);fb.connect(dl);dl.connect(ew);ew.connect(k);
+    const dl=c.createDelay(0.5),fb=c.createGain(),ew=c.createGain();dl.delayTime.value=0.17;fb.gain.value=0.32;ew.gain.value=0.24;
+    DLN=dl;M.connect(dl);dl.connect(fb);fb.connect(dl);dl.connect(ew);ew.connect(k);
   }
   return M;
 }
 /* yengil pianino tovushi (ikkala pianino uchun umumiy): 2 ta tebratgich, filtrsiz */
-function tone(m){
+function pianoTone(m,lat){
   const c=ctx();if(!c)return;
   const f=440*Math.pow(2,(m-69)/12),t=c.currentTime,g=c.createGain(),o1=c.createOscillator(),o2=c.createOscillator(),g2=c.createGain();
   o1.type='triangle';o2.type='sine';o1.frequency.value=f;o2.frequency.value=f*2;g2.gain.value=0.3;
-  g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(0.28,t+0.005);g.gain.exponentialRampToValueAtTime(0.13,t+0.3);g.gain.exponentialRampToValueAtTime(0.0001,t+2.3);   /* pedal kabi cho'ziladi */
+  g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(0.28,t+0.005);g.gain.exponentialRampToValueAtTime(0.13,t+0.3);g.gain.exponentialRampToValueAtTime(0.0001,t+(lat?24:2.3));   /* pedal kabi cho'ziladi */
   o1.connect(g);o2.connect(g2);g2.connect(g);g.connect(out(c));
-  o1.start(t);o2.start(t);o1.stop(t+2.35);o2.stop(t+2.35);
+  o1.start(t);o2.start(t);o1.stop(t+(lat?24.05:2.35));o2.stop(t+(lat?24.05:2.35));
+  if(lat){let dn=false;const h={off:function(){if(dn)return;dn=true;LIVE.delete(h);const n=c.currentTime;
+    try{if(g.gain.cancelAndHoldAtTime)g.gain.cancelAndHoldAtTime(n);else{const v=g.gain.value;g.gain.cancelScheduledValues(n);g.gain.setValueAtTime(v,n);}}catch(e){}
+    g.gain.setTargetAtTime(0.0001,n,0.08);[o1,o2].forEach(o=>{try{o.stop(n+0.5);}catch(e){}});}};LIVE.add(h);return h;}
+}
+
+/* ---------- Cholg'u tovushlari (sintez, tashqi fayl kerak emas) ---------- */
+const INS=[['piano','Pianino'],['epiano','Elektr pianino'],['marimba','Marimba'],['violin','Violin'],['flute','Fleyta'],['organ','Organ'],['guitar','Gitara']];
+let inst='piano';try{const sv=localStorage.getItem('fpInst');if(INS.some(a=>a[0]===sv))inst=sv;}catch(e){}
+const WV={};
+function har(n,f){const a=[];for(let i=1;i<=n;i++)a.push(f(i));return a;}
+const HW={vn:har(26,n=>1/Math.pow(n,1.05)),og:[1,.75,.3,.45,.1,.2,.04,.12],fl:[1,.3,.1,.04,.015],gt:har(18,n=>1/Math.pow(n,1.25))};
+function wv(c,k){return WV[k]||(WV[k]=c.createPeriodicWave(new Float32Array(HW[k].length+1),Float32Array.from([0].concat(HW[k]))));}
+const LIVE=new Set();
+let LAT=[];
+function clearLat(){LAT.forEach(h=>{try{h.off();}catch(e){}});LAT=[];}
+function releaseAll(){LIVE.forEach(h=>{try{h.off();}catch(e){}});LIVE.clear();LAT=[];}
+/* note(m, cholg'u, hold): hold=true bo'lsa cho'ziluvchi cholg'u (violin, akkordeon, fleyta, organ) barmoq ko'tarilguncha yangraydi */
+function note(m,ins,hold,lat){
+  if(!ins||ins==='piano'){return pianoTone(m,lat)||null;}
+  const c=ctx();if(!c)return null;
+  const f=440*Math.pow(2,(m-69)/12),t=c.currentTime,g=c.createGain(),all=[],pit=[];
+  let peak=0.2,att=0.02,rl=0.1,sus=true,dur=0;const LD=lat?20:0;
+  const mk=(w,fr,det,gv,to)=>{const o=c.createOscillator();if(w==='sine')o.type='sine';else o.setPeriodicWave(wv(c,w));o.frequency.value=fr;o.detune.value=det||0;const a=c.createGain();a.gain.value=gv;o.connect(a);a.connect(to);all.push(o);pit.push(o);return o;};
+  const vib=(delay,depth,rate)=>{const l=c.createOscillator(),lg=c.createGain();l.frequency.value=rate;lg.gain.setValueAtTime(0.0001,t);lg.gain.setValueAtTime(0.0001,t+delay);lg.gain.linearRampToValueAtTime(depth,t+delay+0.4);pit.forEach(o=>lg.connect(o.detune));l.connect(lg);all.push(l);};
+  const lpf=(fr,q)=>{const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=fr;lp.Q.value=q;lp.connect(g);return lp;};
+  if(ins==='marimba'){
+    sus=false;dur=Math.max(LD,0.6,Math.min(2.4,2.4-(m-45)*0.045));peak=0.42;
+    mk('sine',f,0,1,g);
+    const g4=c.createGain();g4.gain.setValueAtTime(0.0001,t);g4.gain.linearRampToValueAtTime(0.3,t+0.002);g4.gain.exponentialRampToValueAtTime(0.0001,t+0.16);g4.connect(g);
+    mk('sine',f*4,0,1,g4);
+    g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(peak,t+0.003);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  }else if(ins==='guitar'){
+    sus=false;dur=Math.max(LD,2.2);peak=0.38;
+    const lp=c.createBiquadFilter();lp.type='lowpass';lp.Q.value=0.5;lp.frequency.setValueAtTime(Math.min(f*9,7000),t);lp.frequency.exponentialRampToValueAtTime(Math.max(f*2,400),t+0.8);lp.connect(g);
+    mk('gt',f,0,1,lp);
+    g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(peak,t+0.002);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  }else if(ins==='violin'){
+    peak=0.2;att=0.03;rl=0.12;const lp=lpf(Math.min(f*6+600,5500),0.7);
+    mk('vn',f,-5,0.5,lp);mk('vn',f,5,0.5,lp);vib(0.1,11,5.5);
+  }else if(ins==='epiano'){
+    sus=false;dur=Math.max(LD,1.2,Math.min(3,3.2-(m-45)*0.03));peak=0.34;
+    mk('sine',f,0,1,g);
+    const g2=c.createGain();g2.gain.setValueAtTime(0.0001,t);g2.gain.linearRampToValueAtTime(0.22,t+0.003);g2.gain.exponentialRampToValueAtTime(0.0001,t+0.7);g2.connect(g);
+    mk('sine',f*2,0,1,g2);
+    const g3=c.createGain();g3.gain.setValueAtTime(0.0001,t);g3.gain.linearRampToValueAtTime(0.09,t+0.002);g3.gain.exponentialRampToValueAtTime(0.0001,t+0.12);g3.connect(g);
+    mk('sine',f*7.1,0,1,g3);
+    g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(peak,t+0.003);g.gain.exponentialRampToValueAtTime(peak*0.4,t+0.6);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  }else if(ins==='organ'){
+    peak=0.16;att=0.008;rl=0.08;
+    mk('og',f,0,0.8,g);mk('sine',f/2,0,0.35,g);
+  }else if(ins==='flute'){
+    peak=0.24;att=0.025;rl=0.1;
+    mk('fl',f,0,1,g);vib(0.25,7,5);
+    const ns=c.createBufferSource();ns.buffer=noiseBuf(c);ns.loop=true;
+    const bp=c.createBiquadFilter();bp.type='bandpass';bp.frequency.value=Math.min(f*3,6000);bp.Q.value=0.8;
+    const ng=c.createGain();ng.gain.setValueAtTime(0.0001,t);ng.gain.linearRampToValueAtTime(0.05,t+0.04);ng.gain.exponentialRampToValueAtTime(0.012,t+0.3);
+    ns.connect(bp);bp.connect(ng);ng.connect(g);all.push(ns);
+  }else{pianoTone(m);return null;}
+  if(sus){g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(peak,t+att);}
+  g.connect(out(c));
+  if(DLN){const es=c.createGain();es.gain.value=(ins==='marimba'||ins==='guitar'||ins==='epiano')?0.6:1.0;g.connect(es);es.connect(DLN);}   /* e'ho yuborish */
+  all.forEach(o=>o.start(t));
+  const end=t+(sus?30:dur)+0.1;all.forEach(o=>{try{o.stop(end);}catch(e){}});
+  let done=false;
+  const h={off:function(){
+    if(done)return;done=true;LIVE.delete(h);if(!sus&&!lat)return;
+    const n=c.currentTime;
+    try{if(g.gain.cancelAndHoldAtTime)g.gain.cancelAndHoldAtTime(n);else{const v=g.gain.value;g.gain.cancelScheduledValues(n);g.gain.setValueAtTime(v,n);}}catch(e){}
+    g.gain.setTargetAtTime(0.0001,n,rl/3);
+    all.forEach(o=>{try{o.stop(n+rl+0.15);}catch(e){}});
+  }};
+  if(sus||lat){LIVE.add(h);if(!hold)setTimeout(h.off,1100);}
+  return h;
 }
 /* barmoqni uzmasdan surib chalish (glissando). Klavish joylari bir marta o'lchanadi (elementFromPoint ishlatilmaydi — katta sahifada sekin),
    tez surishda oraliq klavishlar ham o'tkazib yuborilmaydi (coalesced events). */
 function glide(box,o){
-  const act={};let keys=[];
+  const act={},hd={};let keys=[];
   const measure=()=>{keys=[].slice.call(box.querySelectorAll('[data-o]')).map(el=>{const r=el.getBoundingClientRect();return{el:el,l:r.left,t:r.top,r:r.right,b:r.bottom,k:(el.classList.contains('fb')||el.classList.contains('qk-bk'))?1:0};});keys.sort((a,b)=>b.k-a.k);};
   const hit=(x,y)=>{for(let i=0;i<keys.length;i++){const k=keys[i];if(x>=k.l&&x<k.r&&y>=k.t&&y<k.b)return k.el;}return null;};
-  const rel=id=>{const k=act[id];if(k)k.classList.remove('on');delete act[id];};
+  const rel=id=>{const k=act[id];if(k)k.classList.remove('on');delete act[id];const h=hd[id];delete hd[id];if(h&&h.off){const ms=(o.latch&&o.latch()&&o.bar)?o.bar():0;if(ms>20){LAT.push(h);setTimeout(()=>{try{h.off();}catch(e){}},ms);}else h.off();}};
   const press=(id,k)=>{
     if(act[id]===k)return;
+    if(k&&o.latch)clearLat();
     if(act[id])act[id].classList.remove('on');
+    if(hd[id]){if(hd[id].off)hd[id].off();delete hd[id];}
     if(!k){act[id]=null;return;}
     if(o.ok&&!o.ok()){act[id]=null;if(o.blocked)o.blocked();return;}
-    act[id]=k;k.classList.add('on');tone(o.note(k));
+    act[id]=k;const h=note(o.note(k),o.inst?o.inst():null,true,o.latch?o.latch():false);if(h)hd[id]=h;k.classList.add('on');
   };
-  box.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();try{box.setPointerCapture(e.pointerId);}catch(x){}measure();press(e.pointerId,hit(e.clientX,e.clientY));});
+  if(o.cache){const inv=()=>{keys=[];};try{new ResizeObserver(inv).observe(box);new MutationObserver(inv).observe(box,{childList:true});}catch(x){}window.addEventListener('resize',inv);window.addEventListener('orientationchange',inv);}
+  box.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();try{box.setPointerCapture(e.pointerId);}catch(x){}ctx();if(!(o.cache&&keys.length))measure();press(e.pointerId,hit(e.clientX,e.clientY));});
   box.addEventListener('pointermove',e=>{
     if(!(e.pointerId in act))return;e.preventDefault();
     const ev=e.getCoalescedEvents?e.getCoalescedEvents():null;
@@ -13514,8 +13591,8 @@ let ov=null,st=null,box=null,open=false,mode=2,base=60;
 try{mode=(localStorage.getItem('fpMode')==='1')?1:2;}catch(e){}
 function render(){
   const two=mode===2,n=two?2:1,WOFF=[];if(two)base=60;
-  for(let o=0;o<n;o++)WO.forEach(x=>WOFF.push(o*12+x));WOFF.push(n*12);
-  const BL=two?[[1,1],[3,2],[6,4],[8,5],[10,6],[13,8],[15,9],[18,11],[20,12],[22,13]]:[[1,1],[3,2],[6,4],[8,5],[10,6]];
+  for(let o=0;o<n;o++)WO.forEach(x=>WOFF.push(o*12+x));WOFF.push(n*12);if(two)WOFF.length=12;
+  const BL=two?[[1,1],[3,2],[6,4],[8,5],[10,6],[13,8],[15,9],[18,11]]:[[1,1],[3,2],[6,4],[8,5],[10,6]];
   const w=100/WOFF.length;let h='';
   WOFF.forEach((off,i)=>{h+='<div class="fk'+(off%12===0?' c':'')+'" data-o="'+off+'" style="left:'+(i*w)+'%;width:'+w+'%">'+NAMES[WO.indexOf(off%12)]+'</div>';});
   BL.forEach(b=>{h+='<div class="fb" data-o="'+b[0]+'" style="left:'+(b[1]*w-w*0.25)+'%;width:'+(w*0.5)+'%"></div>';});
@@ -13529,7 +13606,7 @@ function render(){
 function layout(){
   if(!st)return;const W=window.innerWidth,H=window.innerHeight;
   st.style.width=(H>W?H:W)+'px';st.style.height=(H>W?W:H)+'px';
-  st.style.transform=H>W?'translateX('+W+'px) rotate(90deg)':'none';
+  st.style.transform=H>W?'translateX('+W+'px) rotate(90deg)':'none';setTop();
 }
 function build(){
   const css=document.createElement('style');css.id='fp-css';
@@ -13538,37 +13615,121 @@ function build(){
   +'#fp-stage{position:absolute;left:0;top:0;will-change:transform;transform-origin:0 0;background:linear-gradient(#1b1630,#0b0a14);touch-action:none}'
   +'#fp-bar{position:absolute;left:0;right:0;top:0;height:54px;display:flex;align-items:center;gap:12px;padding:0 14px;box-sizing:border-box;color:#f5efe0;font-family:sans-serif}'
   +'#fp-title{font-size:15px;font-weight:800;color:#e8c97a;white-space:nowrap}'
-  +'#fp-tip{flex:1;font-size:12px;color:rgba(245,239,224,.6);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
-  +'.fpb{flex:none;min-width:42px;height:38px;padding:0 12px;border-radius:12px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;font:700 14px sans-serif;line-height:1;cursor:pointer;-webkit-tap-highlight-color:transparent}.fpb:active{background:rgba(255,214,107,.3)}#fp-x{font-size:20px}'
-  +'#fp-keys{position:absolute;left:0;right:0;top:calc(54px + (100% - 54px) / 2);height:min(220px,74%);transform:translateY(-50%);border-radius:10px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.6);touch-action:none}'
-  +'#fp-keys .fk{position:absolute;top:0;bottom:0;box-sizing:border-box;background:linear-gradient(#fff,#efe8d6);border:1px solid #a9a290;border-top:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px;font:800 14px sans-serif;color:#6b5a2a}'
+  +'#fp-tip{min-width:0;flex:1;font-size:12px;color:rgba(245,239,224,.6);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
+  +'.fpb{flex:none;min-width:42px;height:38px;padding:0 12px;border-radius:12px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;font:700 14px sans-serif;line-height:1;cursor:pointer;-webkit-tap-highlight-color:transparent}.fpb:active{background:rgba(255,214,107,.3)}#fp-x{font-size:20px}.fpb.act{background:rgba(255,214,107,.3);border-color:#ffd66b}'
+  +'#fp-rhy{display:none;position:absolute;left:0;right:0;top:54px;padding:0 10px 6px;flex-wrap:wrap;gap:6px;align-items:center;box-sizing:border-box;font-family:sans-serif}'+'#fp-rhy.open{display:flex}#fp-rhy .fpb{height:34px;padding:0 10px;font-size:13px}'+'#fp-bpm{font:800 15px sans-serif;min-width:70px;text-align:center;color:#e8c97a}'+'#fp-dots{display:flex;gap:6px;margin-left:6px}#fp-dots i{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.18)}#fp-dots i.on{background:#ffd66b;box-shadow:0 0 8px #ffd66b}'+''
+  +'#fp-ins{display:none;position:absolute;left:0;right:0;top:54px;padding:0 10px 6px;flex-wrap:wrap;gap:6px;align-items:center;box-sizing:border-box;font-family:sans-serif}#fp-ins.open{display:flex}#fp-ins .fpb{height:34px;padding:0 12px;font-size:13px}'
+  +'#fp-keys{position:absolute;left:0;right:0;bottom:22%;height:min(44%,calc(78% - var(--ft,54px) - 4px));border-radius:10px;overflow:hidden;box-shadow:0 -4px 16px rgba(0,0,0,.55);touch-action:none}'
+  +'#fp-keys .fk{position:absolute;top:0;bottom:0;box-sizing:border-box;background:linear-gradient(#fff,#efe8d6);border:1px solid #a9a290;border-top:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:14px;font:800 20px sans-serif;color:#6b5a2a}'
   +'#fp-keys .fk.c{color:#b5651d}'
   +'#fp-keys .fb{position:absolute;top:0;height:58%;box-sizing:border-box;background:linear-gradient(#333,#000);border:1px solid #000;border-top:0;border-radius:0 0 7px 7px;z-index:2}'
   +'#fp-keys .fk.on{background:linear-gradient(#ffe69a,#ffd66b)}'
   +'#fp-keys .fb.on{background:linear-gradient(#7a6420,#3a2f10)}';
   document.head.appendChild(css);
   ov=document.createElement('div');ov.id='fp-overlay';
-  ov.innerHTML='<div id="fp-stage"><div id="fp-bar"><div id="fp-title"></div><div id="fp-tip">Barmoqni uzmasdan suring</div><button class="fpb" id="fp-lo" aria-label="Pastroq oktava">◀</button><button class="fpb" id="fp-hi" aria-label="Balandroq oktava">▶</button><button class="fpb" id="fp-m"></button><button class="fpb" id="fp-x" aria-label="Yopish">✕</button></div><div id="fp-keys"></div></div>';
+  ov.innerHTML='<div id="fp-stage"><div id="fp-bar"><div id="fp-title"></div><div id="fp-tip">Barmoqni uzmasdan suring</div><button class="fpb" id="fp-lo" aria-label="Pastroq oktava">◀</button><button class="fpb" id="fp-hi" aria-label="Balandroq oktava">▶</button><button class="fpb" id="fp-i"></button><button class="fpb" id="fp-r">🥁 Ritm</button><button class="fpb" id="fp-m"></button><button class="fpb" id="fp-x" aria-label="Yopish">✕</button></div><div id="fp-rhy"><button class="fpb" id="fp-play">▶</button><button class="fpb" data-st="metro">Metronom</button><button class="fpb" data-st="vals">Vals 3/4</button><button class="fpb" data-st="six8">6/8</button><button class="fpb" data-st="disko">Disko</button><button class="fpb" id="fp-mt"></button><button class="fpb" id="fp-bm">−</button><span id="fp-bpm"></span><button class="fpb" id="fp-bp">+</button><span id="fp-dots"></span></div><div id="fp-ins"></div><div id="fp-keys"></div></div>';
   document.body.appendChild(ov);st=$('fp-stage');box=$('fp-keys');
-  glide(box,{note:k=>base+(+k.dataset.o)});
+  glide(box,{note:k=>base+(+k.dataset.o),inst:()=>inst,cache:true,latch:()=>rOn,bar:()=>barLeft()});
   $('fp-m').addEventListener('click',e=>{e.stopPropagation();mode=mode===2?1:2;try{localStorage.setItem('fpMode',mode);}catch(x){}render();});
   $('fp-lo').addEventListener('click',e=>{e.stopPropagation();if(base>48){base-=12;render();}});
   $('fp-hi').addEventListener('click',e=>{e.stopPropagation();if(base<72){base+=12;render();}});
-  render();
+  render();initR();initI();
   $('fp-x').addEventListener('click',e=>{e.stopPropagation();close();});
+}
+
+/* ---------- Ritm va metronom (Vals, 6/8, Disko) ---------- */
+let NB=null,DO=null,rOn=false,rs='metro',mi=2,bpm=100,stp=0,nextT=0,rTimer=null;
+const METERS=[{l:'2/4',nb:2,sub:1},{l:'3/4',nb:3,sub:1},{l:'4/4',nb:4,sub:1},{l:'6/8',nb:2,sub:3}];
+const BPMS={metro:100,vals:100,six8:100,disko:100};   /* har bir ritmning o'z tezligi (hammasi 100 dan boshlanadi) */
+function noiseBuf(c){if(!NB){NB=c.createBuffer(1,c.sampleRate,c.sampleRate);const d=NB.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;}return NB;}
+function dOut(c){if(!DO){DO=c.createGain();DO.gain.value=0.9;DO.connect(c.destination);}return DO;}
+function nz(c,t,dur,type,freq,q,vel,o){const s=c.createBufferSource();s.buffer=noiseBuf(c);const f=c.createBiquadFilter();f.type=type;f.frequency.value=freq;f.Q.value=q;const g=c.createGain();g.gain.setValueAtTime(vel,t);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);s.connect(f);f.connect(g);g.connect(o);s.start(t,Math.random()*0.5);s.stop(t+dur+0.02);}
+function osc(c,t,type,f0,f1,fd,vel,dur,o){const os=c.createOscillator(),g=c.createGain();os.type=type;os.frequency.setValueAtTime(f0,t);if(f1!==f0)os.frequency.exponentialRampToValueAtTime(f1,t+fd);g.gain.setValueAtTime(vel,t);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);os.connect(g);g.connect(o);os.start(t);os.stop(t+dur+0.02);}
+function drum(c,t,v,vel){
+  const o=dOut(c);
+  if(v==='kick')osc(c,t,'sine',160,45,0.12,0.95*vel,0.3,o);
+  else if(v==='snare'){nz(c,t,0.17,'bandpass',1800,0.8,0.55*vel,o);osc(c,t,'triangle',190,190,0,0.25*vel,0.1,o);}
+  else if(v==='clap'){[0,0.012,0.024].forEach(d=>nz(c,t+d,0.03,'bandpass',1300,1,0.5*vel,o));nz(c,t+0.03,0.16,'bandpass',1300,1,0.4*vel,o);}
+  else if(v==='hat')nz(c,t,0.045,'highpass',7500,0.7,0.3*vel,o);
+  else if(v==='ohat')nz(c,t,0.2,'highpass',7000,0.7,0.3*vel,o);
+  else if(v==='ck1')osc(c,t,'sine',1600,1600,0,0.55,0.05,o);
+  else if(v==='ck2')osc(c,t,'sine',1100,1100,0,0.4,0.045,o);
+  else osc(c,t,'sine',800,800,0,0.25,0.04,o);
+}
+function pat(){
+  if(rs==='vals')return{nb:3,sub:1,ev:s=>s===0?[['kick',1]]:[['snare',.4],['hat',.3]]};   /* sof vals: bum-pa-pa */
+  if(rs==='six8')return{nb:2,sub:3,ev:s=>{const a=[];if(s===0)a.push(['kick',1]);if(s===2)a.push(['kick',.45]);if(s===3)a.push(['snare',.85]);a.push(['hat',s%3===0?.6:.28]);return a;}};
+  if(rs==='disko')return{nb:4,sub:2,ev:s=>{const a=[];if(s%2===0)a.push(['kick',1]);if(s===2||s===6)a.push(['clap',.8]);a.push(s%2?['ohat',.55]:['hat',.22]);return a;}};
+  const m=METERS[mi];return{nb:m.nb,sub:m.sub,ev:s=>[[s===0?'ck1':(s%m.sub===0?'ck2':'ck3'),1]]};
+}
+function flash(bi){const d=$('fp-dots');if(!d)return;for(let i=0;i<d.children.length;i++)d.children[i].className=(i===bi)?'on':'';}
+function sched(){
+  const c=ctx();if(!c||!rOn)return;const p=pat(),n=p.nb*p.sub;
+  while(nextT<c.currentTime+0.15){
+    const s=stp%n;p.ev(s).forEach(e=>drum(c,nextT,e[0],e[1]));
+    if(s%p.sub===0){const bi=s/p.sub,dl=Math.max(0,(nextT-c.currentTime)*1000);setTimeout(()=>{if(rOn)flash(bi);},dl);}
+    nextT+=60/bpm/p.sub;stp++;
+  }
+}
+/* joriy taktning oxirigacha qolgan vaqt (ms): nota shu paytgacha cho'ziladi */
+function barLeft(){
+  const c=ctx();if(!c||!rOn)return 0;
+  const p=pat(),n=p.nb*p.sub,sd=60/bpm/p.sub,k=(n-(stp%n))%n;
+  let ms=(nextT+k*sd-c.currentTime)*1000;
+  if(ms<sd*p.sub*500)ms+=n*sd*1000;   /* taktning oxiriga yarim urg'u qolgan bo'lsa, keyingi taktgacha cho'ziladi */
+  return Math.max(0,ms);
+}
+function startR(){const c=ctx();if(!c)return;rOn=true;stp=0;nextT=c.currentTime+0.08;clearInterval(rTimer);rTimer=setInterval(sched,25);sched();updR();}
+function stopR(){rOn=false;clearInterval(rTimer);rTimer=null;flash(-1);clearLat();updR();}
+function setTop(){
+  if(!st)return;const r=$('fp-rhy'),n=$('fp-ins');
+  const rh=(r&&r.classList.contains('open'))?r.offsetHeight:0;
+  if(n)n.style.top=(54+rh)+'px';
+  const ih=(n&&n.classList.contains('open'))?n.offsetHeight:0;
+  st.style.setProperty('--ft',(54+rh+ih)+'px');
+}
+function updI(){
+  document.querySelectorAll('#fp-ins [data-in]').forEach(b=>b.classList.toggle('act',b.dataset.in===inst));
+  const t=INS.filter(a=>a[0]===inst)[0];if($('fp-i'))$('fp-i').textContent='🎼 '+t[1];
+}
+function initI(){
+  const p=$('fp-ins');
+  p.innerHTML=INS.map(a=>'<button class="fpb" data-in="'+a[0]+'">'+a[1]+'</button>').join('');
+  $('fp-i').addEventListener('click',e=>{e.stopPropagation();const on=!p.classList.contains('open');p.classList.toggle('open',on);$('fp-i').classList.toggle('act',on);setTop();});
+  p.querySelectorAll('[data-in]').forEach(b=>b.addEventListener('click',e=>{
+    e.stopPropagation();releaseAll();inst=b.dataset.in;try{localStorage.setItem('fpInst',inst);}catch(x){}updI();
+  }));
+  updI();
+}
+function updR(){
+  if(!$('fp-rhy'))return;const p=pat();
+  $('fp-play').textContent=rOn?'⏹':'▶';$('fp-play').classList.toggle('act',rOn);
+  document.querySelectorAll('#fp-rhy [data-st]').forEach(b=>b.classList.toggle('act',b.dataset.st===rs));
+  $('fp-mt').style.display=rs==='metro'?'block':'none';$('fp-mt').textContent=METERS[mi].l;
+  $('fp-bpm').textContent='♩ = '+bpm;
+  let h='';for(let i=0;i<p.nb;i++)h+='<i></i>';$('fp-dots').innerHTML=h;
+}
+function initR(){
+  $('fp-r').addEventListener('click',e=>{e.stopPropagation();const r=$('fp-rhy'),on=!r.classList.contains('open');r.classList.toggle('open',on);$('fp-r').classList.toggle('act',on);setTop();});
+  $('fp-play').addEventListener('click',e=>{e.stopPropagation();rOn?stopR():startR();});
+  document.querySelectorAll('#fp-rhy [data-st]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();if(rs!==b.dataset.st){BPMS[rs]=bpm;rs=b.dataset.st;bpm=BPMS[rs];stp=0;}updR();}));
+  $('fp-mt').addEventListener('click',e=>{e.stopPropagation();mi=(mi+1)%METERS.length;stp=0;updR();});
+  $('fp-bm').addEventListener('click',e=>{e.stopPropagation();bpm=Math.max(40,bpm-4);BPMS[rs]=bpm;updR();});
+  $('fp-bp').addEventListener('click',e=>{e.stopPropagation();bpm=Math.min(208,bpm+4);BPMS[rs]=bpm;updR();});
+  updR();
 }
 function onResize(){if(open)layout();}
 function openFP(){
-  if(!ov)build();open=true;ov.classList.add('on');layout();ctx();
+  if(!ov)build();open=true;ov.classList.add('on');layout();const cc=ctx();if(cc)out(cc);
   window.addEventListener('resize',onResize);window.addEventListener('orientationchange',onResize);
   try{const tg=window.Telegram&&window.Telegram.WebApp;if(tg&&tg.disableVerticalSwipes)tg.disableVerticalSwipes();}catch(e){}
 }
 function close(){
-  if(!ov)return;open=false;ov.classList.remove('on');
+  if(!ov)return;stopR();releaseAll();open=false;ov.classList.remove('on');
   window.removeEventListener('resize',onResize);window.removeEventListener('orientationchange',onResize);
   try{const tg=window.Telegram&&window.Telegram.WebApp;if(tg&&tg.enableVerticalSwipes)tg.enableVerticalSwipes();}catch(e){}
 }
-window.FP={open:openFP,close:close,tone:tone,glide:glide,warm:ctx};
+window.FP={open:openFP,close:close,tone:function(m){pianoTone(m);},glide:glide,warm:ctx};
 })();
 </script>
 <script id="qk-js">
