@@ -1570,6 +1570,14 @@
     </div>
 
     <div class="test-header" style="margin-top:10px;padding:14px">
+      <div class="big" style="font-size:26px;margin-bottom:6px">📋</div>
+      <h2 style="font-size:15px">Imtixon biletlari</h2>
+      <p style="font-size:11px">Har biri 40 ta savoldan iborat tayyor variantlar: 5 tasi Kasb standarti, 35 tasi boshqa bo'limlardan. Variant raqami o'zgarmaydi — istalgan vaqt qayta yechishingiz mumkin.</p>
+      <p style="margin-top:4px;color:var(--accent);font-weight:600;font-size:11px">⏱ Vaqt: 90 daqiqa</p>
+      <button class="btn-primary" onclick="showScreen('bilet')" style="margin-top:10px;padding:9px;font-size:13px">📋 Biletlarni ochish</button>
+    </div>
+
+    <div class="test-header" style="margin-top:10px;padding:14px">
       <div class="big" style="font-size:26px;margin-bottom:6px">🎓</div>
       <h2 style="font-size:15px">Milliy sertifikat</h2>
       <p style="font-size:11px">Rasmiy "Test varianti tafsiloti" hujjatiga muvofiq tuzilgan namunaviy test</p>
@@ -1578,6 +1586,19 @@
         <div onclick="startQuiz('sertifikat1',null)" style="background:linear-gradient(135deg,#4a3a1a,#c9a44c);border-radius:12px;padding:7px 8px;text-align:center;cursor:pointer;min-height:42px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:11px;font-weight:600;color:#fff;line-height:1.2">🔒 1-variant</div><div style="font-size:9.5px;color:rgba(255,255,255,0.8);margin-top:2px">80 ta savol</div></div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- IMTIXON BILETLARI -->
+<div id="screen-bilet" class="screen">
+  <button class="back-btn" onclick="showScreen('tests')">‹ Orqaga</button>
+  <div class="header" style="padding-top:4px">
+    <span class="note-icon">📋</span>
+    <h1>Imtixon biletlari</h1>
+    <p id="bilet-sub">Variantni tanlang</p>
+  </div>
+  <div class="page-content" style="padding-top:8px">
+    <div id="bilet-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>
   </div>
 </div>
 
@@ -5884,6 +5905,8 @@ function updateAttestBallDisplay(){
 }
 let attestBall = loadAttestBall();
 let currentQuizSource='books';
+let currentBiletNo = 0;
+function isExamSource(){ return currentQuizSource==='tests' || currentQuizSource==='bilet'; }
 let lastTestKey='';
 let quizHasTimer=false, quizTimeLeft=0, quizTimerInterval=null;
 const GENERAL_TEST_TIME_LIMIT = 90*60; // 90 daqiqa (soniyalarda)
@@ -5895,6 +5918,7 @@ function showScreen(id, pushHistory = true) {
   const map={home:1,profile:2};
   if(map[id]!==undefined) document.querySelectorAll('.nav-btn')[map[id]].classList.add('active');
   if(id==='books') renderBooks();
+  if(id==='bilet') { try { renderBiletGrid(); } catch(e) { console.error(e); } }
 
   if(pushHistory) {
     // Bir xil sahifani ikki marta qo'shmaymiz
@@ -6387,8 +6411,9 @@ function answerDaily(qIdx, chosenOrigIdx) {
 }
 
 function startQuiz(type, key) {
-  // 2026 kuzgi/bahorgi attestatsiya savollari va asosiy ekrandagi MTT metodikasi bepul: faqat guruh a'zoligi kerak
-  if (/^mttmet[1-4]$/.test(type) || type === 'imtixonKuzgi' || type === 'imtixonKuzgi2' || type === 'imtixonKuzgi3' || type === 'imtixonBahorgi' || type === 'imtixonMilliy') {
+  // 2026 kuzgi/bahorgi attestatsiya savollari, MTT metodikasi va Imtixon biletlarining 1–3-variantlari bepul: faqat guruh a'zoligi kerak
+  // (4-variantdan boshlab: guruh a'zoligi + to'lov)
+  if (/^mttmet[1-4]$/.test(type) || type === 'imtixonKuzgi' || type === 'imtixonKuzgi2' || type === 'imtixonKuzgi3' || type === 'imtixonBahorgi' || type === 'imtixonMilliy' || (type === 'bilet' && Number(key) >= 1 && Number(key) <= 3)) {
     if (typeof window.requireGroup === 'function') window.requireGroup(function () { _doStartQuiz(type, key); });
     else _doStartQuiz(type, key);
     return;
@@ -6442,6 +6467,8 @@ function _doStartQuiz(type, key) {
     } else {
       currentQuizTitle = key;
     }
+  } else if (type === 'bilet') {
+    currentQuizTitle = 'Imtixon bileti — ' + key + '-variant';
   } else if (type === 'general') {
     currentQuizTitle = 'Siz imtixondasiz';
   } else if (type === 'intervals') {
@@ -6687,7 +6714,7 @@ function _doStartQuiz(type, key) {
   } else {
     currentQuizTitle = '';
   }
-  const pool = /^mttmet[1-4]$/.test(type) ? shuffle([...mttMetPool(type)]) : type==='imtixonMilliy' ? shuffle([...imtixonMilliy2026Questions]) : type==='imtixonBahorgi' ? shuffle([...imtixonBahorgi1Questions]) : type==='imtixonKuzgi3' ? shuffle([...imtixonKuzgi3Questions]) : type==='imtixonKuzgi2' ? shuffle([...imtixonKuzgi2Questions]) : type==='imtixonKuzgi' ? shuffle([...imtixonKuzgi1Questions]) : (type==='general' ? buildGeneralPool() : (type==='adabiyot' ? shuffle([...adabiyotQuestions]) : (type==='adabiyot_uzbek2' ? shuffle([...uzbekAdabiyot2Questions]) : (type==='adabiyot_uzbek3' ? shuffle([...uzbekAdabiyot3Questions]) : (type==='adabiyot_uzbek4' ? shuffle([...uzbekAdabiyot4Questions]) : (type==='adabiyot_uzbek5' ? shuffle([...uzbekAdabiyot5Questions]) : (type==='adabiyot_uzbek6' ? shuffle([...uzbekAdabiyot6Questions]) : (type==='adabiyot_uzbek7' ? shuffle([...uzbekAdabiyot7Questions]) : (type==='adabiyot_uzbek8' ? shuffle([...uzbekAdabiyot8Questions]) : (type==='adabiyot_uzbek9' ? shuffle([...uzbekAdabiyot9Questions]) : (type==='adabiyot_uzbek10' ? shuffle([...uzbekAdabiyot10Questions]) : (type==='adabiyot_uzbek11' ? shuffle([...uzbekAdabiyot11Questions]) : (type==='adabiyot_uzbek12' ? shuffle([...uzbekAdabiyot12Questions]) : (type==='adabiyot_uzbek13' ? shuffle([...uzbekAdabiyot13Questions]) : (type==='adabiyot_uzbek14' ? shuffle([...uzbekAdabiyot14Questions]) : (type==='adabiyot_uzbek15' ? shuffle([...uzbekAdabiyot15Questions]) : (type==='adabiyot_uzbek16' ? shuffle([...uzbekAdabiyot16Questions]) : (type==='adabiyot_uzbek17' ? shuffle([...uzbekAdabiyot17Questions]) : (type==='adabiyot_uzbek18' ? shuffle([...uzbekAdabiyot18Questions]) : (type==='adabiyot_uzbek19' ? shuffle([...uzbekAdabiyot19Questions]) : (type==='adabiyot_uzbek20' ? shuffle([...uzbekAdabiyot20Questions]) : (type==='adabiyot_uzbek_tt' ? shuffle([...tayanchTushunchalarQuestions]) : (type==='kompozitorlar1' ? shuffle([...kompozitorlar1Questions]) : (type==='kompozitorlar2' ? shuffle([...kompozitorlar2Questions]) : (type==='kompozitorlar3' ? shuffle([...kompozitorlar3Questions]) : (type==='kompozitorlar4' ? shuffle([...kompozitorlar4Questions]) : (type==='jahon_v1' ? shuffle([...jahonV1Questions]) : (type==='jahon_v2' ? shuffle([...jahonV2Questions]) : (type==='jahon_v3' ? shuffle([...jahonV3Questions]) : (type==='jahon_v4' ? shuffle([...jahonV4Questions]) : (type==='jahon_v5' ? shuffle([...jahonV5Questions]) : (type==='jahon_v6' ? shuffle([...jahonV6Questions]) : (type==='jahon_v7' ? shuffle([...jahonV7Questions]) : (type==='jahon_v8' ? shuffle([...jahonV8Questions]) : (type==='jahon_v9' ? shuffle([...jahonV9Questions]) : (type==='jahon_v10' ? shuffle([...jahonV10Questions]) : (type==='jahon_v11' ? shuffle([...jahonV11Questions]) : (type==='jahon_v12' ? shuffle([...jahonV12Questions]) : (type==='jahon_v13' ? shuffle([...jahonV13Questions]) : (type==='jahon_v14' ? shuffle([...jahonV14Questions]) : (type==='jahon_v15' ? shuffle([...jahonV15Questions]) : ((type==='jahon_v17' ? shuffle([...jahonV17Questions]) : (type==='jahon_v18' ? shuffle([...jahonV18Questions]) : (type==='jahon_v19' ? shuffle([...jahonV19Questions]) : (type==='jahon_v20' ? shuffle([...jahonV20Questions]) : (type==='jahon_v21' ? shuffle([...jahonV21Questions]) : (type==='jahon_v22' ? shuffle([...jahonV22Questions]) : (type==='jahon_v23' ? shuffle([...jahonV23Questions]) : (type==='jahon_v24' ? shuffle([...jahonV24Questions]) : (type==='jahon_v25' ? shuffle([...jahonV25Questions]) : (type==='jahon_v_tt' ? shuffle([...tayanchTushunchalarQuestions]) : (type==='intervals' ? intervalsQuestions : (type==='intervals2' ? intervalsQuestions2 : (type==='intervals3' ? intervalsQuestions3 : (type==='intervals4' ? intervalsQuestions4 : (type==='intervals5' ? intervalsQuestions5 : (type==='intervals6' ? intervalsQuestions6 : (type==='theory' ? nazariyaQuestions : (type==='theory1' ? nazariya2Questions : (type==='theory2' ? nazariya3Questions : (type==='theory3' ? nazariya4Questions : (type==='theory4' ? nazariya5Questions : (type==='theory5' ? nazariya6Questions : (type==='theory6' ? nazariya7Questions : (type==='theory7' ? nazariya8Questions : (type==='theory8' ? nazariya9Questions : (type==='theory9' ? nazariya10Questions : (type==='theory10' ? nazariya11Questions : (type==='shakl1' ? musiqiyShaklQuestions : (type==='shakl2' ? musiqiyShakl2Questions : (type==='shakl3' ? musiqiyShakl3Questions : (type==='shakl4' ? musiqiyShakl4Questions : (type==='shakl5' ? musiqiyShakl5Questions : (type==='kasb1' ? kasb1Questions : (type==='kasb2' ? kasb2Questions : (type==='kasb3' ? kasb3Questions : (type==='kasb4' ? kasb4Questions : (type==='kasb5' ? kasb5Questions : (type==='kasb6' ? kasb6Questions : (type==='kasb7' ? kasb7Questions : (type==='kasb8' ? kasb8Questions : (type==='imtixon1' ? imtixon1Questions : (type==='imtixon2' ? imtixon2Questions : (type==='imtixon3' ? imtixon3Questions : (type==='imtixon4' ? imtixon4Questions : type==='imtixon5' ? imtixon5Questions : type==='imtixon6' ? imtixon6Questions : type==='imtixon7' ? imtixon7Questions : type==='imtixon8' ? imtixon8Questions : (type==='sertifikat1' ? milliySertifikat1Questions : (type==='mttmusiqa1' ? mttMusiqa1Questions : (type==='mttmusiqa2' ? mttMusiqa2Questions : (type==='mttmusiqa3' ? mttMusiqa3Questions : (type==='mttmusiqa4' ? mttMusiqa4Questions : (type==='mttmusiqa5' ? mttMusiqa5Questions : (type==='mttmusiqa6' ? mttMusiqa6Questions : (type==='mttmusiqa7' ? mttMusiqa7Questions : (type==='mttmusiqa8' ? mttMusiqa8Questions : (type==='mttmusiqa9' ? mttMusiqa9Questions : (type==='metodika_v1' ? metodikaV1Questions : (type==='metodika_v2' ? metodikaV2Questions : (type==='metodika_v3' ? metodikaV3Questions : (type==='metodika_v4' ? metodikaV4Questions : (type==='metodika_v5' ? metodikaV5Questions : (type==='ilkqadam1' ? ilkQadam1Questions : (type==='ilkqadam2' ? ilkQadam2Questions : (type==='ilkqadam3' ? ilkQadam3Questions : (type==='ilkqadam4' ? ilkQadam4Questions : (type==='ilkqadam5' ? ilkQadam5Questions : (type==='ilkqadam6' ? ilkQadam6Questions : (type==='nashr3v-1' ? nashr3V1Questions : (type==='nashr3v-2' ? nashr3V2Questions : (type==='nashr3v-3' ? nashr3V3Questions : (type==='nashr3v-4' ? nashr3V4Questions : (type==='nashr3v-5' ? nashr3V5Questions : (type==='nashr3v-6' ? nashr3V6Questions : (type==='nashr3v-7' ? nashr3V7Questions : (type==='nashr3v-8' ? nashr3V8Questions : (type==='nashr3v-9' ? nashr3V9Questions : (type==='nashr3v-10' ? nashr3V10Questions : (type==='nashr3v-11' ? nashr3V11Questions : (sinfTests[key] && sinfTests[key].length > 0 ? sinfTests[key] : [])))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))));
+  const pool = type==='bilet' ? buildBiletPool(key) : /^mttmet[1-4]$/.test(type) ? shuffle([...mttMetPool(type)]) : type==='imtixonMilliy' ? shuffle([...imtixonMilliy2026Questions]) : type==='imtixonBahorgi' ? shuffle([...imtixonBahorgi1Questions]) : type==='imtixonKuzgi3' ? shuffle([...imtixonKuzgi3Questions]) : type==='imtixonKuzgi2' ? shuffle([...imtixonKuzgi2Questions]) : type==='imtixonKuzgi' ? shuffle([...imtixonKuzgi1Questions]) : (type==='general' ? buildGeneralPool() : (type==='adabiyot' ? shuffle([...adabiyotQuestions]) : (type==='adabiyot_uzbek2' ? shuffle([...uzbekAdabiyot2Questions]) : (type==='adabiyot_uzbek3' ? shuffle([...uzbekAdabiyot3Questions]) : (type==='adabiyot_uzbek4' ? shuffle([...uzbekAdabiyot4Questions]) : (type==='adabiyot_uzbek5' ? shuffle([...uzbekAdabiyot5Questions]) : (type==='adabiyot_uzbek6' ? shuffle([...uzbekAdabiyot6Questions]) : (type==='adabiyot_uzbek7' ? shuffle([...uzbekAdabiyot7Questions]) : (type==='adabiyot_uzbek8' ? shuffle([...uzbekAdabiyot8Questions]) : (type==='adabiyot_uzbek9' ? shuffle([...uzbekAdabiyot9Questions]) : (type==='adabiyot_uzbek10' ? shuffle([...uzbekAdabiyot10Questions]) : (type==='adabiyot_uzbek11' ? shuffle([...uzbekAdabiyot11Questions]) : (type==='adabiyot_uzbek12' ? shuffle([...uzbekAdabiyot12Questions]) : (type==='adabiyot_uzbek13' ? shuffle([...uzbekAdabiyot13Questions]) : (type==='adabiyot_uzbek14' ? shuffle([...uzbekAdabiyot14Questions]) : (type==='adabiyot_uzbek15' ? shuffle([...uzbekAdabiyot15Questions]) : (type==='adabiyot_uzbek16' ? shuffle([...uzbekAdabiyot16Questions]) : (type==='adabiyot_uzbek17' ? shuffle([...uzbekAdabiyot17Questions]) : (type==='adabiyot_uzbek18' ? shuffle([...uzbekAdabiyot18Questions]) : (type==='adabiyot_uzbek19' ? shuffle([...uzbekAdabiyot19Questions]) : (type==='adabiyot_uzbek20' ? shuffle([...uzbekAdabiyot20Questions]) : (type==='adabiyot_uzbek_tt' ? shuffle([...tayanchTushunchalarQuestions]) : (type==='kompozitorlar1' ? shuffle([...kompozitorlar1Questions]) : (type==='kompozitorlar2' ? shuffle([...kompozitorlar2Questions]) : (type==='kompozitorlar3' ? shuffle([...kompozitorlar3Questions]) : (type==='kompozitorlar4' ? shuffle([...kompozitorlar4Questions]) : (type==='jahon_v1' ? shuffle([...jahonV1Questions]) : (type==='jahon_v2' ? shuffle([...jahonV2Questions]) : (type==='jahon_v3' ? shuffle([...jahonV3Questions]) : (type==='jahon_v4' ? shuffle([...jahonV4Questions]) : (type==='jahon_v5' ? shuffle([...jahonV5Questions]) : (type==='jahon_v6' ? shuffle([...jahonV6Questions]) : (type==='jahon_v7' ? shuffle([...jahonV7Questions]) : (type==='jahon_v8' ? shuffle([...jahonV8Questions]) : (type==='jahon_v9' ? shuffle([...jahonV9Questions]) : (type==='jahon_v10' ? shuffle([...jahonV10Questions]) : (type==='jahon_v11' ? shuffle([...jahonV11Questions]) : (type==='jahon_v12' ? shuffle([...jahonV12Questions]) : (type==='jahon_v13' ? shuffle([...jahonV13Questions]) : (type==='jahon_v14' ? shuffle([...jahonV14Questions]) : (type==='jahon_v15' ? shuffle([...jahonV15Questions]) : ((type==='jahon_v17' ? shuffle([...jahonV17Questions]) : (type==='jahon_v18' ? shuffle([...jahonV18Questions]) : (type==='jahon_v19' ? shuffle([...jahonV19Questions]) : (type==='jahon_v20' ? shuffle([...jahonV20Questions]) : (type==='jahon_v21' ? shuffle([...jahonV21Questions]) : (type==='jahon_v22' ? shuffle([...jahonV22Questions]) : (type==='jahon_v23' ? shuffle([...jahonV23Questions]) : (type==='jahon_v24' ? shuffle([...jahonV24Questions]) : (type==='jahon_v25' ? shuffle([...jahonV25Questions]) : (type==='jahon_v_tt' ? shuffle([...tayanchTushunchalarQuestions]) : (type==='intervals' ? intervalsQuestions : (type==='intervals2' ? intervalsQuestions2 : (type==='intervals3' ? intervalsQuestions3 : (type==='intervals4' ? intervalsQuestions4 : (type==='intervals5' ? intervalsQuestions5 : (type==='intervals6' ? intervalsQuestions6 : (type==='theory' ? nazariyaQuestions : (type==='theory1' ? nazariya2Questions : (type==='theory2' ? nazariya3Questions : (type==='theory3' ? nazariya4Questions : (type==='theory4' ? nazariya5Questions : (type==='theory5' ? nazariya6Questions : (type==='theory6' ? nazariya7Questions : (type==='theory7' ? nazariya8Questions : (type==='theory8' ? nazariya9Questions : (type==='theory9' ? nazariya10Questions : (type==='theory10' ? nazariya11Questions : (type==='shakl1' ? musiqiyShaklQuestions : (type==='shakl2' ? musiqiyShakl2Questions : (type==='shakl3' ? musiqiyShakl3Questions : (type==='shakl4' ? musiqiyShakl4Questions : (type==='shakl5' ? musiqiyShakl5Questions : (type==='kasb1' ? kasb1Questions : (type==='kasb2' ? kasb2Questions : (type==='kasb3' ? kasb3Questions : (type==='kasb4' ? kasb4Questions : (type==='kasb5' ? kasb5Questions : (type==='kasb6' ? kasb6Questions : (type==='kasb7' ? kasb7Questions : (type==='kasb8' ? kasb8Questions : (type==='imtixon1' ? imtixon1Questions : (type==='imtixon2' ? imtixon2Questions : (type==='imtixon3' ? imtixon3Questions : (type==='imtixon4' ? imtixon4Questions : type==='imtixon5' ? imtixon5Questions : type==='imtixon6' ? imtixon6Questions : type==='imtixon7' ? imtixon7Questions : type==='imtixon8' ? imtixon8Questions : (type==='sertifikat1' ? milliySertifikat1Questions : (type==='mttmusiqa1' ? mttMusiqa1Questions : (type==='mttmusiqa2' ? mttMusiqa2Questions : (type==='mttmusiqa3' ? mttMusiqa3Questions : (type==='mttmusiqa4' ? mttMusiqa4Questions : (type==='mttmusiqa5' ? mttMusiqa5Questions : (type==='mttmusiqa6' ? mttMusiqa6Questions : (type==='mttmusiqa7' ? mttMusiqa7Questions : (type==='mttmusiqa8' ? mttMusiqa8Questions : (type==='mttmusiqa9' ? mttMusiqa9Questions : (type==='metodika_v1' ? metodikaV1Questions : (type==='metodika_v2' ? metodikaV2Questions : (type==='metodika_v3' ? metodikaV3Questions : (type==='metodika_v4' ? metodikaV4Questions : (type==='metodika_v5' ? metodikaV5Questions : (type==='ilkqadam1' ? ilkQadam1Questions : (type==='ilkqadam2' ? ilkQadam2Questions : (type==='ilkqadam3' ? ilkQadam3Questions : (type==='ilkqadam4' ? ilkQadam4Questions : (type==='ilkqadam5' ? ilkQadam5Questions : (type==='ilkqadam6' ? ilkQadam6Questions : (type==='nashr3v-1' ? nashr3V1Questions : (type==='nashr3v-2' ? nashr3V2Questions : (type==='nashr3v-3' ? nashr3V3Questions : (type==='nashr3v-4' ? nashr3V4Questions : (type==='nashr3v-5' ? nashr3V5Questions : (type==='nashr3v-6' ? nashr3V6Questions : (type==='nashr3v-7' ? nashr3V7Questions : (type==='nashr3v-8' ? nashr3V8Questions : (type==='nashr3v-9' ? nashr3V9Questions : (type==='nashr3v-10' ? nashr3V10Questions : (type==='nashr3v-11' ? nashr3V11Questions : (sinfTests[key] && sinfTests[key].length > 0 ? sinfTests[key] : [])))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))));
 
   quizQuestions = shuffle([...pool]);
   currentQ=0; score=0; answered=false;
@@ -6695,9 +6722,11 @@ function _doStartQuiz(type, key) {
   shuffledOrders = quizQuestions.map(q => q.fixed ? [...Array(q.a.length).keys()] : shuffle([...Array(q.a.length).keys()]));
   currentQuizSource = /^mttmet[1-4]$/.test(type) ? 'home' : (type==='imtixonMilliy'||type==='imtixonBahorgi'||type==='imtixonKuzgi'||type==='imtixonKuzgi2'||type==='imtixonKuzgi3') ? 'imtixon' : (type==='general' ? 'tests' : (type==='intervals' || type==='intervals2' || type==='intervals3' || type==='intervals4' || type==='intervals5' || type==='intervals6' ? 'intervals' : (type==='theory' || type==='theory1' || type==='theory2' || type==='theory3' || type==='theory4' || type==='theory5' || type==='theory6' || type==='theory7' || type==='theory8' || type==='theory9' ? 'theory' : (type==='kasb1' || type==='kasb2' || type==='kasb3' || type==='kasb4' || type==='kasb5' ? 'kasb' : (type==='imtixon1' || type==='imtixon2' || type==='imtixon3' || type==='imtixon4' || type==='imtixon5' || type==='imtixon6' || type==='imtixon7' || type==='imtixon8' ? 'imtixon' : (type==='sertifikat1' ? 'tests' : (type==='mttmusiqa1' || type==='mttmusiqa2' || type==='mttmusiqa3' || type==='mttmusiqa4' || type==='mttmusiqa5' || type==='mttmusiqa6' || type==='mttmusiqa7' || type==='mttmusiqa8' || type==='mttmusiqa9' ? 'ilkqadam-musiqa' : (type==='metodika_v1' || type==='metodika_v2' || type==='metodika_v3' || type==='metodika_v4' || type==='metodika_v5' ? 'adabiyot-metodika' : (type==='jahon_v1' || type==='jahon_v2' || type==='jahon_v3' || type==='jahon_v4' || type==='jahon_v5' || type==='jahon_v6' || type==='jahon_v7' || type==='jahon_v8' || type==='jahon_v9' || type==='jahon_v10' || type==='jahon_v11' || type==='jahon_v12' || type==='jahon_v13' || type==='jahon_v14' || type==='jahon_v15' || type==='jahon_v17' || type==='jahon_v18' || type==='jahon_v19' || type==='jahon_v20' || type==='jahon_v21' || type==='jahon_v22' || type==='jahon_v23' || type==='jahon_v24' || type==='jahon_v25' || type==='jahon_v_tt' ? 'adabiyot-jahon' : (type==='adabiyot' || type==='adabiyot_uzbek2' || type==='adabiyot_uzbek3' || type==='adabiyot_uzbek4' || type==='adabiyot_uzbek5' || type==='adabiyot_uzbek6' || type==='adabiyot_uzbek7' || type==='adabiyot_uzbek8' || type==='adabiyot_uzbek9' || type==='adabiyot_uzbek10' || type==='adabiyot_uzbek11' || type==='adabiyot_uzbek12' || type==='adabiyot_uzbek13' || type==='adabiyot_uzbek14' || type==='adabiyot_uzbek15' || type==='adabiyot_uzbek16' || type==='adabiyot_uzbek17' || type==='adabiyot_uzbek18' || type==='adabiyot_uzbek19' || type==='adabiyot_uzbek20' || type==='adabiyot_uzbek_tt' ? 'adabiyot-uzbek' : (type==='kompozitorlar1' || type==='kompozitorlar2' || type==='kompozitorlar3' ? 'adabiyot-kompozitorlar' : (type==='shakl1' || type==='shakl2' || type==='shakl3' || type==='shakl4' || type==='shakl5' ? 'asarlar-tahlili' : (type==='ilkqadam1' || type==='ilkqadam2' || type==='ilkqadam3' || type==='ilkqadam4' || type==='ilkqadam5' || type==='ilkqadam6' || type==='nashr3v-1' || type==='nashr3v-2' || type==='nashr3v-3' || type==='nashr3v-4' || type==='nashr3v-5' || type==='nashr3v-6' || type==='nashr3v-7' || type==='nashr3v-8' || type==='nashr3v-9' || type==='nashr3v-10' || type==='nashr3v-11' ? 'ilkqadam' : 'sinf-test')))))))))))));
 
+  if (type === 'bilet') { currentQuizSource = 'bilet'; currentBiletNo = Number(key) || 0; }
+
   // Umumiy testlar uchun 90 daqiqalik vaqt chegarasi
   clearQuizTimer();
-  if (type === 'general') {
+  if (type === 'general' || type === 'bilet') {
     quizHasTimer = true;
     quizTimeLeft = GENERAL_TEST_TIME_LIMIT;
   } else {
@@ -6708,6 +6737,130 @@ function _doStartQuiz(type, key) {
   showScreen('quiz');
   renderQuestion();
   startQuizTimer();
+}
+
+// ============================================================
+// IMTIXON BILETLARI — savollar qayta yozilmaydi: variantlar mavjud
+// massivlardan (getAllTestQuestions + kasb1..8) ish vaqtida, qat'iy
+// (seed'li) tartibda yig'iladi. Har bir variant: 5 Kasb standarti +
+// 35 boshqa bo'limlardan (MTT musiqa kirmaydi). Fayl hajmi oshmaydi.
+// ============================================================
+const BILET_KASB = 5, BILET_MUSIC = 35;
+let _biletCache = null;
+
+function _biletRng(seed) {           // mulberry32 — har safar bir xil ketma-ketlik
+  let a = seed >>> 0;
+  return function () {
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function _biletShuffle(arr, rnd) {
+  const r = arr.slice();
+  for (let i = r.length - 1; i > 0; i--) {
+    const j = Math.floor(rnd() * (i + 1));
+    const t = r[i]; r[i] = r[j]; r[j] = t;
+  }
+  return r;
+}
+function _biletKey(q) { return String(q.q).replace(/\s+/g, ' ').trim().toLowerCase(); }
+
+function getBiletVariants() {
+  if (_biletCache) return _biletCache;
+  // --- Kasb standarti (takrorsiz) ---
+  const kseen = new Set(); const kasb = [];
+  [kasb1Questions, kasb2Questions, kasb3Questions, kasb4Questions, kasb5Questions, kasb6Questions, kasb7Questions, kasb8Questions]
+    .forEach(arr => (arr || []).forEach(q => {
+      if (!(q && q.q && Array.isArray(q.a) && q.a.length && typeof q.correct === 'number')) return;
+      const k = _biletKey(q); if (kseen.has(k)) return; kseen.add(k); kasb.push(q);
+    }));
+  // --- Musiqaga oid savollar (MTT/Kasb standarti kirmaydi, takrorsiz) ---
+  const music = getAllTestQuestions();
+  // Bo'limlar bo'yicha guruhlab, har bo'limni qat'iy aralashtiramiz
+  const groups = {};
+  music.forEach(q => { const sec = String(q._src || 'Boshqa').split(' — ')[0]; (groups[sec] = groups[sec] || []).push(q); });
+  const secNames = Object.keys(groups).sort();
+  const rndM = _biletRng(20260101);
+  const keyed = [];
+  secNames.forEach((name, si) => {
+    const list = _biletShuffle(groups[name], rndM);
+    const m = list.length;
+    // pozitsiya kaliti: har bir bo'lim savollari butun ro'yxat bo'ylab tekis taqsimlanadi
+    list.forEach((q, j) => keyed.push({ q, pos: (j + 0.5) / m, si }));
+  });
+  keyed.sort((x, y) => (x.pos - y.pos) || (x.si - y.si));
+  const seq = keyed.map(x => x.q);
+  const N = Math.floor(seq.length / BILET_MUSIC);       // variantlar soni savollar sonidan kelib chiqadi
+  // Kasb standarti ketma-ketligi: tugasa qayta aralashtirib davom etadi
+  const kasbSeq = []; let cyc = 0;
+  while (kasbSeq.length < N * BILET_KASB && kasb.length) { kasbSeq.push(..._biletShuffle(kasb, _biletRng(777 + cyc++))); }
+  const variants = [];
+  for (let v = 0; v < N; v++) {
+    const mus = seq.slice(v * BILET_MUSIC, (v + 1) * BILET_MUSIC);
+    const ks = []; const used = new Set(); let p = v * BILET_KASB;
+    while (ks.length < BILET_KASB && p < kasbSeq.length) {
+      const q = kasbSeq[p++]; const k = _biletKey(q);
+      if (!used.has(k)) { used.add(k); ks.push(q); }
+    }
+    variants.push({ kasb: ks, music: mus });
+  }
+  _biletCache = variants;
+  return variants;
+}
+
+function buildBiletPool(n) {
+  const vs = getBiletVariants();
+  const v = vs[(Number(n) || 1) - 1];
+  if (!v) return [];
+  return [...v.kasb, ...v.music];
+}
+
+function _biletStoreKey(){ return 'musiqa_bilet_' + statsNamespace(); }
+function loadBiletResults(){
+  try{ return JSON.parse(localStorage.getItem(_biletStoreKey()) || '{}') || {}; }catch(e){ return {}; }
+}
+// Eng yaxshi natija saqlanadi (qayta yechganda yomonlashmaydi)
+function saveBiletResult(n, correct, total){
+  const all = loadBiletResults();
+  const prev = all[n];
+  if(!prev || correct > prev.c || (correct === prev.c && total !== prev.t)){
+    all[n] = {c: correct, t: total};
+    try{ localStorage.setItem(_biletStoreKey(), JSON.stringify(all)); }catch(e){}
+  }
+}
+
+function renderBiletGrid() {
+  const grid = document.getElementById('bilet-grid');
+  if (!grid) return;
+  const total = getBiletVariants().length;
+  const res = loadBiletResults();
+  const sub = document.getElementById('bilet-sub');
+  if (sub) {
+    const done = Object.keys(res).filter(k => Number(k) <= total).length;
+    sub.textContent = total + ' ta variant · har birida ' + (BILET_KASB + BILET_MUSIC) + ' ta savol · ishlangan: ' + done;
+  }
+  let html = '';
+  for (let i = 1; i <= total; i++) {
+    const r = res[i];
+    let bg = 'linear-gradient(160deg,var(--card) 0%,var(--surface) 100%)';
+    let border = 'var(--border)', numClr = 'var(--accent)', subHtml = '';
+    if (r) {
+      const t = r.t || (BILET_KASB + BILET_MUSIC);
+      const wrong = t - r.c;                       // o'tkazilganlar ham xato hisoblanadi
+      let c1, c2;
+      if (wrong === 0)      { c1 = '#1f8f55'; c2 = '#4caf7d'; }   // 100% — yashil
+      else if (wrong < 5)   { c1 = '#b58900'; c2 = '#e6b800'; }   // 1–4 xato — sariq
+      else                  { c1 = '#a32b2b'; c2 = '#e05c5c'; }   // 5+ xato — qizil
+      bg = 'linear-gradient(160deg,' + c1 + ' 0%,' + c2 + ' 100%)';
+      border = 'rgba(255,255,255,0.28)'; numClr = '#fff';
+      subHtml = '<div style="font-size:13px;font-weight:700;color:#fff;margin-top:4px;text-shadow:0 1px 2px rgba(0,0,0,0.3)">' + r.c + '/' + t + '</div>';
+    }
+    html += '<div onclick="startQuiz(\'bilet\',' + i + ')" style="background:' + bg + ';border:1px solid ' + border + ';border-radius:14px;padding:16px 4px;text-align:center;cursor:pointer;box-shadow:var(--shadow);min-height:78px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:24px;font-weight:700;color:' + numClr + ';line-height:1.1">' + i + '</div>' + subHtml + '</div>';
+  }
+  grid.innerHTML = html;
 }
 
 function buildGeneralPool() {
@@ -6838,7 +6991,7 @@ function renderQuestion() {
   const saved = userAnswers[currentQ];
   const isFirst = currentQ===0;
   const isLast = currentQ===quizQuestions.length-1;
-  const examMode = currentQuizSource === 'tests';
+  const examMode = isExamSource();
   let btnsHtml, fbHtml;
   {
     btnsHtml = shuffled.map((origIdx,newIdx)=>{
@@ -6927,6 +7080,7 @@ function showResult() {
   try{ if(window.__profRec) window.__profRec(currentQuizTitle, quizQuestions.length, score, 1); }catch(e){}
   saveTestResults();
   updateStatScoreDisplay();
+  try{ if(currentQuizSource==='bilet' && currentBiletNo) saveBiletResult(currentBiletNo, score, quizQuestions.length); }catch(e){}
   addAttestBall(score);
   let msg,emoji;
   if(pct>=90){msg="Ajoyib natija! Siz attestatsiyaga tayyor!";emoji='\uD83C\uDFC6';}
@@ -6934,7 +7088,7 @@ function showResult() {
   else if(pct>=50){msg="O'rtacha natija. Darslikni qayta o'qing.";emoji='\uD83D\uDCDA';}
   else{msg="Ko'proq o'qish kerak. Harakat qiling!";emoji='\uD83D\uDCAA';}
   const skippedHtml = skipped>0?`<div style="text-align:center;flex:1"><div style="font-size:26px;color:var(--muted);font-weight:700">${skipped}</div><div style="font-size:12px;color:var(--muted)">O'tkazildi</div></div>`:'';
-  const examMode = currentQuizSource === 'tests';
+  const examMode = isExamSource();
   let answerGridHtml = '';
   if (examMode) {
     const cells = userAnswers.map((a,i)=>{
@@ -6993,7 +7147,12 @@ function showResult() {
 }
 
 function restartQuiz(){
-  if(currentQuizSource === 'tests') {
+  if(currentQuizSource === 'bilet' && currentBiletNo) {
+    // Imtixon bileti: xuddi shu variant qayta
+    quizQuestions = buildBiletPool(currentBiletNo);
+    quizHasTimer = true;
+    quizTimeLeft = GENERAL_TEST_TIME_LIMIT;
+  } else if(currentQuizSource === 'tests') {
     // Umumiy test: har gal yangi aralash 35 ta savol
     quizQuestions = buildGeneralPool();
     quizHasTimer = true;
