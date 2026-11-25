@@ -626,6 +626,46 @@
   body.gm-board .td-m .n{font-size:18px}body.gm-board .td-lbl{font-size:16px}
     body.gm-board #screen-oyin-toldir .gm-side .nav-quiz-btn{font-size:18px;padding:16px}
 </style>
+<style id="board-lite">
+/* ===== ELEKTRON DOSKA UCHUN YENGIL REJIM (faqat body.gm-board) ===== */
+/* 1) Shisha (blur) effektini o'chirish — eng og'ir effekt */
+body.gm-board *,body.gm-board *::before,body.gm-board *::after{
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;}
+/* blur o'rniga zich fon, matn o'qilishi uchun */
+body.gm-board #ai-box,body.gm-board #daily-box{background:rgba(24,18,44,.98)!important;}
+body.gm-board .bottom-nav{background:rgba(22,17,41,.98)!important;}
+body.gm-board .card,body.gm-board .stat-box,body.gm-board .book-card,body.gm-board .question-card,
+body.gm-board .daily-section,body.gm-board .daily-q-card{background-color:rgba(33,28,58,.92)!important;}
+/* 2) Bezak cheksiz animatsiyalarni o'chirish (o'yin ichidagi javob/ijro animatsiyalari qoladi) */
+body.gm-board .header .note-icon,body.gm-board .staff-note,body.gm-board .hero-title,
+body.gm-board #ai-fab,body.gm-board #ai-fab::after,body.gm-board #daily-fab,body.gm-board #daily-fab::after,
+body.gm-board .nq-box>summary>span,body.gm-board #ch-opts.playing .gm-opt,
+body.gm-board [style*="discountPulse"],body.gm-board [style*="emojiSway"],
+body.gm-board #qk-svg .qk-w1,body.gm-board #qk-svg .qk-w2,body.gm-board #qk-svg .qk-w3,
+body.gm-board #qk-svg .qk-cloud,body.gm-board #qk-svg .qk-rays,body.gm-board #qk-svg .qk-boat{
+  animation:none!important;filter:none!important;}
+body.gm-board .screen{animation:none!important;}
+/* 3) Sensorli doska: bosishdagi kechikishni kamaytirish */
+body.gm-board{touch-action:manipulation;}
+/* 4) Tor ekranda (telefon) doska rejimi — bir ustunli maket */
+@media (max-width:899px){
+  body.gm-board #screen-oyin-nota .gm-wrap,body.gm-board #screen-oyin-takt .gm-wrap,
+  body.gm-board #screen-oyin-takt2 .gm-wrap,body.gm-board #screen-oyin-cholgu .gm-wrap,
+  body.gm-board #screen-oyin-toldir .gm-wrap{display:block!important;max-width:none!important;padding:0 8px 90px!important;}
+  body.gm-board #qk{display:block!important;}
+  body.gm-board #qk>.qk-scene{width:100%!important;}
+  body.gm-board .gm-side,body.gm-board #screen-oyin-toldir .gm-side{position:static!important;display:block!important;}
+  body.gm-board #ch-opts{grid-template-columns:repeat(2,1fr)!important;gap:10px!important;}
+  body.gm-board .gm-bar .n{font-size:16px!important;}
+  body.gm-board .gm-lives{font-size:18px!important;}
+  body.gm-board .gm-msg{font-size:14px!important;min-height:20px!important;}
+  body.gm-board .gm-stats{font-size:12px!important;}body.gm-board .gm-stats b{font-size:16px!important;}
+  body.gm-board .td-m .n{font-size:13px!important;}
+  body.gm-board #td-palwrap .td-pal .gm-opt svg{height:46px!important;}
+  body.gm-board .td-trash{font-size:12px!important;padding:9px 8px!important;}
+}
+</style>
+
 </head>
 <body>
 
@@ -10161,7 +10201,7 @@ function setLevels(box,fn){
 
 /* ================= PIANINO TOVUSHI ================= */
 function pianoCore(f,t,dur,vol,dest,sus){
-  const H=[1,.5,.3,.15],S=H.reduce((a,c)=>a+c,0);
+  const H=document.body.classList.contains('gm-board')?[1,.5]:[1,.5,.3,.15],S=H.reduce((a,c)=>a+c,0);
   const m=ctx.createGain(),lp=ctx.createBiquadFilter();
   m.gain.value=0.9;lp.type='lowpass';lp.frequency.value=Math.min(1200+vol*6000,f*9);
   m.connect(lp);lp.connect(dest||ctx.destination);
