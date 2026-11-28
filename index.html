@@ -666,6 +666,118 @@ body.gm-board{touch-action:manipulation;}
 }
 </style>
 
+<style id="ng-style">
+/* ===== YANGI O'YINLAR: 10-o'yin «Ritmni takrorla» va 11-o'yin «Cholg'ularni guruhlarga ajrat» (1–7-sinf, och dizayn) ===== */
+#screen-oyin-ritm .ng-wrap,#screen-oyin-guruh .ng-wrap{max-width:820px;margin:0 auto;padding:4px 10px 90px;color:#2a3560;-webkit-tap-highlight-color:transparent}
+.ng-panel{position:relative;overflow:hidden;border-radius:28px;padding:12px 12px 16px;border:3px solid #fff;box-shadow:0 10px 34px rgba(30,40,90,.28);background:linear-gradient(180deg,#d9f1ff 0%,#eefaff 42%,#fff4d6 100%)}
+.ng-panel.gr{background:linear-gradient(180deg,#e6f9e8 0%,#f3fff0 40%,#fff1d8 100%)}
+.ng-deco{position:absolute;pointer-events:none;opacity:.9;font-size:30px;animation:ngfloat 6s ease-in-out infinite;z-index:0}
+.ng-deco.d1{left:4%;top:56px}.ng-deco.d2{right:5%;top:96px;animation-delay:-2s;font-size:26px}.ng-deco.d3{left:7%;bottom:26px;animation-delay:-4s;font-size:24px}.ng-deco.d4{right:6%;bottom:40px;animation-delay:-1s}
+@keyframes ngfloat{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-10px) rotate(5deg)}}
+.ng-panel>*:not(.ng-deco){position:relative;z-index:1}
+.ng-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.ng-title{font-size:21px;font-weight:800;color:#2a3560;display:flex;align-items:center;gap:8px;text-shadow:0 2px 0 #fff}
+.ng-title .ic{font-size:30px;display:inline-block;animation:ngbounce 1.6s ease-in-out infinite}
+@keyframes ngbounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px) rotate(-6deg)}}
+.ng-stats{display:flex;gap:8px;font-weight:800;font-size:15px}
+.ng-stats span{background:#fff;border-radius:999px;padding:5px 12px;box-shadow:0 2px 6px rgba(0,0,0,.12);color:#2a3560}
+.ng-lv{display:flex;gap:8px;margin:6px 0 10px}
+.ng-lv button{flex:1;border:0;border-radius:16px;padding:10px 4px;font-size:15px;font-weight:800;background:#fff;color:#4a5a8a;box-shadow:0 3px 0 #c9d6f0;cursor:pointer;touch-action:manipulation;transition:transform .1s}
+.ng-lv button.on{background:linear-gradient(135deg,#ffb84d,#ff8a3d);color:#fff;box-shadow:0 3px 0 #d96a1c}
+.ng-lv button:active{transform:translateY(2px)}
+.ng-owl{display:flex;align-items:center;gap:10px;background:#fff;border-radius:20px;padding:8px 12px;margin:4px 0 10px;box-shadow:0 3px 10px rgba(0,0,0,.1);min-height:58px}
+.ng-owl .o{font-size:40px;flex:none;animation:ngbounce 2.4s ease-in-out infinite}
+.ng-owl .t{font-size:16px;font-weight:700;line-height:1.3;color:#2a3560}
+.ng-owl .t small{display:block;font-weight:600;font-size:13px;color:#5a6a9a;margin-top:2px}
+.ng-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+.ng-btn{border:0;border-radius:18px;padding:13px 18px;font-size:17px;font-weight:800;color:#fff;cursor:pointer;touch-action:manipulation;box-shadow:0 4px 0 rgba(0,0,0,.22);transition:transform .08s,box-shadow .08s;flex:1 1 130px;min-height:52px}
+.ng-btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.22)}
+.ng-btn.b1{background:linear-gradient(135deg,#3ec6ff,#2a8cf0)}.ng-btn.b2{background:linear-gradient(135deg,#ffb347,#ff7a3d)}.ng-btn.b3{background:linear-gradient(135deg,#7ddc6a,#34b45a)}.ng-btn.b4{background:linear-gradient(135deg,#c9a4ff,#8e6cf0)}
+.ng-btn.off{opacity:.5}
+.ng-topbar{display:flex;align-items:center;justify-content:space-between;padding:0 4px}
+/* --- ritm --- */
+.rt-cards{display:flex;gap:6px;margin:6px 0 4px}
+.rt-card{border-radius:18px;padding:8px 2px 6px;text-align:center;box-shadow:0 4px 0 rgba(0,0,0,.18);transition:transform .12s,filter .12s;min-width:0;color:#2a3560;border:3px solid #fff}
+.rt-card .em{font-size:34px;line-height:1.1;display:block}
+.rt-card b{display:block;font-size:15px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 2px}
+.rt-card.on{transform:scale(1.08) translateY(-4px);filter:brightness(1.12) saturate(1.2);box-shadow:0 8px 0 rgba(0,0,0,.2)}
+.rt-cards.big .rt-card .em{font-size:28px}.rt-cards.eight .rt-card .em{font-size:24px}.rt-cards.eight .rt-card b{font-size:11px}
+.rt-card{position:relative}
+.rt-track{position:relative;height:46px;margin:8px 6px 0;background:#fff;border-radius:23px;box-shadow:inset 0 2px 6px rgba(0,0,0,.14);overflow:hidden}
+.rt-track i{position:absolute;top:6px;bottom:6px;width:2px;background:#dfe6f7}
+.rt-track .ex{position:absolute;top:50%;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;border:3px solid #ff8a3d;background:#fff4e6}
+.rt-track .tp{position:absolute;top:50%;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;animation:ngpop .25s}
+.rt-track .tp.ok{background:#4cd964;box-shadow:0 0 0 3px #b9f3c4}.rt-track .tp.bad{background:#ff5a5f;box-shadow:0 0 0 3px #ffc9ca}
+.rt-track.eight .ex,.rt-track.eight .tp{width:15px;height:15px;margin:-7px 0 0 -7px;border-width:2px}
+body.gm-board .rt-track.eight .ex,body.gm-board .rt-track.eight .tp{width:26px;height:26px;margin:-13px 0 0 -13px}
+.rt-track .head{position:absolute;top:0;bottom:0;width:4px;background:#3b82f6;border-radius:2px;left:0;display:none}
+@keyframes ngpop{0%{transform:scale(.2)}70%{transform:scale(1.25)}100%{transform:scale(1)}}
+.rt-count{height:0;position:relative}
+.rt-count span{position:absolute;left:50%;top:-110px;transform:translateX(-50%);font-size:88px;font-weight:900;color:#ff5a8a;text-shadow:0 4px 0 #fff,0 8px 18px rgba(0,0,0,.25);pointer-events:none;animation:ngpop .35s;z-index:5}
+.rt-padwrap{display:flex;justify-content:center;margin:6px 0 0}
+.rt-pad{width:min(62vw,250px);height:min(62vw,250px);border-radius:50%;border:10px solid #ffd45a;background:radial-gradient(circle at 35% 30%,#fff 0%,#ffe3c4 45%,#ffb36b 100%);box-shadow:0 10px 0 #d68a2a,0 16px 30px rgba(0,0,0,.28);cursor:pointer;touch-action:manipulation;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:transform .06s,box-shadow .06s;user-select:none;-webkit-user-select:none;padding:0;color:#2a3560}
+.rt-pad span{font-size:min(26vw,104px);line-height:1}.rt-pad b{font-size:20px;margin-top:2px}
+.rt-pad.hit,.rt-pad:active{transform:translateY(6px) scale(.97);box-shadow:0 4px 0 #d68a2a,0 8px 16px rgba(0,0,0,.25)}
+.rt-pad.echo{border-color:#6ee07a;animation:ngpulse 1s ease-in-out infinite}
+@keyframes ngpulse{0%,100%{box-shadow:0 10px 0 #d68a2a,0 0 0 0 rgba(110,224,122,.6)}50%{box-shadow:0 10px 0 #d68a2a,0 0 0 18px rgba(110,224,122,0)}}
+/* --- guruhlash --- */
+.gr-bks{display:grid;gap:10px;margin:4px 0 12px}
+.gr-bk{border-radius:22px;padding:8px 6px 8px;text-align:center;border:4px solid #fff;box-shadow:0 5px 0 rgba(0,0,0,.16);min-height:100px;display:flex;flex-direction:column;align-items:center;cursor:pointer;touch-action:manipulation;transition:transform .12s,box-shadow .12s;position:relative}
+.gr-bk .hd{font-size:30px;line-height:1.05}.gr-bk .nm{font-size:14px;font-weight:800;color:#2a3560;line-height:1.15;margin-top:2px}
+.gr-bk .ch{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:6px}
+.gr-bk .ch span{background:#fff;border-radius:999px;padding:2px 8px;font-size:13px;font-weight:700;color:#2a3560;box-shadow:0 1px 3px rgba(0,0,0,.15);animation:ngpop .3s}
+.gr-bk.hov{transform:scale(1.06);box-shadow:0 8px 0 rgba(0,0,0,.2),0 0 0 6px rgba(255,255,255,.8)}
+.gr-bk.bad{animation:ngshake .4s;background-image:linear-gradient(rgba(255,90,95,.35),rgba(255,90,95,.35))}
+.gr-bk.hint{animation:ngpulse2 .8s ease-in-out 3}
+@keyframes ngpulse2{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes ngshake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+.gr-tray{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:6px 0;min-height:120px}
+.gr-card{width:calc(33.3% - 10px);max-width:150px;min-width:92px;background:#fff;border-radius:20px;padding:8px 4px 8px;text-align:center;box-shadow:0 5px 0 #c9d6f0;border:3px solid #fff;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;position:relative;transition:transform .2s,opacity .2s}
+.gr-card .pic{width:68px;height:68px;border-radius:50%;margin:0 auto;background:radial-gradient(circle at 35% 30%,#fff,#ffe9b8);display:flex;align-items:center;justify-content:center;font-size:42px;overflow:hidden;box-shadow:inset 0 0 0 3px #ffd77a}
+.gr-card .pic img{width:100%;height:100%;object-fit:cover}
+.gr-card b{display:block;font-size:15px;margin-top:5px;color:#2a3560}
+.gr-card.sel{outline:5px solid #3b82f6;transform:scale(1.06)}
+.gr-card.drag{transition:none;z-index:50;box-shadow:0 16px 28px rgba(0,0,0,.3);cursor:grabbing}
+.gr-card.bad{animation:ngshake .4s}
+.gr-card.done{opacity:0;transform:scale(.3);pointer-events:none;position:absolute;visibility:hidden}
+.gr-card.back{transition:transform .25s}
+.ng-confetti{position:fixed;top:-30px;font-size:28px;pointer-events:none;z-index:9999;animation:ngfall 2.2s linear forwards}
+@keyframes ngfall{to{transform:translateY(105vh) rotate(540deg);opacity:.9}}
+/* --- doska rejimi (elektron doska, katta ekran) --- */
+body.gm-board #screen-oyin-ritm .ng-wrap,body.gm-board #screen-oyin-guruh .ng-wrap{max-width:1500px;padding:8px 32px 90px}
+body.gm-board .ng-title{font-size:36px}body.gm-board .ng-title .ic{font-size:50px}
+body.gm-board .ng-stats{font-size:24px}body.gm-board .ng-lv button{font-size:24px;padding:16px 8px;border-radius:22px}
+body.gm-board .ng-owl{padding:12px 20px;min-height:90px}body.gm-board .ng-owl .o{font-size:64px}body.gm-board .ng-owl .t{font-size:26px}body.gm-board .ng-owl .t small{font-size:20px}
+body.gm-board .ng-btn{font-size:26px;padding:20px;min-height:80px;border-radius:24px}
+body.gm-board .rt-card .em{font-size:60px}body.gm-board .rt-card b{font-size:26px}
+body.gm-board .rt-cards.eight .rt-card .em{font-size:44px}body.gm-board .rt-cards.eight .rt-card b{font-size:18px}
+body.gm-board .rt-track{height:70px;border-radius:35px}body.gm-board .rt-track .ex,body.gm-board .rt-track .tp{width:34px;height:34px;margin:-17px 0 0 -17px}
+body.gm-board .rt-pad{width:min(32vw,380px);height:min(32vw,380px)}body.gm-board .rt-pad span{font-size:150px}body.gm-board .rt-pad b{font-size:30px}
+body.gm-board .rt-count span{font-size:150px;top:-150px}
+body.gm-board #screen-oyin-ritm .rt-main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);gap:0 32px;align-items:center}
+body.gm-board #screen-oyin-ritm .rt-padwrap{margin-top:0}
+body.gm-board .gr-bks{gap:16px}body.gm-board .gr-bks[data-n="4"]{grid-template-columns:repeat(4,1fr)!important}body.gm-board .gr-bks[data-n="5"]{grid-template-columns:repeat(5,1fr)!important}body.gm-board .gr-bks[data-n="3"]{grid-template-columns:repeat(3,1fr)!important}body.gm-board .gr-bk{min-height:150px;border-radius:30px}body.gm-board .gr-bk .hd{font-size:52px}body.gm-board .gr-bk .nm{font-size:24px}body.gm-board .gr-bk .ch span{font-size:20px;padding:4px 14px}
+body.gm-board .gr-card{max-width:200px;min-width:150px;flex:0 0 170px;border-radius:26px;padding:10px 6px}body.gm-board .gr-card .pic{width:92px;height:92px;font-size:58px}body.gm-board .gr-card b{font-size:23px;margin-top:6px}body.gm-board .gr-tray{gap:14px}
+@media (min-width:620px){.gr-card{width:auto;flex:0 0 140px}}
+
+#screen-oyin-guruh .gr-tray{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;min-height:0;padding:4px 0}
+#screen-oyin-guruh .gr-slot{min-height:84px;border-radius:16px;background:rgba(255,255,255,.35);border:2px dashed rgba(42,53,96,.12)}
+#screen-oyin-guruh .gr-card{width:auto;min-width:0;max-width:none;flex:none;padding:5px 2px 5px;border-radius:14px;box-shadow:0 3px 0 #c9d6f0}
+#screen-oyin-guruh .gr-card .pic{width:48px;height:48px;font-size:28px}
+#screen-oyin-guruh .gr-card b{font-size:10.5px;margin-top:3px;line-height:1.1}
+#screen-oyin-guruh .gr-card.pop{animation:ngpop .3s}
+#screen-oyin-guruh .gr-noimg .gr-card .pic{display:none}
+#screen-oyin-guruh .gr-noimg .gr-card{padding:18px 2px}
+#screen-oyin-guruh .gr-noimg .gr-card b{font-size:14px;margin-top:0}
+#screen-oyin-guruh .gr-noimg .gr-slot{min-height:64px}
+body.gm-board #screen-oyin-guruh .gr-noimg .gr-card b{font-size:26px}
+#screen-oyin-guruh .gr-bk{min-height:84px}
+body.gm-board #screen-oyin-guruh .gr-tray{gap:14px}
+body.gm-board #screen-oyin-guruh .gr-slot{min-height:150px}
+body.gm-board #screen-oyin-guruh .gr-card{flex:none;min-width:0;max-width:none}
+body.gm-board #screen-oyin-guruh .gr-card .pic{width:84px;height:84px;font-size:46px}
+body.gm-board #screen-oyin-guruh .gr-card b{font-size:20px}
+</style>
 </head>
 <body>
 
@@ -1778,7 +1890,7 @@ body.gm-board{touch-action:manipulation;}
     <div class="test-header" style="margin-top:8px">
       <div class="big">🎮</div>
       <h2>Metodik o'yinlar</h2>
-      <p>9 ta o'yin. Guruh a'zolari uchun</p>
+      <p>11 ta o'yin. Guruh a'zolari uchun</p>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px">
         <div id="gm-card-nota" onclick="showScreen('oyin-nota')" style="background:linear-gradient(135deg,#1a3a47,#2c9cc9);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;min-height:72px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.25">1-o'yin</div><div style="font-size:14px;font-weight:700;color:#fff;margin-top:3px">Nota o'qishni o'rganamiz</div><div id="gm-card-nota-sub" style="font-size:10.5px;color:rgba(255,255,255,0.8);margin-top:3px">Nota, pauza va cho'zimi</div></div>
         <div id="gm-card-notaovi" onclick="showScreen('oyin-nota-ovi')" style="background:linear-gradient(135deg,#4a1a2e,#e0739a);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;min-height:72px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.25">2-o'yin</div><div style="font-size:14px;font-weight:700;color:#fff;margin-top:3px">Nota ovi</div><div style="font-size:11px;color:rgba(255,255,255,.8);margin-top:2px">Nota yo'lini nomiga olib bor</div></div>
@@ -1789,6 +1901,8 @@ body.gm-board{touch-action:manipulation;}
         <div id="gm-card-akkord" onclick="showScreen('oyin-akkord')" style="background:linear-gradient(135deg,#47321a,#d19a3a);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;min-height:72px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.25">7-o'yin</div><div style="font-size:14px;font-weight:700;color:#fff;margin-top:3px">Akkordlar tuzish</div><div style="font-size:11px;color:rgba(255,255,255,.8);margin-top:2px">Tonallikda funksiyalar va aylanmalar</div></div>
         <div id="gm-card-yechilish" onclick="showScreen('oyin-yechilish')" style="background:linear-gradient(135deg,#1a4a3a,#5ad1a0);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;min-height:72px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.25">8-o'yin</div><div style="font-size:14px;font-weight:700;color:#fff;margin-top:3px">Akkordlar yechilishi</div><div style="font-size:11px;color:rgba(255,255,255,.8);margin-top:2px">Uchtovushlik va septakkordlar</div></div>
         <div id="gm-card-interval" onclick="showScreen('oyin-interval')" style="grid-column:1 / -1;background:linear-gradient(135deg,#3a1a4a,#8a68d1);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;min-height:72px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.25">9-o'yin</div><div style="font-size:14px;font-weight:700;color:#fff;margin-top:3px">Intervallar tuzish</div><div style="font-size:11px;color:rgba(255,255,255,.8);margin-top:2px">Diatonik, xromatik va tarkibli</div></div>
+        <div onclick="showScreen('oyin-ritm')" style="background:linear-gradient(135deg,#d9602a,#ffb347);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;min-height:72px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.25">10-o'yin</div><div style="font-size:14px;font-weight:700;color:#fff;margin-top:3px">🥁 Ritmni takrorla</div><div style="font-size:11px;color:rgba(255,255,255,.9);margin-top:2px">1–7-sinf uchun</div></div>
+        <div onclick="showScreen('oyin-guruh')" style="background:linear-gradient(135deg,#1f8f6a,#6ddc9a);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;min-height:72px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.25">11-o'yin</div><div style="font-size:14px;font-weight:700;color:#fff;margin-top:3px">🎺 Cholg'u guruhlari</div><div style="font-size:11px;color:rgba(255,255,255,.9);margin-top:2px">Moslashtiring</div></div>
       </div>
     </div>
   </div>
@@ -2076,6 +2190,61 @@ body.gm-board{touch-action:manipulation;}
     </div>
     <div class="gm-grid" id="ch-opts"></div>
     <div class="gm-info" id="ch-info"></div>
+  </div>
+</div>
+
+<!-- 10-O'YIN: RITMNI TAKRORLA -->
+<div id="screen-oyin-ritm" class="screen">
+  <div class="ng-topbar">
+    <button class="back-btn" onclick="showScreen('oyinlar')">‹ Orqaga</button>
+    <button class="gm-bd2" title="Doska rejimi" onclick="GM.fs()">🖥</button>
+  </div>
+  <div class="ng-wrap">
+    <div class="ng-panel" id="rt">
+      <span class="ng-deco d1">☁️</span><span class="ng-deco d2">⭐</span><span class="ng-deco d3">🎵</span><span class="ng-deco d4">🌈</span>
+      <div class="ng-head">
+        <div class="ng-title"><span class="ic">🥁</span>Ritmni takrorla</div>
+        <div class="ng-stats"><span>⭐ <b id="rt-st">0</b></span><span>🔥 <b id="rt-sk">0</b></span></div>
+      </div>
+      <div class="ng-lv" id="rt-lv"></div>
+      <div class="ng-owl"><span class="o">🦉</span><div class="t" id="rt-msg">Tinglash tugmasini bos va ritmni eshit!</div></div>
+      <div class="rt-main">
+        <div>
+          <div class="rt-cards" id="rt-cards"></div>
+          <div class="rt-track" id="rt-track"></div>
+          <div class="rt-count" id="rt-count"></div>
+          <div class="ng-btns">
+            <button class="ng-btn b1" id="rt-listen">▶ Tinglash</button>
+            <button class="ng-btn b2" id="rt-echo">🥁 Takrorla</button>
+            <button class="ng-btn b4" id="rt-eye">👁 Yozuv</button>
+            <button class="ng-btn b3" id="rt-next">Keyingi ›</button>
+          </div>
+        </div>
+        <div class="rt-padwrap"><button class="rt-pad" id="rt-pad" aria-label="Zarb"><span>🥁</span><b>Bos!</b></button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 11-O'YIN: CHOLG'ULARNI GURUHLARI BILAN MOSLASHTIRING -->
+<div id="screen-oyin-guruh" class="screen">
+  <div class="ng-topbar">
+    <button class="back-btn" onclick="showScreen('oyinlar')">‹ Orqaga</button>
+    <button class="gm-bd2" title="Doska rejimi" onclick="GM.fs()">🖥</button>
+  </div>
+  <div class="ng-wrap">
+    <div class="ng-panel gr" id="gr">
+      <span class="ng-deco d1">🎶</span><span class="ng-deco d2">🌟</span><span class="ng-deco d3">🎈</span><span class="ng-deco d4">🦋</span>
+      <div class="ng-head">
+        <div class="ng-title"><span class="ic">🎺</span>Cholg'ularni guruhlarga ajrat</div>
+        <div class="ng-stats"><span>⭐ <b id="gr-st">0</b></span><span>🎯 <b id="gr-pg">0/16</b></span><span id="gr-pic" role="button" style="cursor:pointer;user-select:none;-webkit-user-select:none" onclick="grPicToggle()">🖼 <b id="gr-pic-t">Rasm: yoqiq</b></span><span>✅ <b id="gr-rd">0</b></span></div>
+      </div>
+      <div class="ng-lv" id="gr-lv"></div>
+      <div class="ng-owl"><span class="o">🦉</span><div class="t" id="gr-msg">Bu cholg'ular qaysi guruhga kiradi?</div></div>
+      <div class="gr-bks" id="gr-bks"></div>
+      <div class="gr-tray" id="gr-tray"></div>
+      <div class="ng-btns"><button class="ng-btn b3" id="gr-new">🔄 Yangi to'plam</button></div>
+    </div>
   </div>
 </div>
 
@@ -12251,7 +12420,7 @@ function gmLockUI(){
   const c3=document.getElementById('gm-card-toldir'),sub3=document.getElementById('gm-card-toldir-sub');
   if(c3){c3.style.opacity=GAMES_OK?'':'0.5';if(sub3)sub3.textContent=GAMES_OK?"Ritm va o'lchov":'🔒 Tez orada';}
   const p=c.parentElement.parentElement.querySelector('p');
-  if(p)p.textContent="9 ta o'yin. Guruh a'zolari uchun bepul";
+  if(p)p.textContent="11 ta o'yin. Guruh a'zolari uchun bepul";
 }
 const GAME_IDS=['oyinlar','oyin-nota','oyin-takt','oyin-takt2','oyin-akkord','oyin-toldir','oyin-yechilish','oyin-interval','oyin-cholgu','oyin-nota-ovi','oyin-karnay'];
 let _grpAt=0;
@@ -15218,6 +15387,470 @@ window.showScreen=showScreen=function(id,push){
     inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { clearTimeout(timer); run(); inp.blur(); } });
   })();
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && $('srch-overlay') && $('srch-overlay').classList.contains('on')) window.srchClose(); });
+})();
+</script>
+
+<script id="ng-games">
+/* ============================================================
+   10-o'yin «Ritmni takrorla»  va  11-o'yin «Cholg'ularni guruhlarga ajrat»
+   1–7-sinf o'quvchilari uchun, elektron doska rejimida ham tez ishlaydi.
+   ============================================================ */
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const R=n=>Math.floor(Math.random()*n);
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=R(i+1);const t=a[i];a[i]=a[j];a[j]=t;}return a;};
+
+/* ---------- ovoz ---------- */
+let AC=null;
+function ac(){
+  if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(C){try{AC=new C();}catch(e){}}}
+  if(AC&&AC.state==='suspended'){try{AC.resume();}catch(e){}}
+  return AC;
+}
+function tone(f,t,d,type,vol,slide,dest){
+  const a=ac();if(!a)return;
+  try{
+    const o=a.createOscillator(),g=a.createGain();
+    o.type=type||'sine';o.frequency.setValueAtTime(f,t);
+    if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+d*0.7);
+    g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(vol,t+0.005);g.gain.exponentialRampToValueAtTime(0.001,t+d);
+    o.connect(g);g.connect(dest||a.destination);o.start(t);o.stop(t+d+0.03);
+  }catch(e){}
+}
+const drumHit=(t,hi,dest)=>{tone(hi?280:200,t,0.3,'sine',0.95,hi?120:70,dest);tone(2000,t,0.03,'square',0.1,0,dest);};
+const clickS=(t,acc,vol,dest)=>tone(acc?1500:1000,t,0.06,'square',vol||0.25,0,dest);
+function ding(ok){const a=ac();if(!a)return;const t=a.currentTime+0.01;if(ok){tone(660,t,0.18,'triangle',0.35);tone(990,t+0.1,0.28,'triangle',0.35);}else tone(200,t,0.3,'sawtooth',0.22,110);}
+function fanfare(){const a=ac();if(!a)return;const t=a.currentTime+0.02;[523,659,784,1047].forEach((f,i)=>tone(f,t+i*0.11,0.32,'triangle',0.3));}
+function confetti(){
+  const E=['🎉','⭐','🎵','🎈','🌟','🎶','🦋'];
+  for(let i=0;i<26;i++){
+    const s=document.createElement('span');s.className='ng-confetti';s.textContent=E[R(E.length)];
+    s.style.left=(Math.random()*96)+'vw';s.style.animationDelay=(Math.random()*0.7)+'s';s.style.fontSize=(20+R(22))+'px';
+    document.body.appendChild(s);setTimeout(()=>s.remove(),3200);
+  }
+}
+function levelBar(box,names,cur,cb){
+  box.innerHTML='';
+  names.forEach((n,i)=>{const b=document.createElement('button');b.textContent=n;if(i===cur)b.className='on';b.onclick=()=>{cb(i);};box.appendChild(b);});
+}
+
+/* ============================================================
+   10-O'YIN: RITMNI TAKRORLA
+   ============================================================ */
+const TOK={
+  ta:  {b:1,on:[0],             syl:'ta',         em:'🥁',col:'#ffb39a'},
+  titi:{b:1,on:[0,.5],          syl:'ti-ti',      em:'🐣',col:'#ffe27a'},
+  rest:{b:1,on:[],              syl:'sh',         em:'🤫',col:'#cfd8e3'},
+  taa: {b:2,on:[0],             syl:'ta-a',       em:'🐢',col:'#a5e3a0'},
+  tiri:{b:1,on:[0,.25,.5,.75],  syl:'ti-ri-ti-ri',em:'🐜',col:'#dcb4f5'},
+  syn: {b:2,on:[0,.5,1.5],      syl:'ti-ta-ti',   em:'🦘',col:'#9fe6ee'}
+};
+const RLV=[
+  {nm:'🌱 1–2-sinf',bpm:72, beats:4,toks:['ta','ta','ta','titi','titi','rest'],minOn:3,need:null,       tol:.36},
+  {nm:'🌟 3–4-sinf',bpm:84, beats:4,toks:['ta','titi','titi','rest','taa'],      minOn:3,need:['rest','taa'],tol:.32},
+  {nm:'🚀 5–7-sinf',bpm:92, beats:8,toks:['ta','titi','rest','taa','tiri','syn'],minOn:6,need:['tiri','syn'], tol:.27}
+];
+/* tuzilma (token ro'yxati) yaratish */
+function genPattern(lv,avoid){
+  for(let tries=0;tries<300;tries++){
+    let remain=lv.beats,arr=[];
+    while(remain>0){
+      const ok=lv.toks.filter(t=>TOK[t].b<=remain);
+      const t=ok[R(ok.length)];arr.push(t);remain-=TOK[t].b;
+    }
+    const on=arr.reduce((s,t)=>s+TOK[t].on.length,0);
+    if(on<lv.minOn)continue;
+    if(lv.need&&!arr.some(t=>lv.need.indexOf(t)>=0))continue;
+    if(arr.join()===avoid)continue;
+    return arr;
+  }
+  return lv.toks.slice(0,lv.beats);
+}
+/* tuzilma → zarblar vaqti (taktda, tempga ko'paytiriladi) */
+function onsetsOf(arr){
+  let pos=0;const out=[];
+  arr.forEach(t=>{TOK[t].on.forEach(o=>out.push(pos+o));pos+=TOK[t].b;});
+  return out;
+}
+/* qo'l zarblarini baholash. exp — kutilgan zarblar (takt), taps — sekund (nol = ritm boshlanishi), beat — bitta takt sekundda */
+function evalTaps(exp,taps,beat,tolF){
+  const tol=Math.max(0.11,beat*tolF);
+  const E=exp.map(x=>x*beat),T=taps.slice().sort((a,b)=>a-b);
+  let shift=0;
+  if(T.length&&E.length){shift=T[0]-E[0];const lim=beat*0.5;if(shift>lim)shift=lim;if(shift<-lim)shift=-lim;}
+  const used=T.map(()=>false),hitMark=T.map(()=>false);
+  let hits=0;
+  E.forEach(e=>{
+    let bj=-1,bd=1e9;
+    T.forEach((t,j)=>{if(used[j])return;const d=Math.abs(t-shift-e);if(d<=tol&&d<bd){bd=d;bj=j;}});
+    if(bj>=0){used[bj]=true;hitMark[bj]=true;hits++;}
+  });
+  const extra=T.length-hits;
+  const score=E.length?Math.max(0,(hits-0.5*extra)/E.length):0;
+  let stars=0;
+  if(hits===E.length&&extra===0)stars=3;else if(score>=0.7)stars=2;else if(score>=0.4)stars=1;
+  return {hits,extra,stars,score,shift,marks:hitMark,taps:T};
+}
+
+const RT={lv:0,pat:[],ons:[],show:true,state:'idle',run:0,st:0,sk:0,last:'',taps:[],t0:0,beat:0,master:null,raf:0,inited:false,total:0,tapOpen:false};
+
+function rtSetMsg(h,small){$('rt-msg').innerHTML=h+(small?'<small>'+small+'</small>':'');}
+function rtRender(){
+  const L=RLV[RT.lv];
+  const box=$('rt-cards');box.className='rt-cards'+(L.beats>4?' eight':'');box.innerHTML='';
+  RT.pat.forEach((t,i)=>{
+    const T=TOK[t],d=document.createElement('div');
+    d.className='rt-card'+(RT.show?'':' hide');d.style.flex=T.b+' 1 0';d.style.background=T.col;d.dataset.i=i;
+    d.innerHTML='<span class="em">'+(RT.show?T.em:'❓')+'</span><b>'+(RT.show?T.syl:'?')+'</b>';
+    box.appendChild(d);
+  });
+  const tr=$('rt-track');tr.innerHTML='';tr.className='rt-track'+(L.beats>4?' eight':'');
+  for(let i=1;i<L.beats;i++){const l=document.createElement('i');l.style.left=(4+i/L.beats*92)+'%';tr.appendChild(l);}
+  RT.ons.forEach(o=>{const e=document.createElement('div');e.className='ex';e.style.left=(4+o/L.beats*92)+'%';e.style.display=RT.show?'':'none';e.dataset.ex='1';tr.appendChild(e);});
+  const hd=document.createElement('div');hd.className='head';hd.id='rt-head';tr.appendChild(hd);
+  $('rt-eye').textContent=RT.show?'👁 Yozuv':'🙈 Yozuv';
+}
+function rtNew(){
+  rtStop();
+  const L=RLV[RT.lv];
+  RT.pat=genPattern(L,RT.last);RT.last=RT.pat.join();RT.ons=onsetsOf(RT.pat);RT.taps=[];
+  RT.show=RT.lv<2?true:RT.show;
+  rtRender();
+  rtSetMsg('Tinglash tugmasini bos va ritmni eshit!','Keyin «Takrorla» ni bosib, barabanni shu ritmda chal.');
+  rtPad(false);
+}
+function rtStop(){
+  RT.run++;RT.state='idle';RT.tapOpen=false;
+  if(RT.master){try{RT.master.gain.value=0;RT.master.disconnect();}catch(e){}RT.master=null;}
+  if(RT.raf){cancelAnimationFrame(RT.raf);RT.raf=0;}
+  $('rt-count').innerHTML='';
+  document.querySelectorAll('#rt-cards .rt-card.on').forEach(c=>c.classList.remove('on'));
+  const h=$('rt-head');if(h)h.style.display='none';
+  rtPad(false);
+}
+function rtPad(on){const p=$('rt-pad');if(p)p.classList.toggle('echo',!!on);}
+function rtCount(n){$('rt-count').innerHTML=n?'<span>'+n+'</span>':'';}
+function rtStart(mode){ /* mode: 'listen' | 'echo' */
+  const a=ac();if(!a){rtSetMsg('Ovoz ishlamayapti','Brauzerda ovozni yoqing.');return;}
+  rtStop();
+  const L=RLV[RT.lv],beat=60/L.bpm,run=RT.run;
+  RT.beat=beat;RT.total=L.beats;RT.taps=[];
+  const m=a.createGain();m.gain.value=1;m.connect(a.destination);RT.master=m;
+  const start=a.currentTime+0.18,t0=start+4*beat;RT.t0=t0;
+  for(let i=0;i<4;i++)clickS(start+i*beat,i===0,0.3,m);
+  if(mode==='listen'){RT.ons.forEach(o=>drumHit(t0+o*beat,false,m));}
+  else{for(let i=0;i<L.beats;i++)clickS(t0+i*beat,i%4===0,0.1,m);} /* yengil metronom */
+  RT.state=mode==='listen'?'listen':'count';
+  const endT=t0+L.beats*beat;
+  let nextOn=0;
+  rtSetMsg(mode==='listen'?'Diqqat bilan tingla… 🎧':'Sanab ol: 1-2-3-4, so\'ng chal! 🥁',null);
+  const tapEnd=endT+beat*0.9;
+  const tick=()=>{
+    if(run!==RT.run)return;
+    const now=a.currentTime;
+    if(now<t0){
+      const k=Math.floor((now-start)/beat);
+      if(k>=0&&k<4)rtCount(k+1);
+      else rtCount(0);
+      if(mode==='echo'&&now>t0-beat*0.4)RT.tapOpen=true;
+    }else{
+      rtCount(0);
+      if(RT.state==='count'){RT.state='tap';rtSetMsg('Endi sen chal! 🥁',null);rtPad(true);}
+      const bp=(now-t0)/beat;
+      const hd=$('rt-head');if(hd){hd.style.display=bp<L.beats?'block':'none';hd.style.left=(4+Math.min(1,Math.max(0,bp/L.beats))*92)+'%';}
+      let ci=-1,acc=0;RT.pat.forEach((t,i)=>{if(bp>=acc&&bp<acc+TOK[t].b)ci=i;acc+=TOK[t].b;});
+      document.querySelectorAll('#rt-cards .rt-card').forEach((c,i)=>c.classList.toggle('on',i===ci));
+      if(mode==='listen'){
+        while(nextOn<RT.ons.length&&now>=t0+RT.ons[nextOn]*beat-0.02){const p=$('rt-pad');p.classList.add('hit');setTimeout(()=>p.classList.remove('hit'),110);nextOn++;}
+      }
+    }
+    if(mode==='listen'&&now>=endT+0.25){
+      RT.state='idle';rtStop2();rtSetMsg('Endi sen takrorla! 🥁','«Takrorla» ni bos, sanab ol va chal.');return;
+    }
+    if(mode==='echo'&&now>=tapEnd){rtFinish();return;}
+    RT.raf=requestAnimationFrame(tick);
+  };
+  RT.raf=requestAnimationFrame(tick);
+}
+function rtStop2(){ /* tinglash tugagach: faqat ko'rsatkichlarni tozalash */
+  if(RT.raf){cancelAnimationFrame(RT.raf);RT.raf=0;}
+  document.querySelectorAll('#rt-cards .rt-card.on').forEach(c=>c.classList.remove('on'));
+  const h=$('rt-head');if(h)h.style.display='none';rtCount(0);
+}
+function rtTap(){
+  const a=ac();if(!a)return;
+  const p=$('rt-pad');p.classList.add('hit');setTimeout(()=>p.classList.remove('hit'),100);
+  drumHit(a.currentTime,true);
+  if(RT.state==='tap'||(RT.state==='count'&&RT.tapOpen)){
+    RT.taps.push(a.currentTime-RT.t0);
+    const tr=$('rt-track'),L=RLV[RT.lv];
+    const d=document.createElement('div');d.className='tp';d.style.background='#3b82f6';
+    d.style.left=(4+Math.min(1,Math.max(0,(a.currentTime-RT.t0)/(L.beats*RT.beat)))*92)+'%';d.dataset.tp='1';tr.appendChild(d);
+  }
+}
+function rtFinish(){
+  const L=RLV[RT.lv];
+  const res=evalTaps(RT.ons,RT.taps,RT.beat,L.tol);
+  rtStop2();RT.state='done';rtPad(false);RT.tapOpen=false;
+  if(RT.master){try{RT.master.gain.value=0;}catch(e){}}
+  /* natijani yo'lakda ko'rsatish */
+  const tr=$('rt-track');
+  tr.querySelectorAll('[data-tp]').forEach(n=>n.remove());
+  tr.querySelectorAll('[data-ex]').forEach(n=>n.style.display='');
+  res.taps.forEach((tv,j)=>{
+    const d=document.createElement('div');d.className='tp '+(res.marks[j]?'ok':'bad');
+    d.style.left=(4+Math.min(1,Math.max(0,(tv-res.shift)/(L.beats*RT.beat)))*92)+'%';tr.appendChild(d);
+  });
+  RT.show=true;
+  document.querySelectorAll('#rt-cards .rt-card').forEach((c,i)=>{const T=TOK[RT.pat[i]];c.classList.remove('hide');c.querySelector('.em').textContent=T.em;c.querySelector('b').textContent=T.syl;});
+  if(res.stars>0)RT.st+=res.stars;
+  RT.sk=res.stars===3?RT.sk+1:0;
+  $('rt-st').textContent=RT.st;$('rt-sk').textContent=RT.sk;
+  const stars='⭐'.repeat(res.stars)+'☆'.repeat(3-res.stars);
+  if(res.stars===3){rtSetMsg('Ajoyib! Ritm juda aniq! 🎉 '+stars,'Keyingisiga o\'tamizmi?');fanfare();confetti();}
+  else if(res.stars===2){rtSetMsg('Yaxshi! '+stars,res.hits+' / '+RT.ons.length+' zarb to\'g\'ri. Yana bir urinib ko\'r!');ding(true);}
+  else if(res.stars===1){rtSetMsg('Yomon emas! '+stars,'Avval tinglab ol, keyin sanab chal.');ding(false);}
+  else{rtSetMsg('Keling, yana tinglaymiz 🎧 '+stars,res.taps.length?'Zarblar o\'z joyiga tushmadi. «Tinglash» ni bos.':'Baraban chalinmadi. Sanab bo\'lgach barabanni bos!');ding(false);}
+}
+function rtInit(){
+  if(RT.inited)return;RT.inited=true;
+  $('rt-listen').onclick=()=>{ac();rtStart('listen');};
+  $('rt-echo').onclick=()=>{ac();rtStart('echo');};
+  $('rt-next').onclick=()=>{ac();rtNew();};
+  $('rt-eye').onclick=()=>{RT.show=!RT.show;if(RT.state==='idle'||RT.state==='done')rtRender();};
+  const pad=$('rt-pad');
+  pad.addEventListener('pointerdown',e=>{e.preventDefault();rtTap();});
+  document.addEventListener('keydown',e=>{
+    const scr=$('screen-oyin-ritm');
+    if(!scr||!scr.classList.contains('active')||e.repeat)return;
+    if(e.code==='Space'||e.key===' '||e.key==='Enter'){e.preventDefault();rtTap();}
+  });
+}
+function rtOpen(){
+  rtInit();
+  levelBar($('rt-lv'),RLV.map(x=>x.nm),RT.lv,function sel(i){RT.lv=i;RT.show=true;levelBar($('rt-lv'),RLV.map(x=>x.nm),RT.lv,sel);rtNew();});
+  $('rt-st').textContent=RT.st;$('rt-sk').textContent=RT.sk;
+  rtNew();
+}
+
+/* ============================================================
+   11-O'YIN: CHOLG'ULARNI GURUHLARI BILAN MOSLASHTIRING
+   ============================================================ */
+const GR={
+  urib:  {nm:"Urib chalinadigan", em:'🥁',col:'#ffd9a8',hint:'uriladi'},
+  puflab:{nm:"Puflab chalinadigan",em:'🎺',col:'#b9e0ff',hint:'puflanadi'},
+  chertib:{nm:"Chertib chalinadigan",em:'🎸',col:'#bff0b8',hint:'chertiladi'},
+  kamon: {nm:"Kamonchali",        em:'🎻',col:'#dccaff',hint:'kamon bilan'},
+  klavish:{nm:"Klavishli",        em:'🎹',col:'#ffc6dc',hint:'tugmalar bilan'}
+};
+const POOL={
+  urib:[
+    {n:'Doira',e:'🥁',img:'Doira.jpg',i:"Doira — qo'l bilan uriladigan zarbli cholg'u."},
+    {n:'Baraban',e:'🥁',img:'Baraban.jpg',i:"Baraban — tayoqchalar bilan uriladi."},
+    {n:'Kislafon',e:'🎼',img:'Kislafon.jpg',i:"Kislafon — tayoqcha bilan uriladigan zarbli cholg'u."},
+    {n:'Drabukka',e:'🥁',img:'Drabukka.jpg',i:"Drabukka — urib chalinadigan cholg'u."},
+    {n:'Dovul',e:'🥁',img:'Dovul.jpg',i:"Dovul — katta zarbli cholg'u, uriladi."},
+    {n:'Timbal',e:'🥁',img:'Timbal.jpg',i:"Timbal — tayoqcha bilan uriladigan zarbli cholg'u."},
+    {n:'Qayroq',e:'🥌',img:'Qayroq.jpg',i:"Qayroq — ikkita toshni bir-biriga urib chalinadi."},
+    {n:"Nog'ora",e:'🥁',i:"Nog'ora — tayoqcha yoki qo'l bilan uriladi."},
+    {n:'Uchburchak',e:'🔺',i:"Uchburchak (triangel) — metall tayoqcha bilan uriladi."}
+  ],
+  puflab:[
+    {n:'Nay',e:'🎶',img:'Nay.jpg',i:"Nay — puflab chalinadigan xalq cholg'usi."},
+    {n:'Tuba',e:'🎺',img:'Tuba.jpg',i:"Tuba — eng past tovushli mis puflama cholg'u."},
+    {n:'Karnay',e:'📯',img:'Karnay.jpg',i:"Karnay — katta puflab chalinadigan cholg'u."},
+    {n:'Surnay',e:'🎷',img:'Surnay.jpg',i:"Surnay — puflab chalinadigan xalq cholg'usi."},
+    {n:"Qo'shnay",e:'🎶',img:"Qo‘shnay.jpg",i:"Qo'shnay — ikki nayli puflab chalinadigan cholg'u."},
+    {n:'Klarnet',e:'🎷',img:'Klarnet.jpg',i:"Klarnet — yog'och puflama cholg'u."},
+    {n:'Gaboy',e:'🎶',img:'Gaboy.jpg',i:"Gaboy — qamishli yog'och puflama cholg'u."},
+    {n:'Fagot',e:'🎶',img:'Fagot.jpg',i:"Fagot — past tovushli yog'och puflama cholg'u."},
+    {n:'Vilinka',e:'🎶',img:'Vilinka.jpg',i:"Vilinka — puflab chalinadigan xalq cholg'usi."},
+    {n:'Truba',e:'🎺',i:"Truba — mis puflama cholg'u."}
+  ],
+  chertib:[
+    {n:'Dutor',e:'🎸',img:'Dutor.jpg',i:"Dutor — ikki torli, chertib chalinadi."},
+    {n:'Rubob',e:'🎸',img:'Rubob.jpg',i:"Rubob — torli, chertib chalinadigan cholg'u."},
+    {n:'Tanbur',e:'🎸',img:'Tambur.jpg',i:"Tanbur — torli, chertib chalinadigan cholg'u."},
+    {n:'Dombira',e:'🎸',img:'Dombira.jpg',i:"Dombira — ikki torli, chertib chalinadi."},
+    {n:'Gitara',e:'🎸',img:'Gitara.jpg',i:"Gitara — chertib chalinadigan torli cholg'u."},
+    {n:'Banjo',e:'🪕',img:'Banjo.jpg',i:"Banjo — chertib chalinadigan torli cholg'u."},
+    {n:'Arfa',e:'🪕',i:"Arfa — torlarini chertib chalinadi."}
+  ],
+  kamon:[
+    {n:"G'ijjak",e:'🎻',img:'Gijjak.jpg',i:"G'ijjak — kamon bilan chalinadigan torli cholg'u."},
+    {n:'Skripka',e:'🎻',img:'Skripka.jpg',i:"Skripka — kamon bilan chalinadi."},
+    {n:'Violanchel',e:'🎻',img:'Violanchel.jpg',i:"Violanchel — katta kamonchali cholg'u."},
+    {n:'Kontra bas',e:'🎻',img:'Kontra bas.jpg',i:"Kontra bas — eng katta kamonchali cholg'u."},
+    {n:'Altiya',e:'🎻',i:"Altiya — skripkadan sal kattaroq kamonchali cholg'u."}
+  ]
+};
+const GGROUPS=['urib','puflab','chertib','kamon'],GVIS=4,GPER=4;
+const G={items:[],queue:[],mist:0,placed:0,sel:null,st:0,rd:0,inited:false,done:false,wrong:{}};
+
+function gSetMsg(h,small){$('gr-msg').innerHTML=h+(small?'<small>'+small+'</small>':'');}
+function grPicToggle(){
+  const on=$('gr').classList.toggle('gr-noimg')===false;
+  $('gr-pic-t').textContent=on?'Rasm: yoqiq':'Rasm: o\'chiq';
+}
+window.grPicToggle=grPicToggle;
+function gMake(it){
+  const c=document.createElement('div');c.className='gr-card pop';c.dataset.id=it.id;
+  const pic=document.createElement('div');pic.className='pic';pic.textContent=it.e;
+  if(it.img){
+    const base=it.img.replace(/\.[a-z]+$/i,'');
+    const nm=[it.img];
+    [base,base.toLowerCase(),it.n,it.n.toLowerCase(),base.replace(/\u2018/g,"'"),base.replace(/'/g,'\u2018')].forEach(x=>['jpg','png','jpeg','webp'].forEach(e=>{const u=x+'.'+e;if(nm.indexOf(u)<0)nm.push(u);}));
+    const urls=[];nm.forEach(x=>['images/','./'].forEach(d=>urls.push(d+encodeURIComponent(x))));
+    let k=0;const im=new Image();im.alt='';im.draggable=false;
+    im.onload=()=>{pic.textContent='';pic.appendChild(im);};
+    im.onerror=()=>{k++;if(k<urls.length)im.src=urls[k];};
+    im.src=urls[0];
+  }
+  const b=document.createElement('b');b.textContent=it.n;
+  c.appendChild(pic);c.appendChild(b);
+  return c;
+}
+function gFill(){
+  const slots=document.querySelectorAll('#gr-tray .gr-slot');
+  for(let i=0;i<slots.length;i++){
+    if(slots[i].firstChild)continue;
+    const it=G.queue.shift();if(!it)break;
+    slots[i].appendChild(gMake(it));
+  }
+}
+function gProg(){$('gr-pg').textContent=G.placed+'/'+G.items.length;}
+function gNew(){
+  G.items=[];G.mist=0;G.placed=0;G.sel=null;G.done=false;G.wrong={};
+  GGROUPS.forEach(g=>{
+    const withImg=shuf(POOL[g].filter(x=>x.img)),noImg=shuf(POOL[g].filter(x=>!x.img));
+    withImg.concat(noImg).slice(0,GPER).forEach(x=>G.items.push({id:g+'_'+x.n,g:g,n:x.n,e:x.e,img:x.img,i:x.i,placed:false}));
+  });
+  G.queue=shuf(G.items.slice());
+  const bks=$('gr-bks');bks.innerHTML='';
+  bks.dataset.n=GGROUPS.length;bks.style.gridTemplateColumns='repeat(2,1fr)';
+  GGROUPS.forEach(g=>{
+    const d=document.createElement('div');d.className='gr-bk';d.dataset.g=g;d.style.background=GR[g].col;
+    d.innerHTML='<div class="hd">'+GR[g].em+'</div><div class="nm">'+GR[g].nm+'</div><div class="ch"></div>';
+    bks.appendChild(d);
+  });
+  const tray=$('gr-tray');tray.innerHTML='';
+  for(let i=0;i<GVIS;i++){const sl=document.createElement('div');sl.className='gr-slot';tray.appendChild(sl);}
+  gFill();gProg();
+  gSetMsg("Bu cholg'ular qaysi guruhga kiradi?");
+}
+function gBk(x,y){
+  const els=document.querySelectorAll('#gr-bks .gr-bk');
+  for(let i=0;i<els.length;i++){const r=els[i].getBoundingClientRect();if(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom)return els[i];}
+  return null;
+}
+function gSelect(id){
+  G.sel=(G.sel===id)?null:id;
+  document.querySelectorAll('#gr-tray .gr-card').forEach(c=>c.classList.toggle('sel',c.dataset.id===G.sel));
+  if(G.sel){gSetMsg("Bu cholg'ular qaysi guruhga kiradi?");}
+}
+function gPlace(id,g){
+  if(G.done)return;
+  const it=G.items.find(x=>x.id===id);if(!it||it.placed)return;
+  let card=null;document.querySelectorAll('#gr-tray .gr-card').forEach(c=>{if(c.dataset.id===id)card=c;});
+  const bk=document.querySelector('#gr-bks .gr-bk[data-g="'+g+'"]');
+  if(it.g===g){
+    it.placed=true;G.placed++;G.sel=null;
+    ding(true);
+    if(card){card.classList.remove('sel','drag');card.style.transform='';card.classList.add('done');const sl=card.parentNode;setTimeout(()=>{if(card.parentNode===sl)sl.removeChild(card);gFill();},260);}gProg();
+    const ch=bk.querySelector('.ch'),s=document.createElement('span');s.textContent=it.e+' '+it.n;ch.appendChild(s);
+    gSetMsg('To\'g\'ri! ✅ '+it.n+' — '+GR[g].nm.toLowerCase()+'.',it.i);
+    if(G.placed===G.items.length)gFinish();
+  }else{
+    G.mist++;G.wrong[id]=(G.wrong[id]||0)+1;
+    ding(false);
+    if(card){card.classList.remove('drag');card.classList.add('back');card.style.transform='';card.classList.remove('bad');void card.offsetWidth;card.classList.add('bad');setTimeout(()=>card.classList.remove('bad','back'),450);}
+    bk.classList.remove('bad');void bk.offsetWidth;bk.classList.add('bad');setTimeout(()=>bk.classList.remove('bad'),450);
+    G.sel=null;document.querySelectorAll('#gr-tray .gr-card').forEach(c=>c.classList.remove('sel'));
+    if(G.wrong[id]>=2){
+      const rb=document.querySelector('#gr-bks .gr-bk[data-g="'+it.g+'"]');
+      if(rb){rb.classList.remove('hint');void rb.offsetWidth;rb.classList.add('hint');setTimeout(()=>rb.classList.remove('hint'),2600);}
+      gSetMsg('Yo\'q 🤔 '+it.n+' bu guruhga kirmaydi.','Pulsatsiya qilayotgan guruhga qara!');
+    }else gSetMsg('Yo\'q 🤔 '+it.n+' bu guruhga kirmaydi.','Yana o\'ylab ko\'r.');
+  }
+}
+function gClap(){
+  const d=document.createElement('div');
+  d.textContent='👏👏👏';
+  d.style.cssText='position:fixed;left:0;right:0;top:38%;text-align:center;font-size:72px;z-index:9999;pointer-events:none;animation:ngpop .5s;transition:opacity .6s,transform .6s';
+  document.body.appendChild(d);
+  setTimeout(()=>{d.style.opacity='0';d.style.transform='translateY(-40px)';},1500);
+  setTimeout(()=>d.remove(),2200);
+}
+function gFinish(){
+  G.done=true;G.rd++;
+  const stars=G.mist<=1?3:(G.mist<=3?2:1);
+  G.st+=stars;
+  $('gr-st').textContent=G.st;$('gr-rd').textContent=G.rd;
+  setTimeout(()=>{
+    gSetMsg('👏👏👏 Barakalla! 🎉 '+'⭐'.repeat(stars)+'☆'.repeat(3-stars),(G.mist?G.mist+' ta xato. ':'Birorta ham xatosiz! ')+'Yangi to\'plamni bos.');
+    fanfare();confetti();gClap();
+  },400);
+}
+function gInit(){
+  if(G.inited)return;G.inited=true;
+  $('gr-new').onclick=()=>{ac();gNew();};
+  const tray=$('gr-tray');let drag=null;
+  tray.addEventListener('pointerdown',e=>{
+    const c=e.target.closest('.gr-card');if(!c||c.classList.contains('done')||G.done)return;
+    ac();
+    drag={el:c,id:c.dataset.id,sx:e.clientX,sy:e.clientY,moved:false,pid:e.pointerId,hov:null};
+    try{c.setPointerCapture(e.pointerId);}catch(_){}
+  });
+  tray.addEventListener('pointermove',e=>{
+    if(!drag||e.pointerId!==drag.pid)return;
+    const dx=e.clientX-drag.sx,dy=e.clientY-drag.sy;
+    if(!drag.moved&&Math.hypot(dx,dy)<9)return;
+    if(!drag.moved){drag.moved=true;drag.el.classList.add('drag');}
+    drag.el.style.transform='translate('+dx+'px,'+dy+'px) scale(1.08)';
+    const bk=gBk(e.clientX,e.clientY);
+    if(bk!==drag.hov){if(drag.hov)drag.hov.classList.remove('hov');if(bk)bk.classList.add('hov');drag.hov=bk;}
+  });
+  const end=(e,cancel)=>{
+    if(!drag||e.pointerId!==drag.pid)return;
+    const d=drag;drag=null;
+    if(d.hov)d.hov.classList.remove('hov');
+    try{d.el.releasePointerCapture(e.pointerId);}catch(_){}
+    if(!d.moved){if(!cancel)gSelect(d.id);return;}
+    d.el.classList.remove('drag');
+    const bk=cancel?null:gBk(e.clientX,e.clientY);
+    if(bk)gPlace(d.id,bk.dataset.g);
+    else{d.el.classList.add('back');d.el.style.transform='';setTimeout(()=>d.el.classList.remove('back'),300);}
+  };
+  tray.addEventListener('pointerup',e=>end(e,false));
+  tray.addEventListener('pointercancel',e=>end(e,true));
+  $('gr-bks').addEventListener('click',e=>{
+    const bk=e.target.closest('.gr-bk');if(!bk||!G.sel)return;gPlace(G.sel,bk.dataset.g);
+  });
+}
+function gOpen(){
+  gInit();
+  const lv=$('gr-lv');if(lv){lv.innerHTML='';lv.style.display='none';}
+  $('gr-st').textContent=G.st;$('gr-rd').textContent=G.rd;
+  gNew();
+}
+
+/* ---------- ekran ulanishi ---------- */
+const MINE=['oyin-ritm','oyin-guruh'];
+let _grpAt=0;
+const prev=window.showScreen;
+window.showScreen=showScreen=function(id,push){
+  if(MINE.indexOf(id)<0){ if($('screen-oyin-ritm')&&$('screen-oyin-ritm').classList.contains('active'))rtStop(); return prev(id,push); }
+  if(Date.now()-_grpAt>600000&&typeof window.requireGroup==='function'){
+    window.requireGroup(function(){_grpAt=Date.now();window.showScreen(id,push);});
+    return;
+  }
+  prev(id,push);
+  if(id==='oyin-ritm')rtOpen();
+  if(id==='oyin-guruh')gOpen();
+  window.scrollTo(0,0);
+};
+window.NG={rtEval:evalTaps,rtGen:genPattern,rtOns:onsetsOf};
 })();
 </script>
 
